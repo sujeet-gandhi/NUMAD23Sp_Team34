@@ -22,21 +22,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AtYourService extends AppCompatActivity {
 
     private SearchView searchView;
     private ProgressBar loader;
-    private final int SEARCH_MESSAGE = 1995;
 
+    private List<Movie> movies;
+
+    private final int SEARCH_MESSAGE = 1995;
     private static final String TAG = "AtYourService";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_at_your_service);
-
+        movies = new ArrayList<>();
         searchView = findViewById(R.id.searchView);
         loader = findViewById(R.id.loader);
 
@@ -61,30 +65,43 @@ public class AtYourService extends AppCompatActivity {
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                    if(msg.what== SEARCH_MESSAGE){
-                        loader.setVisibility(View.GONE);
-                        JSONArray moviesArray = (JSONArray) msg.obj;
-                        for (int i = 0; i < moviesArray.length(); i++) {
-                            JSONObject movie;
-                            try {
-                                movie = moviesArray.getJSONObject(i);
-                                String title = movie.getString("Title");
-                                String year = movie.getString("Year");
-                                String imageUrl = movie.getString("Poster");
-
-                                Toast.makeText(AtYourService.this, title + year + imageUrl, Toast.LENGTH_SHORT).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                        Toast.makeText(AtYourService.this, ((JSONArray) msg.obj).toString(), Toast.LENGTH_SHORT).show();
+                    if(msg.what == SEARCH_MESSAGE){
+                        populateMoviesList(msg);
                     }
                 super.handleMessage(msg);
             }
         };
         NetworkOperationThread searchThread = new NetworkOperationThread(searchTerm, handler);
         new Thread(searchThread).start();
+    }
+
+    private void populateMoviesList(Message msg) {
+        loader.setVisibility(View.GONE);
+        JSONArray moviesArray = (JSONArray) msg.obj;
+        movies.clear();
+
+        for (int i = 0; i < moviesArray.length(); i++) {
+            JSONObject movie;
+            try {
+                movie = moviesArray.getJSONObject(i);
+                String title = movie.getString("Title");
+                String year = movie.getString("Year");
+                String imageUrl = movie.getString("Poster");
+                String imdbId = movie.getString("imdbID");
+
+                Movie moviePojo = new Movie(title, year, imageUrl, imdbId);
+                movies.add(moviePojo);
+
+                // Start Recycler View code here
+
+
+                //Toast to be removed later
+                Toast.makeText(AtYourService.this, imdbId + title + year + imageUrl, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private String convertStreamToString(InputStream is) {
@@ -117,6 +134,7 @@ public class AtYourService extends AppCompatActivity {
 
                 JSONObject jObject = new JSONObject(resp);
                 JSONArray searchArray = jObject.getJSONArray("Search");
+                // To update ui
                 Message msg = handler.obtainMessage();
                 msg.what = SEARCH_MESSAGE;
                 msg.obj = searchArray;
