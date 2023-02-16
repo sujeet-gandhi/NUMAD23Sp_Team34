@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NUMAD23Sp_Team_34</string>
+    <string name="search_url">https://www.omdbapi.com/?s=</string>
+    <string name="api_key"><![CDATA[&apikey=51c19901]]></string>
 </resources>
