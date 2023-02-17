@@ -7,10 +7,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +34,13 @@ public class AtYourService extends AppCompatActivity {
     private SearchView searchView;
     private ProgressBar loader;
 
+    private TextView noResultsTextView;
+    private RecyclerView moviesRecyclerView;
+
     private List<Movie> movies;
+    private MoviesAdapter moviesAdapter;
+
+
 
     private final int SEARCH_MESSAGE = 1995;
     private static final String TAG = "AtYourService";
@@ -43,6 +52,14 @@ public class AtYourService extends AppCompatActivity {
         movies = new ArrayList<>();
         searchView = findViewById(R.id.searchView);
         loader = findViewById(R.id.loader);
+//        noResultsTextView = findViewById(R.id.noResultsTextView);
+        moviesRecyclerView = findViewById(R.id.recyclerView);
+        moviesAdapter = new MoviesAdapter(movies);
+        moviesRecyclerView.setAdapter(moviesAdapter);
+        moviesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -95,11 +112,15 @@ public class AtYourService extends AppCompatActivity {
                 // Start Recycler View code here
 
 
+
+
                 //Toast to be removed later
-                Toast.makeText(AtYourService.this, imdbId + title + year + imageUrl, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(AtYourService.this, imdbId + title + year + imageUrl, Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            moviesAdapter.notifyDataSetChanged();
+
 
         }
     }
@@ -156,5 +177,20 @@ public class AtYourService extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("movies", new ArrayList<>(movies));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movies.clear();
+        movies.addAll(savedInstanceState.getParcelableArrayList("movies"));
+        moviesAdapter.notifyDataSetChanged();
+    }
+
 
 }
