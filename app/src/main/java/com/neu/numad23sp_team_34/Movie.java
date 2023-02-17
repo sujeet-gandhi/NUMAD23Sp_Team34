@@ -15,6 +15,8 @@ public class Movie implements Parcelable {
 
     private final String imdbId;
 
+
+
     /**
      * Constructs a person object with the specified name and age.
      *  @param title - name of the link.
