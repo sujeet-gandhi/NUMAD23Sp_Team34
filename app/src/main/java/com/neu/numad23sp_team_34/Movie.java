@@ -1,6 +1,11 @@
 package com.neu.numad23sp_team_34;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Movie implements Parcelable {
 
     private final String title;
 
@@ -24,6 +29,25 @@ public class Movie {
         this.imdbId = imdbId;
     }
 
+    protected Movie(Parcel in) {
+        title = in.readString();
+        year = in.readString();
+        imageUrl = in.readString();
+        imdbId = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     public String getTitle() {
         return title;
     }
@@ -38,5 +62,20 @@ public class Movie {
 
     public String getImdbId() {
         return imdbId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+
+        parcel.writeString(title);
+        parcel.writeString(year);
+        parcel.writeString(imageUrl);
+        parcel.writeString(imdbId);
+
     }
 }
