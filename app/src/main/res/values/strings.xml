@@ -6,8 +6,8 @@
     <string name="textview_string">TextView</string>
     <string name="textview6_string">TextView</string>
     <string name="movie_title_string">Movie Title</string>
-    <string name="release_date_string">Release date</string>
-    <string name="runtime_string">RunTIme</string>
+    <string name="release_date_string">Release Date</string>
+    <string name="runtime_string">RunTime</string>
     <string name="rating_string">Rating</string>
     <string name="movie_plot_string">Movie Plot</string>
     <string name="movie_poster_string">Movie Poster</string>
