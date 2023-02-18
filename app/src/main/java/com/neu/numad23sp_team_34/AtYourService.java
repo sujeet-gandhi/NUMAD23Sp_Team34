@@ -40,8 +40,6 @@ public class AtYourService extends AppCompatActivity {
     private List<Movie> movies;
     private MoviesAdapter moviesAdapter;
 
-
-
     private final int SEARCH_MESSAGE = 1995;
     private final int ERROR_MESSAGE = 2000;
     private static final String TAG = "AtYourService";
@@ -115,7 +113,6 @@ public class AtYourService extends AppCompatActivity {
                 e.printStackTrace();
             }
             moviesAdapter.notifyDataSetChanged();
-
 
         }
     }

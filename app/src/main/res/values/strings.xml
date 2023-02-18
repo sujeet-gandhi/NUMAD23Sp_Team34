@@ -9,5 +9,6 @@
     <string name="release_date_string">Release date</string>
     <string name="runtime_string">RunTIme</string>
     <string name="rating_string">Rating</string>
-    <string name="movie_plot_plot">Movie Plot</string>
+    <string name="movie_plot_string">Movie Plot</string>
+    <string name="movie_poster_string">Movie Poster</string>
 </resources>

@@ -25,6 +25,7 @@
                 android:id="@+id/posterImage"
                 android:layout_margin="8dp"
                 android:scaleType="fitCenter"
+                android:contentDescription="@string/movie_poster_string"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_gravity="center"
@@ -46,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textStyle="bold"
                 android:textSize="24sp"
                 android:layout_margin="16dp"
                 android:text="@string/movie_title_string"
@@ -139,7 +141,7 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:layout_margin="16dp"
-                android:text="@string/movie_plot_plot"
+                android:text="@string/movie_plot_string"
                 tools:srcCompat="@tools:sample/avatars" />
 
         </androidx.cardview.widget.CardView>
