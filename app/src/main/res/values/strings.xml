@@ -3,4 +3,11 @@
     <string name="search_url">https://www.omdbapi.com/?s=</string>
     <string name="search_url_id">https://www.omdbapi.com/?i=</string>
     <string name="api_key"><![CDATA[&apikey=51c19901]]></string>
+    <string name="textview_string">TextView</string>
+    <string name="textview6_string">TextView</string>
+    <string name="movie_title_string">Movie Title</string>
+    <string name="release_date_string">Release date</string>
+    <string name="runtime_string">RunTIme</string>
+    <string name="rating_string">Rating</string>
+    <string name="movie_plot_plot">Movie Plot</string>
 </resources>

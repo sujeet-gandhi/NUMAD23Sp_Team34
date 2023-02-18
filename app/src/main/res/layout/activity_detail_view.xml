@@ -48,7 +48,7 @@
                 android:layout_gravity="center"
                 android:textSize="24sp"
                 android:layout_margin="16dp"
-                android:text="Harry Potter"
+                android:text="@string/movie_title_string"
                 android:textColor="@color/black"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -71,7 +71,7 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:layout_margin="16dp"
-                android:text="Release date"
+                android:text="@string/release_date_string"
                 tools:srcCompat="@tools:sample/avatars"
                 />
 
@@ -94,7 +94,7 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:layout_margin="16dp"
-                android:text="RunTIme"
+                android:text="@string/runtime_string"
                 tools:srcCompat="@tools:sample/avatars"
                 />
 
@@ -117,7 +117,7 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:layout_margin="16dp"
-                android:text="Rating"
+                android:text="@string/rating_string"
                 tools:srcCompat="@tools:sample/avatars"
                 />
 
@@ -139,11 +139,10 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:layout_margin="16dp"
-                android:text="Harry Potter Plot"
+                android:text="@string/movie_plot_plot"
                 tools:srcCompat="@tools:sample/avatars" />
 
         </androidx.cardview.widget.CardView>
-
 
 
         <ProgressBar

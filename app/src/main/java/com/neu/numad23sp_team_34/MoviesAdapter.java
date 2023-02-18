@@ -46,7 +46,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 @Override
                 public void onSuccess() {
 
-
                 }
 
                 @Override
@@ -71,8 +70,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 context.startActivity(intent);
             }
         });
-
-
 
     }
 
