@@ -43,6 +43,7 @@ public class AtYourService extends AppCompatActivity {
 
 
     private final int SEARCH_MESSAGE = 1995;
+    private final int ERROR_MESSAGE = 2000;
     private static final String TAG = "AtYourService";
 
     @Override
@@ -82,9 +83,14 @@ public class AtYourService extends AppCompatActivity {
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                    if(msg.what == SEARCH_MESSAGE){
-                        populateMoviesList(msg);
-                    }
+                if(msg.what == SEARCH_MESSAGE){
+                    populateMoviesList(msg);
+                }
+
+                if (msg.what == ERROR_MESSAGE) {
+                    loader.setVisibility(View.GONE);
+                    Toast.makeText(AtYourService.this, "Error, Something went wrong", Toast.LENGTH_SHORT).show();
+                }
                 super.handleMessage(msg);
             }
         };
@@ -162,18 +168,24 @@ public class AtYourService extends AppCompatActivity {
                 handler.sendMessage(msg);
                 // Set Recyclerview list here
                 //loader.setVisibility(View.GONE);
-            } catch (MalformedURLException e) {
-                Log.e(TAG,"MalformedURLException");
+//            } catch (MalformedURLException e) {
+//                Log.e(TAG,"MalformedURLException");
+//                e.printStackTrace();
+//            } catch (ProtocolException e) {
+//                Log.e(TAG,"ProtocolException");
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                Log.e(TAG,"IOException");
+//                e.printStackTrace();
+//            } catch (JSONException e) {
+//                Log.e(TAG,"JSONException");
+//                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (ProtocolException e) {
-                Log.e(TAG,"ProtocolException");
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e(TAG,"IOException");
-                e.printStackTrace();
-            } catch (JSONException e) {
-                Log.e(TAG,"JSONException");
-                e.printStackTrace();
+                Message msg = handler.obtainMessage();
+                msg.what = ERROR_MESSAGE;
+                msg.obj = "Error";
+                handler.sendMessage(msg);
             }
         }
     }
