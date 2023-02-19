@@ -8,4 +8,5 @@
     <string name="release_date_string">Release Date</string>
     <string name="rating_string">Rating</string>
     <string name="movie_plot_string">Movie Plot</string>
+    <string name="poster_string">Poster</string>
 </resources>
