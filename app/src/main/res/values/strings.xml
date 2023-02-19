@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NUMAD23Sp_Team_34</string>
     <string name="search_url">https://www.omdbapi.com/?s=</string>
+    <string name="search_url_id">https://www.omdbapi.com/?i=</string>
     <string name="api_key"><![CDATA[&apikey=51c19901]]></string>
     <string name="runtime_string">RunTime</string>
     <string name="movie_poster_string">Movie Poster</string>
