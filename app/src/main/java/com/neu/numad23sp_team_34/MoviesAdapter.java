@@ -41,6 +41,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Movie movie = movies.get(position);
         holder.title.setText(movie.getTitle());
         holder.year.setText(movie.getYear());
+        Picasso.get().load(movie.getImageUrl()).into(holder.poster);
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(),DetailViewActivity.class);
+            intent.putExtra("imdbId",movie.getImdbId());
+            view.getContext().startActivity(intent);
+        });
         if (!TextUtils.isEmpty(movie.getImageUrl())) {
             Picasso.get().load(movie.getImageUrl()).into(holder.poster, new com.squareup.picasso.Callback() {
                 @Override
@@ -71,8 +77,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 context.startActivity(intent);
             }
         });
-
-
 
     }
 
