@@ -65,7 +65,7 @@ public class AtYourService extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (!TextUtils.isEmpty(searchView.getQuery().toString())) {
-                    performSearch(searchView.getQuery().toString());
+                    performSearch(searchView.getQuery().toString().trim());
                 }
                 return true;
             }
