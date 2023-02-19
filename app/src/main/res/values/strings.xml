@@ -9,4 +9,6 @@
     <string name="rating_string">Rating</string>
     <string name="movie_plot_string">Movie Plot</string>
     <string name="poster_string">Poster</string>
+    <string name="team_34_string">Team 34</string>
+    <string name="at_your_service_string">At Your Service</string>
 </resources>
