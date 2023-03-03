@@ -1,4 +1,4 @@
-package com.neu.numad23sp_team_34;
+package com.neu.numad23sp_team_34.sticktoem.models;
 
 public class Message {
     private String senderUsername;
