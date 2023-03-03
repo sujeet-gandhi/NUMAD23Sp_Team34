@@ -1,6 +1,7 @@
 package com.neu.numad23sp_team_34.sticktoem.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.sticktoem.ChatActivity;
 import com.neu.numad23sp_team_34.sticktoem.models.User;
 
 import java.util.List;
@@ -34,7 +36,14 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
         holder.username.setText(friendList.get(position).getUsername());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("recipient", friendList.get(position).getUsername());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

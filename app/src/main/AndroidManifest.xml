@@ -16,6 +16,13 @@
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
         tools:targetApi="33">
         <activity
+            android:name=".sticktoem.ChatActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".sticktoem.FriendListActivity"
             android:exported="false">
             <meta-data
