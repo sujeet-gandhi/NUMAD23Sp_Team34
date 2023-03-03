@@ -15,13 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
         tools:targetApi="33">
-        <activity
-            android:name=".Notifications"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".DetailViewActivity"
             android:exported="false">
