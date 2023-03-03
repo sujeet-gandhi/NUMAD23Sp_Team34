@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,7 +32,9 @@ public class FriendListActivity extends AppCompatActivity {
 
     private final String TAG = FriendListActivity.class.getSimpleName();
 
-    List<User> friendList;
+    private List<User> friendList;
+
+    private String currentUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class FriendListActivity extends AppCompatActivity {
 
         friendListRecyclerView = findViewById(R.id.friendList);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        currentUsername = prefs.getString("username", "");
 
         friendList = new ArrayList<>();
 
@@ -55,8 +61,10 @@ public class FriendListActivity extends AppCompatActivity {
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Log.e(TAG, "onChildAdded: dataSnapshot = " + dataSnapshot.getValue().toString());
                         User user = dataSnapshot.getValue(User.class);
-                        friendList.add(user);
-                        Toast.makeText( FriendListActivity.this, "New user found " +user.getUsername(), Toast.LENGTH_SHORT).show();
+                        assert user != null;
+                        if (!user.getUsername().equals(currentUsername)) {
+                            friendList.add(user);
+                        }
                         friendListAdapter.notifyDataSetChanged();
                     }
 
