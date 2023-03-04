@@ -45,7 +45,6 @@ public class FriendListActivity extends AppCompatActivity {
 
     Button history;
 
-    ChatActivity chatActivity;
 
     HashMap<String, Integer> stickerCounts = new HashMap<>();
     HashMap<String, Integer> recievedCount = new HashMap<>();
