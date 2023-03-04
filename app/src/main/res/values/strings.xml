@@ -13,5 +13,7 @@
     <string name="team_34_string">Team 34</string>
     <string name="at_your_service_string">At Your Service</string>
     <string name="stick_it_to_em">Stick It To \'Em</string>
-    <string name="sticker_received_from_string">"Sticker received from: "</string>
+    <string name="channel_name">New Sticker</string>
+    <string name="channel_description">Notification for NUMAD23Sp Team 34</string>
+    <string name="channel_id">New Sticker NUMAD23Sp Team 34</string>
 </resources>
