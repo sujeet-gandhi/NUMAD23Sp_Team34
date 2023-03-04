@@ -48,9 +48,15 @@ public class FriendListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
+        history = (Button) findViewById(R.id.historyButton);
 
         friendListRecyclerView = findViewById(R.id.friendList);
 
+        history.setOnClickListener(view -> {
+            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
+
+            startActivity(intent);
+        });
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
