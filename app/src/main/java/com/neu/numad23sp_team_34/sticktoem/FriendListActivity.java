@@ -48,6 +48,8 @@ public class FriendListActivity extends AppCompatActivity {
     ChatActivity chatActivity;
 
     HashMap<String, Integer> stickerCounts = new HashMap<>();
+    HashMap<String, Integer> recievedCount = new HashMap<>();
+
 
 
     @Override
@@ -62,6 +64,8 @@ public class FriendListActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         currentUsername = prefs.getString("username", "");
+//        SharedPreferences prefs1 = PreferenceManager.getDefaultSharedPreferences(this);
+//        currentUsername = prefs.getString("username", "");
 
         friendList = new ArrayList<>();
 
@@ -112,28 +116,46 @@ public class FriendListActivity extends AppCompatActivity {
         );
         fetchHistory();
 
-//        chatActivity = new ChatActivity();
-//        String count = chatActivity.ViewHistory(currentUsername);
-//        history = findViewById(R.id.historyButton);
-        history.setOnClickListener(view -> {
-            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
-
-            intent.putExtra("stickerCount", stickerCounts.toString());
-            startActivity(intent);
-        });
-
     }
     private void fetchHistory(){
-        List<Message> messages = new ArrayList<>();
+
         mDatabase.child("messages").addValueEventListener(new ValueEventListener(){
             @Override
              public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Message> messages = new ArrayList<>();
+                List<Message> receivedMes = new ArrayList<>();
                 for(DataSnapshot ds: dataSnapshot.getChildren() ){
                     Message message = ds.getValue(Message.class);
                     if (message.getSenderUsername().equals(currentUsername)) {
                         messages.add(message);
                     }
+                    if(message.getReceiverUsername().equals(currentUsername)){
+                        receivedMes.add(message);
+                    }
                 }
+                List<String> stickerIds = new ArrayList<>();
+                stickerIds.add("2131165428");
+                stickerIds.add("2131165429");
+                stickerIds.add("2131165430");
+                stickerIds.add("2131165431");
+                for (String stickerId: stickerIds) {
+                    int num = countStickers(messages, stickerId);
+                    stickerCounts.put(stickerId, num);
+
+                }
+                Log.d(TAG,"Sticker Counts" + stickerCounts);
+                for(String receivedStickerId: stickerIds) {
+                    int receivedStickerCount = countStickers(receivedMes,receivedStickerId);
+                    recievedCount.put(receivedStickerId,receivedStickerCount);
+                }
+                Log.d(TAG,"received Counts " + recievedCount);
+
+                history.setOnClickListener(view -> {
+                    Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
+                    intent.putExtra("stickerCount", stickerCounts.toString());
+                    intent.putExtra("receivedCount", recievedCount.toString());
+                    startActivity(intent);
+                });
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -144,15 +166,7 @@ public class FriendListActivity extends AppCompatActivity {
         }
         );
         // count and update the counter map
-        List<String> stickerIds = new ArrayList<>();
-        stickerIds.add("cat");
-        stickerIds.add("dog");
-        stickerIds.add("2131165428");
-        stickerIds.add("");
-        for (String stickerId: stickerIds) {
-            int num = countStickers(messages, stickerId);
-            stickerCounts.put(stickerId, num);
-        }
+
     }
     public int countStickers(List<Message> messages, String stickerId) {
         int count = 0;
@@ -160,11 +174,9 @@ public class FriendListActivity extends AppCompatActivity {
             if (message.getStickerId() != null && message.getStickerId().equals(stickerId)) {
                 count++;
             }
-
     }
         return count;
     }
-
 
 
 }
