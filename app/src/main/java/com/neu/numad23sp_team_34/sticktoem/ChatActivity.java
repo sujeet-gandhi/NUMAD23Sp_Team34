@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private final String TAG = ChatActivity.class.getSimpleName();
 
-    HashMap<String, Integer> stickerCounts = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,18 +138,18 @@ public class ChatActivity extends AppCompatActivity {
         );
 
     }
-    public int countStickers(String recipientName, String senderName, String stickerId) {
-        int count = 0;
-        for (Message message : messages) {
-            if ((message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))
-                    || (message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))) {
-                if (message.getStickerId() != null && message.getStickerId().equals(stickerId)) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
+//    public int countStickers(String recipientName, String senderName, String stickerId) {
+//        int count = 0;
+//        for (Message message : messages) {
+//            if ((message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))
+//                    || (message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))) {
+//                if (message.getStickerId() != null && message.getStickerId().equals(stickerId)) {
+//                    count++;
+//                }
+//            }
+//        }
+//        return count;
+//    }
 //    public String ViewHistory(String recipientName){
 //        int count = countStickers(recipientName,senderName,stickerId);
 //        return String.valueOf(count);

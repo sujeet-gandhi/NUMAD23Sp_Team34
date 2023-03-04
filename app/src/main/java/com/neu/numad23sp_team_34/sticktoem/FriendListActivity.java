@@ -1,5 +1,6 @@
 package com.neu.numad23sp_team_34.sticktoem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +19,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.sticktoem.adapters.FriendListAdapter;
+import com.neu.numad23sp_team_34.sticktoem.models.Message;
 import com.neu.numad23sp_team_34.sticktoem.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FriendListActivity extends AppCompatActivity {
@@ -43,6 +47,8 @@ public class FriendListActivity extends AppCompatActivity {
 
     ChatActivity chatActivity;
 
+    HashMap<String, Integer> stickerCounts = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +58,6 @@ public class FriendListActivity extends AppCompatActivity {
 
         friendListRecyclerView = findViewById(R.id.friendList);
 
-        history.setOnClickListener(view -> {
-            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
-
-            startActivity(intent);
-        });
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -109,16 +110,61 @@ public class FriendListActivity extends AppCompatActivity {
                     }
                 }
         );
+        fetchHistory();
 
 //        chatActivity = new ChatActivity();
 //        String count = chatActivity.ViewHistory(currentUsername);
 //        history = findViewById(R.id.historyButton);
-//        history.setOnClickListener(view -> {
-//            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
-//            intent.putExtra("stickerCount",count);
-//            startActivity(intent);
-//        });
+        history.setOnClickListener(view -> {
+            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
+
+            intent.putExtra("stickerCount", stickerCounts.toString());
+            startActivity(intent);
+        });
 
     }
+    private void fetchHistory(){
+        List<Message> messages = new ArrayList<>();
+        mDatabase.child("messages").addValueEventListener(new ValueEventListener(){
+            @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren() ){
+                    Message message = ds.getValue(Message.class);
+                    if (message.getSenderUsername().equals(currentUsername)) {
+                        messages.add(message);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+
+            }
+        }
+        );
+        // count and update the counter map
+        List<String> stickerIds = new ArrayList<>();
+        stickerIds.add("cat");
+        stickerIds.add("dog");
+        stickerIds.add("2131165428");
+        stickerIds.add("");
+        for (String stickerId: stickerIds) {
+            int num = countStickers(messages, stickerId);
+            stickerCounts.put(stickerId, num);
+        }
+    }
+    public int countStickers(List<Message> messages, String stickerId) {
+        int count = 0;
+        for (Message message : messages) {
+            if (message.getStickerId() != null && message.getStickerId().equals(stickerId)) {
+                count++;
+            }
+
+    }
+        return count;
+    }
+
+
 
 }
