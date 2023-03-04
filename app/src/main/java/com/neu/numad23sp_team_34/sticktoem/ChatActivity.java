@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         senderName = prefs.getString("username", "");
 
-        adapter = new ChatListAdapter(this, messages, senderName, recipientName);
+        adapter = new ChatListAdapter(this, messages, senderName, recipientName,chatRecyclerView);
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         chatRecyclerView.setAdapter(adapter);
@@ -73,9 +73,9 @@ public class ChatActivity extends AppCompatActivity {
 
         List<Sticker> stickers = new ArrayList<>();
         stickers.add(new Sticker(R.drawable.smile));
-        stickers.add(new Sticker(R.drawable.smile));
-        stickers.add(new Sticker(R.drawable.smile));
-        stickers.add(new Sticker(R.drawable.smile));
+        stickers.add(new Sticker(R.drawable.angry));
+        stickers.add(new Sticker(R.drawable.crying));
+        stickers.add(new Sticker(R.drawable.laugh));
 
         StickerAdapter stickerAdapter = new StickerAdapter(this, stickers, senderName, recipientName);
         stickerRecyclerView.setAdapter(stickerAdapter);
