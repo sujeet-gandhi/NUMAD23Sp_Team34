@@ -43,7 +43,8 @@ public class StickItToEm extends AppCompatActivity {
 
         login.setOnClickListener(view -> {
             if (!TextUtils.isEmpty(usernameEditText.getText().toString())) {
-                processLogin(usernameEditText.getText().toString());
+//                processLogin(usernameEditText.getText().toString());
+                performSuccessfulLogin(new User("sujeet","Sujeet","sujeet@gmail.com"));
             }
         });
     }

@@ -15,6 +15,7 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+
     public String getSenderUsername() {
         return senderUsername;
     }

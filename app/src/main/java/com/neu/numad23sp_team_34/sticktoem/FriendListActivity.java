@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -36,6 +39,11 @@ public class FriendListActivity extends AppCompatActivity {
 
     private String currentUsername;
 
+    Button history;
+
+    ChatActivity chatActivity;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +51,13 @@ public class FriendListActivity extends AppCompatActivity {
 
         friendListRecyclerView = findViewById(R.id.friendList);
 
+
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         currentUsername = prefs.getString("username", "");
 
         friendList = new ArrayList<>();
+
 
         friendListAdapter = new FriendListAdapter(this, friendList);
         friendListRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -71,7 +82,7 @@ public class FriendListActivity extends AppCompatActivity {
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         Log.v(TAG, "onChildChanged: " + dataSnapshot.getValue().toString());
-                        Toast.makeText( FriendListActivity.this, "onChildChanged: dataSnapshot = " + dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FriendListActivity.this, "onChildChanged: dataSnapshot = " + dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -92,5 +103,16 @@ public class FriendListActivity extends AppCompatActivity {
                     }
                 }
         );
+
+//        chatActivity = new ChatActivity();
+//        String count = chatActivity.ViewHistory(currentUsername);
+//        history = findViewById(R.id.historyButton);
+//        history.setOnClickListener(view -> {
+//            Intent intent = new Intent(FriendListActivity.this,HistoryActivity.class);
+//            intent.putExtra("stickerCount",count);
+//            startActivity(intent);
+//        });
+
     }
+
 }

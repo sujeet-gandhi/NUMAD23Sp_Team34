@@ -12,6 +12,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ValueEventListener;
+import com.neu.numad23sp_team_34.sticktoem.models.Message;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,10 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.sticktoem.adapters.ChatListAdapter;
-import com.neu.numad23sp_team_34.sticktoem.models.Message;
-import com.neu.numad23sp_team_34.sticktoem.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -33,6 +35,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private String senderName;
 
+    private String stickerId;
+
     private TextView recipientNameTextView;
 
     private RecyclerView chatRecyclerView;
@@ -42,6 +46,8 @@ public class ChatActivity extends AppCompatActivity {
     private ChatListAdapter adapter;
 
     private final String TAG = ChatActivity.class.getSimpleName();
+
+    HashMap<String, Integer> stickerCounts = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,9 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         senderName = prefs.getString("username", "");
 
+        SharedPreferences prefs1 = PreferenceManager.getDefaultSharedPreferences(this);
+        stickerId = prefs1.getString("stickerId", "");
+
         adapter = new ChatListAdapter(this, messages, senderName, recipientName);
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -67,6 +76,27 @@ public class ChatActivity extends AppCompatActivity {
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.child("messages").addValueEventListener(new ValueEventListener()
+        {
+            @Override    public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    Message message = ds.getValue(Message.class);
+                    assert message != null;
+                    if ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
+                            || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
+                        messages.add(message);
+                    }
+
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+             Log.w(TAG, "Failed to read value.", error.toException());
+            }});
         mDatabase.child("messages").addChildEventListener(
                 new ChildEventListener() {
 
@@ -108,4 +138,21 @@ public class ChatActivity extends AppCompatActivity {
         );
 
     }
+    public int countStickers(String recipientName, String senderName, String stickerId) {
+        int count = 0;
+        for (Message message : messages) {
+            if ((message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))
+                    || (message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))) {
+                if (message.getStickerId() != null && message.getStickerId().equals(stickerId)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+//    public String ViewHistory(String recipientName){
+//        int count = countStickers(recipientName,senderName,stickerId);
+//        return String.valueOf(count);
+//    }
+
 }

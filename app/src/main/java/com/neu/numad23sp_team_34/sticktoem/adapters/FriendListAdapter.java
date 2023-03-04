@@ -1,5 +1,6 @@
 package com.neu.numad23sp_team_34.sticktoem.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FriendViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.username.setText(friendList.get(position).getUsername());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
