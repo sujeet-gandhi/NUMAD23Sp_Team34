@@ -1,5 +1,6 @@
 package com.neu.numad23sp_team_34;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -8,6 +9,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Notifications extends AppCompatActivity {
 
@@ -36,25 +46,45 @@ public class Notifications extends AppCompatActivity {
 
     public void sendNotification(String username, String message) {
 
-        String channelId = getString(R.string.channel_id);
-        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.foo)
-                .setContentTitle("New sticker from " + username)
-                .setContentText("You received a new sticker!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Notifications", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult();
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, notifyBuild.build());
+                        Map<String, String> data = new HashMap<>();
+                        data.put("username", username);
+                        data.put("message", message);
+
+                        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(Notifications.this, getString(R.string.channel_id))
+                                .setSmallIcon(R.drawable.foo)
+                                .setContentTitle("New sticker from " + username)
+                                .setContentText(message)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setAutoCancel(true);
+
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(Notifications.this);
+                        notificationManager.notify(getString(R.string.channel_id),0, notifyBuild.build());
+
+                        FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(token)
+                                .setData(data)
+                                .build());
+                    }
+                });
 
     }
 
     private void registerChatListener() {
         chatService = new ChatService();
         chatService.setOnMessageReceivedListener(new ChatService.OnMessageReceivedListener() {
+
             @Override
             public void onMessageReceived(String sender, String message) {
-                // Check if the message contains a sticker
+
                 if (message.contains("<sticker>")) {
                     // Send a notification
                     sendNotification(sender, message);
