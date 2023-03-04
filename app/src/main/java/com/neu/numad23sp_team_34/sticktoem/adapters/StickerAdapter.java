@@ -82,6 +82,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
             Sticker sticker = mStickers.get(getAdapterPosition());
             Message message = new Message(senderName, recipientName, Integer.toString(sticker.getImageResourceId()), System.currentTimeMillis());
             mDatabase.child("messages").push().setValue(message);
+
             Toast.makeText(view.getContext(), "Sticker sent!", Toast.LENGTH_SHORT).show();
 
 

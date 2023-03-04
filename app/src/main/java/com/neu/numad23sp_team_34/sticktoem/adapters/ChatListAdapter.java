@@ -27,6 +27,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final List<Message> messageList;
 
+    private Message mostRecentStickerMessage;
+
+
     private final String senderName;
 
     private final RecyclerView recyclerView;
@@ -68,15 +71,24 @@ public class ChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Drawable senderDrawable = context.getResources().getDrawable(Integer.parseInt(messageList.get(position).getStickerId()));
                 ((ChatSenderViewHolder) holder).messageImageView.setImageDrawable(senderDrawable);
                 ((ChatSenderViewHolder) holder).messageImageView.setVisibility(View.VISIBLE);
+                if (messageList.get(position) == mostRecentStickerMessage) {
+                    recyclerView.scrollToPosition(position);
+                }
                 break;
 
             case RECEIVER_VIEW_HOLDER:
                 Drawable receiverDrawable = context.getResources().getDrawable(Integer.parseInt(messageList.get(position).getStickerId()));
                 ((ChatReceiverViewHolder) holder).message.setImageDrawable(receiverDrawable);
                 ((ChatReceiverViewHolder) holder).message.setVisibility(View.VISIBLE);
+                if (messageList.get(position) == mostRecentStickerMessage) {
+                    recyclerView.scrollToPosition(position);
+                }
                 break;
         }
-        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+
+//        recyclerView.smoothScrollToPosition(getItemCount() - 1);
+
+
 
     }
 

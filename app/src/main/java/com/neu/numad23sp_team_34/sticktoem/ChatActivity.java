@@ -80,6 +80,12 @@ public class ChatActivity extends AppCompatActivity {
         StickerAdapter stickerAdapter = new StickerAdapter(this, stickers, senderName, recipientName);
         stickerRecyclerView.setAdapter(stickerAdapter);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        layoutManager.setStackFromEnd(true);
+//        chatRecyclerView.setLayoutManager(layoutManager);
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        chatRecyclerView.setAdapter(adapter);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("messages").addChildEventListener(
                 new ChildEventListener() {
@@ -92,6 +98,8 @@ public class ChatActivity extends AppCompatActivity {
                         if ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
                                 || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
                             messages.add(message);
+                            chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1); // Scroll to the bottom of the chat
+
                         }
                         adapter.notifyDataSetChanged();
                     }
