@@ -19,7 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.sticktoem.adapters.ChatListAdapter;
+import com.neu.numad23sp_team_34.sticktoem.adapters.StickerAdapter;
 import com.neu.numad23sp_team_34.sticktoem.models.Message;
+import com.neu.numad23sp_team_34.sticktoem.models.Sticker;
 import com.neu.numad23sp_team_34.sticktoem.models.User;
 
 import java.util.ArrayList;
@@ -35,11 +37,12 @@ public class ChatActivity extends AppCompatActivity {
 
     private TextView recipientNameTextView;
 
-    private RecyclerView chatRecyclerView;
+    private RecyclerView chatRecyclerView, stickerRecyclerView;
 
     private List<Message> messages;
 
     private ChatListAdapter adapter;
+    private StickerAdapter stickerAdapter;
 
     private final String TAG = ChatActivity.class.getSimpleName();
 
@@ -65,6 +68,17 @@ public class ChatActivity extends AppCompatActivity {
         recipientNameTextView = findViewById(R.id.recipientName);
         recipientNameTextView.setText(recipientName);
 
+        stickerRecyclerView = findViewById(R.id.stickerRecyclerView);
+        stickerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        List<Sticker> stickers = new ArrayList<>();
+        stickers.add(new Sticker(R.drawable.smile));
+        stickers.add(new Sticker(R.drawable.smile));
+        stickers.add(new Sticker(R.drawable.smile));
+        stickers.add(new Sticker(R.drawable.smile));
+
+        StickerAdapter stickerAdapter = new StickerAdapter(this, stickers, senderName, recipientName);
+        stickerRecyclerView.setAdapter(stickerAdapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("messages").addChildEventListener(
