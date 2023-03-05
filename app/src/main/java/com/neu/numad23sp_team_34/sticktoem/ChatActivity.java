@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         senderName = prefs.getString("username", "");
 
-        adapter = new ChatListAdapter(this, messages, senderName, recipientName,chatRecyclerView);
+        adapter = new ChatListAdapter(this, messages, senderName, recipientName, chatRecyclerView);
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         chatRecyclerView.setAdapter(adapter);
@@ -97,9 +97,13 @@ public class ChatActivity extends AppCompatActivity {
                         assert message != null;
                         if ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
                                 || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
-                            messages.add(message);
-                            chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1); // Scroll to the bottom of the chat
-
+                            if (message.getStickerId() != null) {
+                                Sticker sticker = new Sticker(Integer.parseInt(message.getStickerId()));
+                                onStickerReceived(message.getSenderUsername(), message.getReceiverUsername(), sticker.toString());
+                            } else {
+                                adapter.addMessage(message);
+                                chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
+                            }
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -126,8 +130,21 @@ public class ChatActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext()
                                 , "DBError: " + databaseError, Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
         );
+    }
 
+    //new
+    public void onStickerReceived(String senderName, String recipientName, String stickerResource) {
+
+        Sticker sticker = new Sticker(Integer.parseInt(stickerResource));
+        long timestamp = System.currentTimeMillis();
+        Message message = new Message(senderName, recipientName, stickerResource, timestamp);
+        adapter.addMessage(message);
+
+        NotificationActivity notificationActivity = new NotificationActivity();
+        notificationActivity.sendNotification(senderName, "", stickerResource);
     }
 }

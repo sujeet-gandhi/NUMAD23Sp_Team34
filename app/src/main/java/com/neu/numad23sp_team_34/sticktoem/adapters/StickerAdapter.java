@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.sticktoem.models.Message;
 import com.neu.numad23sp_team_34.sticktoem.models.Sticker;
@@ -20,6 +22,7 @@ import com.neu.numad23sp_team_34.sticktoem.models.Sticker;
 import java.util.List;
 
 import java.util.List;
+import java.util.Random;
 
 public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerViewHolder> {
 
@@ -34,16 +37,19 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     private final DatabaseReference mDatabase;
 
-//    private final OnStickerClickListener mClickListener;
+    private final FirebaseMessaging mFirebaseMessaging;
+
+    //private final OnStickerClickListener mClickListener;
 
     public StickerAdapter(Context context, List<Sticker> stickers,String senderName, String recipientName) {
         mContext = context;
         mStickers = stickers;
-//        mClickListener = clickListener;
+       // mClickListener = clickListener;
         this.inflater = LayoutInflater.from(context);
         this.senderName = senderName;
         this.recipientName = recipientName;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseMessaging = FirebaseMessaging.getInstance();
     }
 
     @NonNull
@@ -85,9 +91,13 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
             Toast.makeText(view.getContext(), "Sticker sent!", Toast.LENGTH_SHORT).show();
 
-
-
-
+            //new
+            mFirebaseMessaging.send(new RemoteMessage.Builder(recipientName + "@fcm.googleapis.com")
+                    .setMessageId(Integer.toString(new Random().nextInt()))
+                    .addData("type", "sticker")
+                    .addData("senderName", senderName)
+                    .addData("stickerResource", Integer.toString(sticker.getImageResourceId()))
+                    .build());
         }
     }
 
