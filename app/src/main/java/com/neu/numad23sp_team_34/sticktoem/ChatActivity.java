@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity {
                                 || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
                             if (message.getStickerId() != null) {
                                 Sticker sticker = new Sticker(Integer.parseInt(message.getStickerId()));
-                                onStickerReceived(message.getSenderUsername(), message.getReceiverUsername(), sticker.toString());
+                                onStickerReceived(message.getSenderUsername(), message.getReceiverUsername(), String.valueOf(sticker.getImageResourceId()));
                             } else {
                                 adapter.addMessage(message);
                                 chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
