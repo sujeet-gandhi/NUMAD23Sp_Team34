@@ -1,4 +1,4 @@
-package com.neu.numad23sp_team_34;
+package com.neu.numad23sp_team_34.sticktoem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +19,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
+import com.neu.numad23sp_team_34.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Notifications extends AppCompatActivity {
-
-    private ChatService chatService;
+public class NotificationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createNotificationChannel();
-        registerChatListener();
     }
 
     public void createNotificationChannel() {
@@ -44,7 +46,7 @@ public class Notifications extends AppCompatActivity {
         }
     }
 
-    public void sendNotification(String username, String message) {
+    public void sendNotification(String username, String message, int stickerId) {
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -59,50 +61,34 @@ public class Notifications extends AppCompatActivity {
                         Map<String, String> data = new HashMap<>();
                         data.put("username", username);
                         data.put("message", message);
+                        data.put("stickerId", Integer.toString(stickerId));
 
-                        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(Notifications.this, getString(R.string.channel_id))
-                                .setSmallIcon(R.drawable.foo)
+                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), stickerId);
+                        Bitmap smallIcon = Bitmap.createScaledBitmap(largeIcon, 64, 64, false);
+
+                        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(NotificationActivity.this, getString(R.string.channel_id))
+                                .setLargeIcon(smallIcon)
                                 .setContentTitle("New sticker from " + username)
-                                .setContentText(message)
+                                .setContentText("Check it out!")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setAutoCancel(true);
 
-                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(Notifications.this);
-                        notificationManager.notify(getString(R.string.channel_id),0, notifyBuild.build());
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(NotificationActivity.this);
+                        notificationManager.notify(getString(R.string.channel_id), 0, notifyBuild.build());
 
                         FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(token)
                                 .setData(data)
                                 .build());
                     }
                 });
-
     }
 
-    private void registerChatListener() {
-        chatService = new ChatService();
-        chatService.setOnMessageReceivedListener(new ChatService.OnMessageReceivedListener() {
-
-            @Override
-            public void onMessageReceived(String sender, String message) {
-
-                if (message.contains("<sticker>")) {
-                    // Send a notification
-                    sendNotification(sender, message);
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        chatService.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        chatService.stop();
+    private PendingIntent createContentIntent(Map<String, String> data) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("username", data.get("username"));
+        intent.putExtra("message", data.get("message"));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }
