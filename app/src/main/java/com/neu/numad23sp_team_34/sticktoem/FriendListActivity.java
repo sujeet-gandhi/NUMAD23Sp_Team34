@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -48,6 +49,8 @@ public class FriendListActivity extends AppCompatActivity {
     HashMap<String, Integer> stickerCounts = new HashMap<>();
     HashMap<String, Integer> recievedCount = new HashMap<>();
 
+    private TextView currentUser;
+
 
 
     @Override
@@ -55,13 +58,14 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
         history = (Button) findViewById(R.id.historyButton);
+        currentUser = (TextView) findViewById(R.id.signedInName);
 
         friendListRecyclerView = findViewById(R.id.friendList);
 
 
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         currentUsername = prefs.getString("username", "");
+        currentUser.setText("Signed In as: " +currentUsername);
 //        SharedPreferences prefs1 = PreferenceManager.getDefaultSharedPreferences(this);
 //        currentUsername = prefs.getString("username", "");
 
@@ -124,10 +128,10 @@ public class FriendListActivity extends AppCompatActivity {
                 List<Message> receivedMes = new ArrayList<>();
                 for(DataSnapshot ds: dataSnapshot.getChildren() ){
                     Message message = ds.getValue(Message.class);
-                    if (message.getSenderUsername().equals(currentUsername)) {
+                    if (message.getSenderUsername() != null && message.getSenderUsername().equals(currentUsername)) {
                         messages.add(message);
                     }
-                    if(message.getReceiverUsername().equals(currentUsername)){
+                    if(message.getReceiverUsername() != null && message.getReceiverUsername().equals(currentUsername)){
                         receivedMes.add(message);
                     }
                 }
