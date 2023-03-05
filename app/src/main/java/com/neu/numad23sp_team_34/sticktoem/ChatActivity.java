@@ -106,8 +106,9 @@ public class ChatActivity extends AppCompatActivity {
                         Log.e(TAG, "onChildAdded: dataSnapshot = " + dataSnapshot.getValue().toString());
                         Message message = dataSnapshot.getValue(Message.class);
                         assert message != null;
-                        if ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
-                                || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
+                        if ((message.getSenderUsername() != null && message.getReceiverUsername() != null)
+                                && ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
+                                || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName)))) {
                             messages.add(message);
                             chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1); // Scroll to the bottom of the chat
                             if (message.getStickerId() != null) {
@@ -115,6 +116,7 @@ public class ChatActivity extends AppCompatActivity {
                                 if (message.getStickerId() != null && message.getReceiverUsername().equals(senderName)) {
 
                                     Intent intent = new Intent(ChatActivity.this, ChatActivity.class);
+                                    intent.putExtra("recipient", recipientName);
                                     PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                                     RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_sticker_received);
