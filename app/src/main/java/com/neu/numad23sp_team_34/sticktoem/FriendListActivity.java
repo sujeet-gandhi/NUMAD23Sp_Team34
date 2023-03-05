@@ -45,7 +45,6 @@ public class FriendListActivity extends AppCompatActivity {
 
     Button history;
 
-
     HashMap<String, Integer> stickerCounts = new HashMap<>();
     HashMap<String, Integer> recievedCount = new HashMap<>();
 
@@ -134,17 +133,19 @@ public class FriendListActivity extends AppCompatActivity {
                 }
                 List<String> stickerIds = new ArrayList<>();
                 stickerIds.add("2131165428");
-                stickerIds.add("2131165429");
-                stickerIds.add("2131165430");
-                stickerIds.add("2131165431");
+                stickerIds.add("2131165356");
+                stickerIds.add("2131165334");
+                stickerIds.add("2131165304");
                 for (String stickerId: stickerIds) {
                     int num = countStickers(messages, stickerId);
                     stickerCounts.put(stickerId, num);
+                    Log.d(TAG,"Sticker Id" + stickerId);
                 }
                 Log.d(TAG,"Sticker Counts" + stickerCounts);
                 for(String receivedStickerId: stickerIds) {
                     int receivedStickerCount = countStickers(receivedMes,receivedStickerId);
                     recievedCount.put(receivedStickerId,receivedStickerCount);
+                    Log.d(TAG,"Rec Sticker Id" + receivedStickerId);
                 }
                 Log.d(TAG,"received Counts " + recievedCount);
                 history.setOnClickListener(view -> {

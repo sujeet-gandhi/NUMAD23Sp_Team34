@@ -22,14 +22,10 @@ public class HistoryActivity extends AppCompatActivity {
 
     int num;
     int recnum;
+
     HashMap<String, Integer> SenderCount = new HashMap<>();
 
     HashMap<String, Integer> ReceiverCount = new HashMap<>();
-
-    List<Sticker> stickers;
-
-
-
 
 
     @Override
@@ -42,18 +38,12 @@ public class HistoryActivity extends AppCompatActivity {
         sticker3Text = findViewById(R.id.sticker3);
         sticker4Text = findViewById(R.id.textView9);
 
-        stickers = new ArrayList<>();
-        stickers.add(new Sticker(R.drawable.smile));
-        stickers.add(new Sticker(R.drawable.angry));
-        stickers.add(new Sticker(R.drawable.crying));
-        stickers.add(new Sticker(R.drawable.laugh));
-
 
         String count = getIntent().getStringExtra("stickerCount");
         String ReceivedCount = getIntent().getStringExtra("receivedCount");
         SenderCount = toHashmap(count);
         ReceiverCount = toHashmap(ReceivedCount);
-        String[] keys = {"2131165428", "2131165429", "2131165430", "2131165431"};
+        String[] keys = {"2131165428", "2131165356", "2131165334", "2131165304"};
 
         for (int i = 0; i < keys.length; i++) {
             if (SenderCount.containsKey(keys[i]) && ReceiverCount.containsKey(keys[i])) {
@@ -64,13 +54,13 @@ public class HistoryActivity extends AppCompatActivity {
                         sticker1Text.setText("Sent = "+ num + "\nReceived =" + recnum);
                         break;
                     case 1:
-                        sticker2Text.setText("Sent = "+ num + "\nReceived =" + recnum);
+                        sticker4Text.setText("Sent = "+ num + "\nReceived =" + recnum);
                         break;
                     case 2:
                         sticker3Text.setText("Sent = "+ num + "\nReceived =" + recnum);
                         break;
                     case 3:
-                        sticker4Text.setText("Sent = "+ num + "\nReceived =" + recnum);
+                        sticker2Text.setText("Sent = "+ num + "\nReceived =" + recnum);
                         break;
                 }
             }

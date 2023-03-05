@@ -16,7 +16,7 @@
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
         tools:targetApi="33">
         <activity
-            android:name=".HistoryActivity"
+            android:name=".sticktoem.HistoryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
