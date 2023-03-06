@@ -16,7 +16,16 @@
         android:layout_alignTop="@+id/notificationStickerImageView"
         android:layout_marginStart="16dp"
         android:layout_toEndOf="@+id/notificationStickerImageView"
-        android:text="You received a sticker!"
+        android:text="@string/you_received_a_sticker_string"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/notificationStickerSenderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notificationTextView"
+        android:layout_alignStart="@+id/notificationTextView"
+        android:text="@string/from_username_string"
+        android:textSize="12sp" />
 
 </RelativeLayout>

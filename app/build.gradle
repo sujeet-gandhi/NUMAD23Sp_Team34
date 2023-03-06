@@ -41,5 +41,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+
+
 
 }

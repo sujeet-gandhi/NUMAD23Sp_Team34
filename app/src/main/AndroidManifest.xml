@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
         tools:targetApi="33">
+
+
         <activity
             android:name=".sticktoem.HistoryActivity"
             android:exported="false">

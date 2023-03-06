@@ -98,6 +98,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
+
     public static class ChatSenderViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView messageImageView;

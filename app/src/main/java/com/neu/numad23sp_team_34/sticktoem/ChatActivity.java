@@ -115,12 +115,22 @@ public class ChatActivity extends AppCompatActivity {
                                 // Display the custom notification
                                 if (message.getStickerId() != null && message.getReceiverUsername().equals(senderName)) {
 
+                                    String stickerSenderName = "";
+                                    if (message.getSenderUsername().equals(senderName)) {
+
+                                        stickerSenderName = "You";
+                                    } else {
+
+                                        stickerSenderName = message.getSenderUsername();
+                                    }
+
                                     Intent intent = new Intent(ChatActivity.this, ChatActivity.class);
                                     intent.putExtra("recipient", recipientName);
                                     PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                                     RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_sticker_received);
                                     notificationLayout.setImageViewResource(R.id.notificationStickerImageView, Integer.parseInt(message.getStickerId()));
+                                    notificationLayout.setTextViewText(R.id.notificationStickerSenderTextView, stickerSenderName + " sent a sticker");
 
                                     NotificationCompat.Builder builder = new NotificationCompat.Builder(ChatActivity.this, NOTIFICATION_CHANNEL_ID)
                                             .setSmallIcon(R.mipmap.ic_launcher_round)
@@ -129,7 +139,6 @@ public class ChatActivity extends AppCompatActivity {
                                             .setContentIntent(pendingIntent)
                                             .setAutoCancel(true)
                                             .setPriority(NotificationCompat.PRIORITY_HIGH);
-                                    ;
 
                                     notificationManager.notify(0, builder.build());
                                 }
