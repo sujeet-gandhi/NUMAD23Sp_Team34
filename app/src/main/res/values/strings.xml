@@ -16,7 +16,6 @@
     <string name="channel_name">New Sticker</string>
     <string name="channel_description">Notification for NUMAD23Sp Team 34</string>
     <string name="channel_id">New Sticker NUMAD23Sp Team 34</string>
-    <string name="new_notification_received_string">New notification received!</string>
     <string name="you_received_a_sticker_string">You received a sticker!</string>
-    <string name="from_username_string">From: John Doe</string>
+    <string name="from_username_string">From: username</string>
 </resources>

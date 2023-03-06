@@ -117,10 +117,10 @@ public class ChatActivity extends AppCompatActivity {
 
                                     String stickerSenderName = "";
                                     if (message.getSenderUsername().equals(senderName)) {
-                                        // The user who sent the sticker is the current user
+
                                         stickerSenderName = "You";
                                     } else {
-                                        // The user who sent the sticker is the recipient
+
                                         stickerSenderName = message.getSenderUsername();
                                     }
 
