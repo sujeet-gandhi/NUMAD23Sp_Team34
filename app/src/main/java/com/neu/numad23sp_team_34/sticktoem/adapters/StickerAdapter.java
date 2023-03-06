@@ -91,13 +91,6 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
             Toast.makeText(view.getContext(), "Sticker sent!", Toast.LENGTH_SHORT).show();
 
-            //new
-            mFirebaseMessaging.send(new RemoteMessage.Builder(recipientName + "@fcm.googleapis.com")
-                    .setMessageId(Integer.toString(new Random().nextInt()))
-                    .addData("type", "sticker")
-                    .addData("senderName", senderName)
-                    .addData("stickerResource", Integer.toString(sticker.getImageResourceId()))
-                    .build());
         }
     }
 

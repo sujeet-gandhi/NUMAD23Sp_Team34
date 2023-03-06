@@ -97,13 +97,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return messageList.size();
     }
 
-    //new
-    public void addMessage(Message message) {
-        messageList.add(message);
-        mostRecentStickerMessage = message;
-        notifyItemInserted(messageList.size() - 1);
-        recyclerView.scrollToPosition(messageList.size() - 1);
-    }
 
 
     public static class ChatSenderViewHolder extends RecyclerView.ViewHolder {

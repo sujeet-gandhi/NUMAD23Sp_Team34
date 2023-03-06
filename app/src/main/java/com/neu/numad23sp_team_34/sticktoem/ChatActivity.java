@@ -1,14 +1,20 @@
 package com.neu.numad23sp_team_34.sticktoem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +43,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private TextView recipientNameTextView;
 
+    private static final String NOTIFICATION_CHANNEL_ID = "sticker_received_channel";
+    private static final CharSequence NOTIFICATION_CHANNEL_NAME = "Sticker Received";
+
+    private NotificationManager notificationManager;
+
     private RecyclerView chatRecyclerView, stickerRecyclerView;
 
     private List<Message> messages;
@@ -60,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         senderName = prefs.getString("username", "");
 
-        adapter = new ChatListAdapter(this, messages, senderName, recipientName, chatRecyclerView);
+        adapter = new ChatListAdapter(this, messages, senderName, recipientName,chatRecyclerView);
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         chatRecyclerView.setAdapter(adapter);
@@ -95,14 +106,42 @@ public class ChatActivity extends AppCompatActivity {
                         Log.e(TAG, "onChildAdded: dataSnapshot = " + dataSnapshot.getValue().toString());
                         Message message = dataSnapshot.getValue(Message.class);
                         assert message != null;
-                        if ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
-                                || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName))) {
+                        if ((message.getSenderUsername() != null && message.getReceiverUsername() != null)
+                                && ((message.getSenderUsername().equals(recipientName) && message.getReceiverUsername().equals(senderName))
+                                || (message.getSenderUsername().equals(senderName) && message.getReceiverUsername().equals(recipientName)))) {
+                            messages.add(message);
+                            chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1); // Scroll to the bottom of the chat
                             if (message.getStickerId() != null) {
-                                Sticker sticker = new Sticker(Integer.parseInt(message.getStickerId()));
-                                onStickerReceived(message.getSenderUsername(), message.getReceiverUsername(), String.valueOf(sticker.getImageResourceId()));
-                            } else {
-                                adapter.addMessage(message);
-                                chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
+                                // Display the custom notification
+                                if (message.getStickerId() != null && message.getReceiverUsername().equals(senderName)) {
+
+                                    String stickerSenderName = "";
+                                    if (message.getSenderUsername().equals(senderName)) {
+                                        // The user who sent the sticker is the current user
+                                        stickerSenderName = "You";
+                                    } else {
+                                        // The user who sent the sticker is the recipient
+                                        stickerSenderName = message.getSenderUsername();
+                                    }
+
+                                    Intent intent = new Intent(ChatActivity.this, ChatActivity.class);
+                                    intent.putExtra("recipient", recipientName);
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                                    RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_sticker_received);
+                                    notificationLayout.setImageViewResource(R.id.notificationStickerImageView, Integer.parseInt(message.getStickerId()));
+                                    notificationLayout.setTextViewText(R.id.notificationStickerSenderTextView, stickerSenderName + " sent a sticker");
+
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ChatActivity.this, NOTIFICATION_CHANNEL_ID)
+                                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                                            .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                                            .setCustomContentView(notificationLayout)
+                                            .setContentIntent(pendingIntent)
+                                            .setAutoCancel(true)
+                                            .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+                                    notificationManager.notify(0, builder.build());
+                                }
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -130,21 +169,18 @@ public class ChatActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext()
                                 , "DBError: " + databaseError, Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
         );
-    }
 
-    //new
-    public void onStickerReceived(String senderName, String recipientName, String stickerResource) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
 
-        Sticker sticker = new Sticker(Integer.parseInt(stickerResource));
-        long timestamp = System.currentTimeMillis();
-        Message message = new Message(senderName, recipientName, stickerResource, timestamp);
-        adapter.addMessage(message);
-
-        NotificationActivity notificationActivity = new NotificationActivity();
-        notificationActivity.sendNotification(senderName, "", stickerResource);
     }
 }
