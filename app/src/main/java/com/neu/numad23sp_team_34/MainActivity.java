@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
+import com.neu.numad23sp_team_34.project.CreateStory;
 import com.neu.numad23sp_team_34.sticktoem.StickItToEm;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button stickItToEm;
 
     private Button wanderLust;
+    private Button createStoryBtn;
 
 
     @Override
@@ -25,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         atYourServiceBtn = (Button) findViewById(R.id.atYourService);
         stickItToEm = (Button) findViewById(R.id.stickItToEm);
         wanderLust = (Button) findViewById(R.id.project);
+        createStoryBtn = (Button) findViewById(R.id.createStory);
+
+        createStoryBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CreateStory.class);
+            startActivity(intent);
+        });
 
         atYourServiceBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AtYourService.class);
