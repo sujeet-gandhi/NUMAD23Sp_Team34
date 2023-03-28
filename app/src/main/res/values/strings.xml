@@ -18,4 +18,6 @@
     <string name="channel_id">New Sticker NUMAD23Sp Team 34</string>
     <string name="you_received_a_sticker_string">You received a sticker!</string>
     <string name="from_username_string">From: username</string>
+    <string name="first_name_string">First Name</string>
+    <string name="last_name_string">Last Name</string>
 </resources>
