@@ -29,11 +29,19 @@ import com.neu.numad23sp_team_34.R;
 
 public class NewAccountActivity extends AppCompatActivity {
 
-    EditText edtusername;
-    EditText edtemail;
-    EditText edtpassword;
-    EditText edtconfirmPassword;
+    EditText edtUsername;
+
+    EditText edtEmail;
+
+    EditText edtPassword;
+
+    EditText edtConfirmPassword;
+
     Button signup;
+
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+    Users users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +49,10 @@ public class NewAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_account);
 
 
-        edtusername = (EditText) findViewById(R.id.Username);
-        edtemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
-        edtpassword = (EditText) findViewById(R.id.editTextTextPassword);
-        edtconfirmPassword = (EditText) findViewById(R.id.confirmPassword);
+        edtUsername = (EditText) findViewById(R.id.Username);
+        edtEmail = (EditText) findViewById(R.id.editTextTextEmailAddress);
+        edtPassword = (EditText) findViewById(R.id.editTextTextPassword);
+        edtConfirmPassword = (EditText) findViewById(R.id.confirmPassword);
         signup = (Button) findViewById(R.id.Signup);
 
 
@@ -53,52 +61,50 @@ public class NewAccountActivity extends AppCompatActivity {
 
         signup.setOnClickListener(view -> {
 
-            String username = edtusername.getText().toString();
-            String email = edtemail.getText().toString();
-            String password = edtpassword.getText().toString();
-            String confirmPassword = edtconfirmPassword.getText().toString();
-
+            String username = edtUsername.getText().toString();
+            String email = edtEmail.getText().toString();
+            String password = edtPassword.getText().toString();
+            String confirmPassword = edtConfirmPassword.getText().toString();
             if(username.isEmpty()){
-                edtusername.setError("This field cannot be empty");
-                edtusername.requestFocus();
+                edtUsername.setError("This field cannot be empty");
+                edtUsername.requestFocus();
                 Toast.makeText(NewAccountActivity.this,"Please enter a user " +
                         "name",Toast.LENGTH_SHORT).show();
             }else if(TextUtils.isEmpty(email)){
                 Toast.makeText(NewAccountActivity.this,"Please enter email-id" +
                         "!",Toast.LENGTH_SHORT).show();
-                edtemail.setError("This field cannot be empty");
-                edtemail.requestFocus();
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(edtemail.getText().toString()).matches()){
+                edtEmail.setError("This field cannot be empty");
+                edtEmail.requestFocus();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches()){
                 Toast.makeText(NewAccountActivity.this,"Please " +
                         "enter email-id in correct format!",Toast.LENGTH_SHORT).show();
-                edtemail.setError("Not correct format");
-                edtemail.requestFocus();
+                edtEmail.setError("Not correct format");
+                edtEmail.requestFocus();
             }else if(password.isEmpty()) {
                 Toast.makeText(NewAccountActivity.this, "Please " +
                         "enter the password!", Toast.LENGTH_SHORT).show();
-                edtpassword.setError("This field cannot be empty");
-                edtpassword.requestFocus();
+                edtPassword.setError("This field cannot be empty");
+                edtPassword.requestFocus();
             }else if(password.length()<6){
                 Toast.makeText(NewAccountActivity.this,"Password must " +
                         "have at least 6 characters",Toast.LENGTH_SHORT).show();
-                edtpassword.setError("More than 6 characters");
-                edtpassword.requestFocus();
+                edtPassword.setError("More than 6 characters");
+                edtPassword.requestFocus();
             } else if(confirmPassword.isEmpty()){
-                edtconfirmPassword.setError("Please confirm the password");
-                edtconfirmPassword.requestFocus();
+                edtConfirmPassword.setError("Please confirm the password");
+                edtConfirmPassword.requestFocus();
             }else if(!password.equals(confirmPassword)){
-                edtconfirmPassword.setError("Passwords don't match");
-                edtconfirmPassword.requestFocus();
+                edtConfirmPassword.setError("Passwords don't match");
+                edtConfirmPassword.requestFocus();
             } else {
-
                 FirebaseAuth auth = FirebaseAuth.getInstance();
-
                 if (!(username.isEmpty() && email.isEmpty()
                         && password.isEmpty()
                         && confirmPassword.isEmpty())) {
 
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            firebaseDatabase.getReference().child("WanderLustUser").setValue(new Users(username,email,password));
                             Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
 
                         } else {
