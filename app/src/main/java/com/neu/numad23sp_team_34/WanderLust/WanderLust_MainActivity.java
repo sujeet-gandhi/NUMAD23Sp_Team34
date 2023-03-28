@@ -26,7 +26,7 @@ public class WanderLust_MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         createAccount.setOnClickListener(view -> {
-            Intent intent = new Intent(WanderLust_MainActivity.this,WanderLust_MainActivity.class);
+            Intent intent = new Intent(WanderLust_MainActivity.this,NewAccountActivity.class);
             startActivity(intent);
         });
 
