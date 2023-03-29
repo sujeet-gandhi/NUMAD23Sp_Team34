@@ -1,14 +1,18 @@
 package com.neu.numad23sp_team_34.project;
 
+import java.util.List;
+
 public class Story {
     private String id;
     private String title;
     private String description;
-    private String itinerary;
     private String review;
     private float rating;
 
-    public Story(String id, String title, String description, String review, float rating) {
+    private List<String> itinerary;
+
+
+    public Story(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> itinerary) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,6 +37,10 @@ public class Story {
         this.title = title;
     }
 
+    public List<String> getItinerary() {
+        return itinerary;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -41,11 +49,9 @@ public class Story {
         this.description = description;
     }
 
-    public String getItinerary() {
-        return itinerary;
-    }
 
-    public void setItinerary(String itinerary) {
+
+    public void setItinerary(List<String> itinerary) {
         this.itinerary = itinerary;
     }
 
