@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     >
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +24,8 @@
             android:layout_height="wrap_content"
             android:hint="Story Title" />
 
+
+
         <EditText
             android:id="@+id/editTextStoryDescription"
             android:layout_width="match_parent"
@@ -26,18 +34,27 @@
             android:inputType="textMultiLine"
             android:minLines="4" />
 
-        <ImageView
-            android:id="@+id/storyImageView"
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:layout_marginTop="16dp"
+            android:scrollbars="horizontal" />
 
-        <Button
+
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonAddImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Add Image"
             android:layout_gravity="center_horizontal"
-            android:text="Add Image" />
+            android:textAllCaps="false"
+            app:cornerRadius="4dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
         <Button
             android:id="@+id/buttonAddLocation"
@@ -47,13 +64,12 @@
             android:text="Add Location" />
 
 
-        <EditText
-            android:id="@+id/editTextItinerary"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/itineraryRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Itinerary"
-            android:inputType="textMultiLine"
-            android:minLines="4" />
+            android:orientation="vertical" />
+
 
         <EditText
             android:id="@+id/editTextReview"
@@ -79,4 +95,6 @@
             android:text="Submit Story" />
 
     </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 </ScrollView>
