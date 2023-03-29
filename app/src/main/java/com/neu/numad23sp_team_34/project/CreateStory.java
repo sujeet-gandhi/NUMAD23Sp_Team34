@@ -158,7 +158,6 @@ public class CreateStory extends AppCompatActivity {
     private void submitStory() {
         String storyTitle = editTextStoryTitle.getText().toString();
         String storyDescription = editTextStoryDescription.getText().toString();
-//        String itinerary = editTextItinerary.getText().toString();
         String review = editTextReview.getText().toString();
         float rating = ratingBar.getRating();
 
@@ -167,7 +166,7 @@ public class CreateStory extends AppCompatActivity {
         String storyId = databaseReference.push().getKey();
 
         // Create a Story object with the input data
-        Story story = new Story(storyId, storyTitle, storyDescription, review, rating);
+        Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems);
 
         // Save the story object to the Realtime Database
         databaseReference.child(storyId).setValue(story);
@@ -179,7 +178,7 @@ public class CreateStory extends AppCompatActivity {
     }
 
     private void uploadImages(String storyId) {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("story_images").child(storyId);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("stories/images").child(storyId);
 
         for (int i = 0; i < images.size(); i++) {
             Bitmap image = images.get(i);
