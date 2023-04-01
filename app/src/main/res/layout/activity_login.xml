@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="false"
-    android:background="#122f3e"
+    android:background="@drawable/peralbeach"
     tools:context=".WanderLust.LoginActivity">
 
 
@@ -29,6 +29,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:backgroundTint="#c0dfee"
+                android:background="@drawable/night"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:cardCornerRadius="30sp"

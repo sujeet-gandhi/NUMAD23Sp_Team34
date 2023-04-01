@@ -8,13 +8,7 @@ public class Users {
     private String WanderLust_email;
     private String WanderLust_password;
 
-    public String getWanderLust_userid() {
-        return WanderLust_userid;
-    }
 
-    public void setWanderLust_userid(String wanderLust_userid) {
-        WanderLust_userid = wanderLust_userid;
-    }
 
     //    public Users(){
 //    }
@@ -23,6 +17,15 @@ public class Users {
         this.WanderLust_username = WanderLust_username;
         this.WanderLust_email=WanderLust_email;
         this.WanderLust_password=WanderLust_password;
+    }
+
+
+    public String getWanderLust_userid() {
+        return WanderLust_userid;
+    }
+
+    public void setWanderLust_userid(String wanderLust_userid) {
+        WanderLust_userid = wanderLust_userid;
     }
 
 

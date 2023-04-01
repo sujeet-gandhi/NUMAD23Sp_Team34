@@ -110,6 +110,7 @@ public class NewAccountActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
 
                         } else {
+
                             Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
 
