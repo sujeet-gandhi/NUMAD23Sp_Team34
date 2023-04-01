@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_centerVertical="false"
     android:background="#122f3e"
-    tools:context=".WanderLust.LoginActivity">
+    tools:context=".wanderlust.login.LoginActivity">
 
 
     <ScrollView

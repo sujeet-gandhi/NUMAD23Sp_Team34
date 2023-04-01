@@ -7,6 +7,10 @@ android {
     namespace 'com.neu.numad23sp_team_34'
     compileSdk 33
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.neu.numad23sp_team_34"
         minSdk 27
