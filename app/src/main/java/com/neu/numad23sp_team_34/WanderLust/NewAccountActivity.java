@@ -55,7 +55,12 @@ public class NewAccountActivity extends AppCompatActivity {
         edtConfirmPassword = (EditText) findViewById(R.id.confirmPassword);
         signup = (Button) findViewById(R.id.Signup);
 
+
+
+
+
         signup.setOnClickListener(view -> {
+
             String username = edtUsername.getText().toString();
             String email = edtEmail.getText().toString();
             String password = edtPassword.getText().toString();
@@ -99,9 +104,7 @@ public class NewAccountActivity extends AppCompatActivity {
 
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            String userid = task.getResult().getUser().getUid();
-                            users =new Users(userid,username,email,password);
-                            firebaseDatabase.getReference().child("WanderLustUser").child(userid).setValue(users);
+                            firebaseDatabase.getReference().child("WanderLustUser").setValue(new Users(username,email,password));
                             Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
 
                         } else {
