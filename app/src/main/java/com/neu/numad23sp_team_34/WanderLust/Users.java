@@ -2,17 +2,30 @@ package com.neu.numad23sp_team_34.WanderLust;
 
 public class Users {
 
+
+    private String WanderLust_userid;
     private String WanderLust_username;
     private String WanderLust_email;
     private String WanderLust_password;
 
 
-//    public Users(){
+
+
+    //    public Users(){
 //    }
-    public Users(String WanderLust_username,String WanderLust_email,String WanderLust_password ){
+    public Users(String WanderLust_userid, String WanderLust_username,String WanderLust_email,String WanderLust_password ){
+        this.WanderLust_userid=WanderLust_userid;
         this.WanderLust_username = WanderLust_username;
         this.WanderLust_email=WanderLust_email;
         this.WanderLust_password=WanderLust_password;
+    }
+
+    public String getWanderLust_userid() {
+        return WanderLust_userid;
+    }
+
+    public void setWanderLust_userid(String wanderLust_userid) {
+        WanderLust_userid = wanderLust_userid;
     }
 
 
