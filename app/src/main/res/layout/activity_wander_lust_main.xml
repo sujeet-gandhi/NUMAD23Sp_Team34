@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/mainpage"
-    tools:context=".WanderLust.WanderLust_MainActivity">
+    tools:context=".wanderlust.WanderLust_MainActivity">
 
 
     <TextView

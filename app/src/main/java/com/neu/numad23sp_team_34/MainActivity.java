@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.neu.numad23sp_team_34.WanderLust.WanderLust_MainActivity;
+import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
 import com.neu.numad23sp_team_34.sticktoem.StickItToEm;
 
 public class MainActivity extends AppCompatActivity {
