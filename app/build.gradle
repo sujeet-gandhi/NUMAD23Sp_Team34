@@ -7,6 +7,10 @@ android {
     namespace 'com.neu.numad23sp_team_34'
     compileSdk 33
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.neu.numad23sp_team_34"
         minSdk 27
@@ -35,6 +39,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     implementation 'com.google.firebase:firebase-analytics'
@@ -42,7 +47,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.firebase:firebase-database:20.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
-
-
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
 
 }
