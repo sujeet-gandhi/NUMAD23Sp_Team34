@@ -24,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        profilePicture = findViewById(R.id.profile_picture);
+        profilePicture = findViewById(R.id.profile_picture_icon);
         profilePicture.setOnClickListener(this);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -34,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.profile_picture) {
+        if (id == R.id.profile_picture_icon) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
         }

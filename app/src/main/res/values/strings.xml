@@ -20,4 +20,6 @@
     <string name="from_username_string">From: username</string>
     <string name="first_name_string">First Name</string>
     <string name="last_name_string">Last Name</string>
+    <string name="profile_pic_icon_string">Profile pic icon</string>
+    <string name="profile_picture_string">Profile Picture</string>
 </resources>
