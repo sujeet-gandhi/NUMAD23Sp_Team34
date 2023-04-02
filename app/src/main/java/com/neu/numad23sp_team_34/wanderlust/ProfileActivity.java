@@ -1,4 +1,4 @@
-package com.neu.numad23sp_team_34;
+package com.neu.numad23sp_team_34.wanderlust;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.neu.numad23sp_team_34.R;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 

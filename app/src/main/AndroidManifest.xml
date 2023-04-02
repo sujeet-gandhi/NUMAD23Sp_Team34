@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -16,10 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
-        tools:targetApi="33" >
+        tools:targetApi="33">
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" >
+            android:name=".wanderlust.OtherUserProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".wanderlust.ProfileActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -54,14 +60,14 @@
         </activity>
         <activity
             android:name=".sticktoem.HistoryActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".sticktoem.ChatActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
