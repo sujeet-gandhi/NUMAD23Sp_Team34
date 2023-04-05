@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -24,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
@@ -60,7 +62,7 @@ public class CreateStory extends AppCompatActivity {
 
     private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview;
     private ImageView storyImageView;
-    private Button buttonAddImage, buttonSubmit;
+    private Button buttonAddImage, buttonSubmit, buttonPreview;
     private RatingBar ratingBar;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 2;
 
@@ -85,7 +87,9 @@ public class CreateStory extends AppCompatActivity {
         editTextReview = findViewById(R.id.editTextReview);
         buttonAddImage = findViewById(R.id.buttonAddImage);
         buttonSubmit = findViewById(R.id.buttonSubmit);
+        buttonPreview = findViewById(R.id.buttonPreview);
         ratingBar = findViewById(R.id.ratingBar);
+
 
         imageRecyclerView = findViewById(R.id.imageRecyclerView);
         imageAdapter = new ImageAdapter(this, images);
@@ -96,7 +100,11 @@ public class CreateStory extends AppCompatActivity {
         Button buttonAddLocation = findViewById(R.id.buttonAddLocation);
 
         itineraryRecyclerView = findViewById(R.id.itineraryRecyclerView);
-        itineraryAdapter = new ItineraryAdapter(itineraryItems);
+        itineraryAdapter = new ItineraryAdapter( itineraryItems, () -> {
+            buttonAddLocation.setVisibility(View.INVISIBLE);
+            buttonAddLocation.callOnClick();
+            itineraryAdapter.notifyDataSetChanged();
+        });
         LinearLayoutManager layoutManagerItinerary = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);
@@ -112,6 +120,17 @@ public class CreateStory extends AppCompatActivity {
                 launchPlacesAutocomplete();
             }
         });
+
+        buttonPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPreviewDialog();
+            }
+        });
+
+
+
+
 
 
 
@@ -152,6 +171,45 @@ public class CreateStory extends AppCompatActivity {
                 Toast.makeText(this, "Camera permission is required to take a photo", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    private void showPreviewDialog() {
+        // Get the data from input fields
+        String title = editTextStoryTitle.getText().toString();
+        String description = editTextStoryDescription.getText().toString();
+        String review = editTextReview.getText().toString();
+        float rating = ratingBar.getRating();
+
+
+
+        // Create a custom dialog
+        Dialog previewDialog = new Dialog(this);
+        previewDialog.setContentView(R.layout.dialog_story_preview);
+
+        // Set the data for the TextViews in the dialog
+        TextView textViewTitle = previewDialog.findViewById(R.id.textViewTitle);
+        TextView textViewDescription = previewDialog.findViewById(R.id.textViewDescription);
+        textViewTitle.setText(title);
+        textViewDescription.setText(description);
+
+        RatingBar previewRatingBar = previewDialog.findViewById(R.id.previewRatingBar);
+        previewRatingBar.setRating(rating);
+
+        // Set the location for the TextView in the dialog
+        RecyclerView dialogImageRecyclerView = previewDialog.findViewById(R.id.dialogImageRecyclerView);
+        ImageAdapter dialogImageAdapter = new ImageAdapter(this, images);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        dialogImageRecyclerView.setLayoutManager(layoutManager);
+        dialogImageRecyclerView.setAdapter(dialogImageAdapter);
+
+        // Set the image for the ImageView in the dialog
+        // Replace the line below with the actual image data
+
+
+
+        // Show the dialog
+        previewDialog.show();
     }
 
 
@@ -284,14 +342,15 @@ public class CreateStory extends AppCompatActivity {
     }
 
     private void addLocationToItinerary(String placeName, String placeAddress) {
-        String locationEntry = placeName + " - " + placeAddress;
+        String locationEntry = "📍 " + placeName + " (" + placeAddress + ")";
         itineraryItems.add(locationEntry);
         itineraryAdapter.notifyDataSetChanged();
     }
 
 
 
-        // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
+
+    // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
         // ...
 
 
