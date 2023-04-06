@@ -17,6 +17,27 @@
         android:theme="@style/Theme.NUMAD23Sp_Team_34"
         tools:targetApi="33">
         <activity
+            android:name=".UserProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".wanderlust.WanderLust_MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".wanderlust.User"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".wanderlust.home.HomeActivity"
             android:exported="false">
             <meta-data
@@ -24,7 +45,21 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".wanderlust.login.NewAccountActivity"
+            android:name=".wanderlust.home.FavoriteFragment"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".wanderlust.home.ProfileFragment"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".wanderlust.home.TripsFragment"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -38,7 +73,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".wanderlust.WanderLust_MainActivity"
+            android:name=".wanderlust.login.NewAccountActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

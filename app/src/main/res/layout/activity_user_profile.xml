@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mountains"
+    tools:context=".wanderlust.UserProfileActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="40dp"
+            android:background="#003060">
+
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_picture"
+                android:layout_centerHorizontal="true"
+                android:hint="loading..."
+                android:text="Loading..."
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:id="@+id/Username_view"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="#C3E0E5">
+            <ImageView
+                android:id="@+id/profile_icon"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                app:srcCompat="@drawable/profile"
+                />
+            <TextView
+                android:id="@+id/Userprofile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:hint="Loading..."
+                android:textSize="20dp"
+                android:layout_marginStart="50dp"
+                android:layout_alignStart="@+id/profile_icon"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:id="@+id/Email_view"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20sp"
+            android:background="#C3E0E5">
+            <ImageView
+                android:id="@+id/profile_icon2"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                app:srcCompat="@android:drawable/sym_action_email"
+                />
+            <TextView
+                android:id="@+id/Userprofile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:hint="Loading..."
+                android:textSize="20dp"
+                android:layout_marginStart="50dp"
+                android:layout_alignStart="@+id/profile_icon2"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Password_view"
+            android:padding="15dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20sp"
+            android:background="#C3E0E5">
+            <ImageView
+                android:id="@+id/profile_icon3"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                app:srcCompat="@android:drawable/ic_lock_idle_lock"
+                />
+            <TextView
+                android:id="@+id/Userprofile_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:hint="Loading..."
+                android:textSize="20dp"
+                android:layout_marginStart="50dp"
+                android:layout_alignStart="@+id/profile_icon3"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+</ScrollView>
