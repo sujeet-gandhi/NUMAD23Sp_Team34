@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +15,8 @@ import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -60,7 +59,7 @@ public class CreateStory extends AppCompatActivity {
     private ImageAdapter imageAdapter;
     private List<Bitmap> images = new ArrayList<>();
 
-    private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview;
+    private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview, editKeywords;
     private ImageView storyImageView;
     private Button buttonAddImage, buttonSubmit, buttonPreview;
     private RatingBar ratingBar;
@@ -89,6 +88,7 @@ public class CreateStory extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.buttonSubmit);
         buttonPreview = findViewById(R.id.buttonPreview);
         ratingBar = findViewById(R.id.ratingBar);
+        editKeywords = findViewById(R.id.keywords);
 
 
         imageRecyclerView = findViewById(R.id.imageRecyclerView);
@@ -110,10 +110,6 @@ public class CreateStory extends AppCompatActivity {
         itineraryRecyclerView.setAdapter(itineraryAdapter);
         itineraryRecyclerView.addItemDecoration(new ConnectingLineItemDecoration(Color.GRAY, 5));
 
-
-
-
-
         buttonAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,13 +124,6 @@ public class CreateStory extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
         buttonAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +134,8 @@ public class CreateStory extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Do Validation for all the fields here
+
                 submitStory();
             }
         });
@@ -217,26 +208,24 @@ public class CreateStory extends AppCompatActivity {
         String storyTitle = editTextStoryTitle.getText().toString();
         String storyDescription = editTextStoryDescription.getText().toString();
         String review = editTextReview.getText().toString();
+        List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
         float rating = ratingBar.getRating();
 
         // Create a unique ID for the story
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
         String storyId = databaseReference.push().getKey();
 
-        // Create a Story object with the input data
-        Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems);
-
-        // Save the story object to the Realtime Database
-        databaseReference.child(storyId).setValue(story);
-
         // Upload images to Firebase Storage
-        uploadImages(storyId);
+        uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
 
         Toast.makeText(this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
-    private void uploadImages(String storyId) {
+    private void uploadImagesAndCreateStory(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> keywords) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("stories/images").child(storyId);
+
+        List<String> imageUrls = new ArrayList<>();
 
         for (int i = 0; i < images.size(); i++) {
             Bitmap image = images.get(i);
@@ -247,18 +236,26 @@ public class CreateStory extends AppCompatActivity {
             StorageReference imageRef = storageReference.child("image_" + i + ".jpg");
             UploadTask uploadTask = imageRef.putBytes(imageData);
 
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(CreateStory.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(CreateStory.this, "Image uploaded successfully!", Toast.LENGTH_SHORT
-                    ).show();
-                }
-            });
+            uploadTask
+                    .addOnFailureListener(e ->
+                            Toast.makeText(CreateStory.this, "Failed to upload image: " + e.getMessage() + "\n Try again", Toast.LENGTH_SHORT).show()
+                    )
+                    .addOnSuccessListener(taskSnapshot -> {
+                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imageUrls.add(uri.toString());
+                                if (images.size() == imageUrls.size()) {
+                                    // Create a Story object with the input data
+                                    Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems, imageUrls, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),  keywords);
+
+                                    // Save the story object to the Realtime Database
+                                    FirebaseDatabase.getInstance().getReference("stories").child(storyId).setValue(story);
+                                }
+                            }
+                        });
+                        Toast.makeText(CreateStory.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 
