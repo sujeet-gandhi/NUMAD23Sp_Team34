@@ -70,6 +70,7 @@
                             android:ems="10"
                             android:hint="Enter new Password"
                             android:inputType="textPassword" />
+
                         <EditText
                             android:id="@+id/confirmPassword"
                             android:layout_width="match_parent"
@@ -92,8 +93,6 @@
                             android:topRightRadius="30dp"
                             android:backgroundTint="#055C9D"
                             android:text="Signup" />
-
-
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

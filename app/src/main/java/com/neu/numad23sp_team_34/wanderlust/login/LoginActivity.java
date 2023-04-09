@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.wanderlust.UserProfileActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -112,8 +113,8 @@ public class LoginActivity extends AppCompatActivity {
                                 //Email verification before login.
                                 if (firebaseUser.isEmailVerified()) {
                                     Toast.makeText(LoginActivity.this, "You are logged in!", Toast.LENGTH_SHORT).show();
-                                    //Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
-                                    //startActivity(intent);
+                                    Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                    startActivity(intent);
                                 } else {
                                     firebaseUser.sendEmailVerification();
                                     firebaseAuth.signOut();
@@ -164,8 +165,8 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
+                startActivity(intent);
             }
         });
 
