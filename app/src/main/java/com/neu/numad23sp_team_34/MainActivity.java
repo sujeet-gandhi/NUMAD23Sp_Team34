@@ -20,10 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private Button stickItToEm;
 
     private Button wanderLust;
-    private Button createStoryBtn;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +28,6 @@ public class MainActivity extends AppCompatActivity {
         atYourServiceBtn = (Button) findViewById(R.id.atYourService);
         stickItToEm = (Button) findViewById(R.id.stickItToEm);
         wanderLust = (Button) findViewById(R.id.project);
-        createStoryBtn = (Button) findViewById(R.id.createStory);
-
-        createStoryBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, CreateStory.class);
-            startActivity(intent);
-        });
 
         atYourServiceBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AtYourService.class);
