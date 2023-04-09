@@ -13,9 +13,9 @@ public class Story {
 
 
     public Story(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> itinerary) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
+        this.id = storyId;
+        this.title = storyTitle;
+        this.description = storyDescription;
         this.itinerary = itinerary;
         this.review = review;
         this.rating = rating;
