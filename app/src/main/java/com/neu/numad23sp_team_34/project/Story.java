@@ -8,17 +8,27 @@ public class Story {
     private String description;
     private String review;
     private float rating;
+    private List<String> imageUrl;
+    private String userName;
+    private List<String> keywords;
 
     private List<String> itinerary;
 
+    public Story() {
 
-    public Story(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> itinerary) {
-        this.id = storyId;
-        this.title = storyTitle;
-        this.description = storyDescription;
-        this.itinerary = itinerary;
+    }
+
+    public Story(String id, String title, String description, String review, float rating,
+                 List<String> itinerary, List<String> imageUrl, String userName, List<String> keywords) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
         this.review = review;
         this.rating = rating;
+        this.imageUrl = imageUrl;
+        this.userName = userName;
+        this.keywords = keywords;
+        this.itinerary = itinerary;
     }
 
     public String getId() {
@@ -49,8 +59,6 @@ public class Story {
         this.description = description;
     }
 
-
-
     public void setItinerary(List<String> itinerary) {
         this.itinerary = itinerary;
     }
@@ -71,6 +79,29 @@ public class Story {
         this.rating = rating;
     }
 
+    public List<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(List<String> imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
+    }
 
     // Add getters and setters for each field
 }

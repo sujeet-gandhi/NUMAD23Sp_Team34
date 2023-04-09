@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void populateFragments() {
-        TripsFragment tripsFragment = TripsFragment.newInstance("", "");
+        TripsFragment tripsFragment = TripsFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(binding.tripsContainer.getId(), tripsFragment);
         transaction.commit();
