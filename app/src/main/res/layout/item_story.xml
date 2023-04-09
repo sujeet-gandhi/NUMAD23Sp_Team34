@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/storyCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/storyImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:id="@+id/storyTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/storyImage"
+                android:textSize="32sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                tools:text="Yosemite Park"/>
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/userLogo"
+                android:layout_toEndOf="@id/storyImage"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="32dp"
+                android:textColor="@color/black"
+                tools:text="Super User"/>
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/storyTitle"
+                android:textSize="32sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                tools:text="Yosemite Park"/>
+
+            <ImageView
+                android:id="@+id/userLogo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_toEndOf="@id/storyImage"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/baseline_account_circle_24"
+                android:layout_alignParentTop="true"
+                app:tint="@color/black"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
