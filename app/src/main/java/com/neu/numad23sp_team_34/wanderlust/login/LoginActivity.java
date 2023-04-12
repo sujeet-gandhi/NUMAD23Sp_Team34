@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
+
     private static final String TAG = "LoginActivity";
 //    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -63,24 +65,27 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //password hide and show
+        ;
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+        ImageView pwd_show_hide =(ImageView) findViewById(R.id.pwdhideshow);
 //        ImageView pwd_show_hide = (ImageView) findViewById(R.id.pwd_hide);
-//        pwd_show_hide.setImageResource(R.drawable.ic_pwdhide);
-//        pwd_show_hide.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (password.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
-//
-//                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-//
-//                    pwd_show_hide.setImageResource(R.drawable.ic_pwdhide);
-//                } else {
-//                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-//                    pwd_show_hide.setImageResource(R.drawable.ic_pwdshow);
-//                }
-//
-//            }
-//        });
+        pwd_show_hide.setImageResource(R.drawable.ic_pwdhide);
+        pwd_show_hide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (password.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    pwd_show_hide.setImageResource(R.drawable.ic_pwdhide);
+                } else {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    pwd_show_hide.setImageResource(R.drawable.ic_pwdshow);
+                }
+
+            }
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
 

@@ -2,6 +2,7 @@ package com.neu.numad23sp_team_34.wanderlust.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.wanderlust.User;
+import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 public class NewAccountActivity extends AppCompatActivity {
 
@@ -36,7 +38,7 @@ public class NewAccountActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-    User user;
+    User users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +117,8 @@ public class NewAccountActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -129,6 +130,25 @@ public class NewAccountActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
+//                                                String userid = task.getResult().getUser().getUid();
+//                                                users =new User(username,email,password);
+//                                                firebaseDatabase.getReference().child("WanderLustUser").child(userid).setValue(users);
+                                                String userid = task.getResult().toString();
+                                                firebaseDatabase.getReference().child("Wander" +
+                                                        "LustUser").child(userid).setValue(new User(username,email,password));
+                                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                                //email verification.
+                                                firebaseUser.sendEmailVerification();
+
+                                                //Opening an activity after registration.
+                                                Intent intent = new Intent(NewAccountActivity.this, HomeActivity.class);
+                                                //
+                                                //Once finish registering, clear out the activities behind.
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                                startActivity(intent);
+                                                finish();
                                             }
                                         }
                                     });
