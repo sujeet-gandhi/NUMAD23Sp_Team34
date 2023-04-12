@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.wanderlust.login.NewAccountActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class CreateStory extends AppCompatActivity {
     private List<Bitmap> images = new ArrayList<>();
 
     private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview, editKeywords;
+    private String storyTitle,storyDescription,storyReview;
     private ImageView storyImageView;
     private Button buttonAddImage, buttonSubmit, buttonPreview;
     private RatingBar ratingBar;
@@ -110,33 +113,64 @@ public class CreateStory extends AppCompatActivity {
         itineraryRecyclerView.setAdapter(itineraryAdapter);
         itineraryRecyclerView.addItemDecoration(new ConnectingLineItemDecoration(Color.GRAY, 5));
 
-        buttonAddLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchPlacesAutocomplete();
-            }
-        });
 
-        buttonPreview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPreviewDialog();
-            }
-        });
 
-        buttonAddImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
+
+
+
+
+        buttonAddLocation.setOnClickListener(v -> launchPlacesAutocomplete());
+
+        buttonPreview.setOnClickListener(v -> showPreviewDialog());
+
+        buttonAddImage.setOnClickListener(v -> chooseImage());
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Do Validation for all the fields here
+                storyTitle = editTextStoryTitle.getText().toString();
+                storyDescription=editTextStoryDescription.getText().toString();
+                storyReview =editTextReview.getText().toString();
 
-                submitStory();
+                if(storyTitle.isEmpty()){
+                    editTextStoryTitle.setError("This field cannot be empty");
+                    editTextStoryTitle.requestFocus();
+                    Toast.makeText(CreateStory.this,"Please enter the Story Title. " +
+                            "",Toast.LENGTH_SHORT).show();
+                } else if(TextUtils.isEmpty(storyDescription)){
+                    editTextStoryDescription.setError("This field cannot be empty");
+                    editTextStoryDescription.requestFocus();
+                    Toast.makeText(CreateStory.this,"Please enter a short Description. " +
+                            "",Toast.LENGTH_SHORT).show();
+                } else if(storyTitle.length()>100){
+                    editTextStoryTitle.setError("Story title must be under 100 characters");
+                    editTextStoryTitle.requestFocus();
+                    Toast.makeText(CreateStory.this,"Please enter a short Description. " +
+                            "",Toast.LENGTH_SHORT).show();
+                } else if (storyDescription.length()>800){
+                    editTextStoryDescription.setError("Story Description must be under 800 characters");
+                    editTextStoryDescription.requestFocus();
+                    Toast.makeText(CreateStory.this,"Please enter a short Description. " +
+                            "",Toast.LENGTH_SHORT).show();
+
+                } else if(imageAdapter.getItemCount()==0){
+                    Toast.makeText(CreateStory.this,"Please add an image... " +
+                            "",Toast.LENGTH_SHORT).show();
+
+                } else if(itineraryAdapter.getItemCount()==0){
+                    Toast.makeText(CreateStory.this,"Please add location..." +
+                            "",Toast.LENGTH_SHORT).show();
+                } else if(itineraryAdapter.getItemCount()==1){
+                    Toast.makeText(CreateStory.this,"Trip needs two locations..." +
+                            "",Toast.LENGTH_SHORT).show();
+                } else if (ratingBar.getRating()==0.0){
+                    Toast.makeText(CreateStory.this,"Rating can not be empty..." +
+                            "",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    submitStory();
+                }
             }
         });
 
@@ -344,9 +378,13 @@ public class CreateStory extends AppCompatActivity {
         itineraryAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
 
 
+    }
     // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
         // ...
 
