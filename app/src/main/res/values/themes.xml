@@ -19,5 +19,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/colorText</item>
+        <item name="windowActionBar">false</item> <!-- Add this line -->
+        <item name="windowNoTitle">true</item> <!-- Add this line -->
     </style>
 </resources>
