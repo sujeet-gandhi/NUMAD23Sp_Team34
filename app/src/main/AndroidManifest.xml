@@ -31,6 +31,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".project.MyStoriesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
             android:name=".wanderlust.login.LoginActivity"
             android:exported="false">
             <meta-data

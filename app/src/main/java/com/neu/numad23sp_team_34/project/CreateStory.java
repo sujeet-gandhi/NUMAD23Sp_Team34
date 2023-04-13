@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CreateStory extends AppCompatActivity {
 
@@ -226,6 +227,7 @@ public class CreateStory extends AppCompatActivity {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("stories/images").child(storyId);
 
         List<String> imageUrls = new ArrayList<>();
+        AtomicInteger imagesUploaded = new AtomicInteger(0); // Counter to track uploaded images
 
         for (int i = 0; i < images.size(); i++) {
             Bitmap image = images.get(i);
@@ -241,20 +243,18 @@ public class CreateStory extends AppCompatActivity {
                             Toast.makeText(CreateStory.this, "Failed to upload image: " + e.getMessage() + "\n Try again", Toast.LENGTH_SHORT).show()
                     )
                     .addOnSuccessListener(taskSnapshot -> {
-                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                imageUrls.add(uri.toString());
-                                if (images.size() == imageUrls.size()) {
-                                    // Create a Story object with the input data
-                                    Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems, imageUrls, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),  keywords);
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            imageUrls.add(uri.toString());
+                            int uploadedCount = imagesUploaded.incrementAndGet(); // Increment the counter
 
-                                    // Save the story object to the Realtime Database
-                                    FirebaseDatabase.getInstance().getReference("stories").child(storyId).setValue(story);
-                                }
+                            if (uploadedCount == images.size()) {
+                                // All images are uploaded, now create the story
+                                Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems, imageUrls, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), keywords);
+                                FirebaseDatabase.getInstance().getReference("stories").child(storyId).setValue(story);
+                                Toast.makeText(CreateStory.this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         });
-                        Toast.makeText(CreateStory.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                     });
         }
     }
@@ -262,7 +262,7 @@ public class CreateStory extends AppCompatActivity {
 
 
 
-                    private void chooseImage() {
+    private void chooseImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose an option")
                 .setItems(new CharSequence[]{"Take a photo", "Choose from gallery"},

@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create Story"
+                android:text="✈️ Create Story"
                 android:textSize="28sp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Story Title"
+                android:text="Story Title 📝"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
@@ -108,11 +108,11 @@
                 android:id="@+id/buttonAddImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Image"
+                android:text="📷 Add Image"
                 android:layout_gravity="center_horizontal"
                 android:textAllCaps="false"
-                android:textColor="@android:color/black"
-                android:backgroundTint="@android:color/white"
+                android:textColor="@color/button_text_color"
+                android:backgroundTint="@color/button_color"
                 android:layout_marginTop="16dp"
                 app:cornerRadius="4dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
@@ -130,9 +130,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Add Location"
-                android:textColor="@android:color/black"
-                android:backgroundTint="@android:color/white"
+                android:text="🌎 Add Location"
+                android:textColor="@color/button_text_color"
+                android:backgroundTint="@color/button_color"
                 android:layout_marginTop="16dp" />
 
 
