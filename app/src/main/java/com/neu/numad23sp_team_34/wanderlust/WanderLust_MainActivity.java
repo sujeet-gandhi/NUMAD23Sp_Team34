@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.neu.numad23sp_team_34.R;
-import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
+import com.neu.numad23sp_team_34.wanderlust.details.Activities.MainScreen;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
 import com.neu.numad23sp_team_34.wanderlust.login.NewAccountActivity;
 
@@ -31,7 +31,7 @@ public class WanderLust_MainActivity extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             Toast.makeText(this, "Already Logged in as " + firebaseAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(WanderLust_MainActivity.this, HomeActivity.class);
+            Intent intent = new Intent(WanderLust_MainActivity.this, MainScreen.class);
             startActivity(intent);
         } else {
             login.setVisibility(View.VISIBLE);

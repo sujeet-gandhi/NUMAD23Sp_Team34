@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.neu.numad23sp_team_34.R;
-import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
+import com.neu.numad23sp_team_34.wanderlust.details.Activities.MainScreen;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainScreen.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
