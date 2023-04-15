@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Story"
+                android:textSize="28sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Story Title"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/editTextStoryTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Story Title"
+                android:textColorHint="@color/light_grey"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Story Description"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/editTextStoryDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Story Description"
+                android:inputType="textMultiLine"
+                android:minLines="4"
+                android:textColorHint="@color/light_grey"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keywords"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/keywords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:hint="Keywords (Comma Separated)"
+                android:textColorHint="@color/light_grey"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Images"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/imageRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="horizontal" />
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Image"
+                android:layout_gravity="center_horizontal"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="16dp"
+                app:cornerRadius="4dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Itinerary"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+            <Button
+                android:id="@+id/buttonAddLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Add Location"
+                android:textColor="@android:color/black"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="16dp" />
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/itineraryRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/editTextReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Review"
+                android:inputType="textMultiLine"
+                android:minLines="4"
+                android:textColorHint="@color/light_grey"
+                android:layout_marginTop="16dp"/>
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
+                android:stepSize="1"
+                android:layout_marginTop="16dp"/>
+
+            <Button
+                android:id="@+id/buttonPreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Preview Story"
+                android:textColor="@android:color/black"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="16dp" />
+
+
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Submit Story"
+                android:textColor="@android:color/black"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginTop="16dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</ScrollView>
+

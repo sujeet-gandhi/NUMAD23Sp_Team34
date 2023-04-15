@@ -3,11 +3,15 @@ package com.neu.numad23sp_team_34;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
+import com.neu.numad23sp_team_34.project.CreateStory;
 import com.neu.numad23sp_team_34.sticktoem.StickItToEm;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private Button stickItToEm;
 
     private Button wanderLust;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
