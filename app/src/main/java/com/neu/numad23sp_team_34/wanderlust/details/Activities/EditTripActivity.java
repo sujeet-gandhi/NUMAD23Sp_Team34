@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -380,7 +381,7 @@ public class EditTripActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(tripName)) {
             String id = databaseTripReference.push().getKey();
 
-            Trip trip = new Trip(tripId, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, fav, keywords, itineraryItems);
+            Trip trip = new Trip(tripId, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, fav,  keywords, itineraryItems, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
             databaseTripReference.child(tripId).setValue(trip);
 

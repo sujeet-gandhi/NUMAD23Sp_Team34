@@ -29,6 +29,7 @@ import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.R;
@@ -223,7 +224,7 @@ public class ViewTripActivity extends AppCompatActivity {
     public void addToFavorites(String tripId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("trips").child(tripId);
         boolean isFavorite = true;
-        Trip favTrip = new Trip(tripId, toolbarTitleString, destinationNameString, tripTypeString, priceInteger, ratingTrip, tripStartDateString, tripEndDateString, tripImageString, isFavorite, keywords, itineraryItems);
+        Trip favTrip = new Trip(tripId, toolbarTitleString, destinationNameString, tripTypeString, priceInteger, ratingTrip, tripStartDateString, tripEndDateString, tripImageString, isFavorite, keywords, itineraryItems, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         databaseReference.setValue(favTrip);
         Toast.makeText(getApplicationContext(), "Added to Favorites list", Toast.LENGTH_LONG).show();
     }
@@ -231,7 +232,7 @@ public class ViewTripActivity extends AppCompatActivity {
     public void removeFromFavorites(String tripId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("trips").child(tripId);
         boolean isFavorite = false;
-        Trip favTrip = new Trip(tripId, toolbarTitleString, destinationNameString, tripTypeString, priceInteger, ratingTrip, tripStartDateString, tripEndDateString, tripImageString, isFavorite, keywords, itineraryItems);
+        Trip favTrip = new Trip(tripId, toolbarTitleString, destinationNameString, tripTypeString, priceInteger, ratingTrip, tripStartDateString, tripEndDateString, tripImageString, isFavorite, keywords, itineraryItems, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         databaseReference.setValue(favTrip);
         Toast.makeText(getApplicationContext(), "Removed from Favorites list", Toast.LENGTH_LONG).show();
     }

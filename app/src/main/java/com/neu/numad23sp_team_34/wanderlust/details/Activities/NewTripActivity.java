@@ -40,6 +40,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -318,8 +319,9 @@ public class NewTripActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(tripName)) {
             String id = databaseTripReference.push().getKey();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-            Trip trip = new Trip(id, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, false, keywords, itineraryItems);
+            Trip trip = new Trip(id, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, false, keywords, itineraryItems, userId);
 
             databaseTripReference.child(id).setValue(trip);
 

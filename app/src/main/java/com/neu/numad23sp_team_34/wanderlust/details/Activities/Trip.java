@@ -20,11 +20,14 @@ public class Trip {
     private List<String> itinerary;
 
 
+    private String username;
+
+
 
     public Trip() {
     }
 
-    public Trip(String tripId, String tripName, String tripDestination, String tripType, int tripPrice, float tripRating, String startDate, String endDate, String photoURL, boolean isFavorite,List<String> keywords, List<String> itinerary) {
+    public Trip(String tripId, String tripName, String tripDestination, String tripType, int tripPrice, float tripRating, String startDate, String endDate, String photoURL, boolean isFavorite,List<String> keywords, List<String> itinerary, String username) {
         this.tripId = tripId;
         this.tripName = tripName;
         this.tripDestination = tripDestination;
@@ -37,9 +40,10 @@ public class Trip {
         this.isFavorite = isFavorite;
         this.keywords = keywords;
         this.itinerary = itinerary;
+        this.username = username;
     }
 
-    public Trip(String tripName, String tripDestination, String tripType, int tripPrice, float tripRating, String startDate, String endDate, String photoURL, boolean isFavorite) {
+    public Trip(String tripName, String tripDestination, String tripType, int tripPrice, float tripRating, String startDate, String endDate, String photoURL, boolean isFavorite, String username) {
         this.tripName = tripName;
         this.tripDestination = tripDestination;
         this.tripType = tripType;
@@ -79,6 +83,14 @@ public class Trip {
 
     public String getTripType() {
         return tripType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setTripType(String tripType) {

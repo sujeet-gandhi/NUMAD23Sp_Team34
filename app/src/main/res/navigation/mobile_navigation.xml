@@ -7,8 +7,14 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.neu.numad23sp_team_34.wanderlust.details.Activities.Fragments.TripsFragment"
+        android:name="com.neu.numad23sp_team_34.wanderlust.details.Activities.Fragments.HomeFragment"
         android:label="@string/menu_home"
+        tools:layout="@layout/fragment_trips" />
+
+    <fragment
+        android:id="@+id/nav_trips"
+        android:name="com.neu.numad23sp_team_34.wanderlust.details.Activities.Fragments.TripsFragment"
+        android:label="@string/menu_my_trips"
         tools:layout="@layout/fragment_trips" />
 
     <fragment
