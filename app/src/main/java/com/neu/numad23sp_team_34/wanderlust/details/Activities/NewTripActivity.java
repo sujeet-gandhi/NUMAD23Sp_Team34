@@ -322,6 +322,8 @@ public class NewTripActivity extends AppCompatActivity {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
             Trip trip = new Trip(id, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, false, keywords, itineraryItems, userId);
+            trip.setTimestamp(System.currentTimeMillis());
+
 
             databaseTripReference.child(id).setValue(trip);
 

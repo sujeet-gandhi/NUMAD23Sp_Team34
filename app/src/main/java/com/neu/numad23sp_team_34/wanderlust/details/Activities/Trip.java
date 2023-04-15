@@ -22,6 +22,9 @@ public class Trip {
 
     private String username;
 
+    private long timestamp;
+
+
 
 
     public Trip() {
@@ -55,6 +58,14 @@ public class Trip {
         this.isFavorite = isFavorite;
         this.keywords = keywords;
         this.itinerary = itinerary;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getTripId() {

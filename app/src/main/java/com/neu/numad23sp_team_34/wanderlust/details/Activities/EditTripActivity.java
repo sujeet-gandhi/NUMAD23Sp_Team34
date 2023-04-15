@@ -362,7 +362,7 @@ public class EditTripActivity extends AppCompatActivity {
         }
     }
 
-    public void updateTripOnClick(View view) {
+    public void addTripOnClick(View view) {
         String tripName = updateTripNameEditText.getText().toString().trim();
         String destination = updateDestinationEditText.getText().toString().trim();
 
@@ -382,6 +382,7 @@ public class EditTripActivity extends AppCompatActivity {
             String id = databaseTripReference.push().getKey();
 
             Trip trip = new Trip(tripId, tripName, destination, radioButtonToStringTripType, priceOfTrip, tripRating, startDate, endDate, url, fav,  keywords, itineraryItems, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            trip.setTimestamp(System.currentTimeMillis());
 
             databaseTripReference.child(tripId).setValue(trip);
 

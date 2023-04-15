@@ -10,7 +10,7 @@
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_trips"
-            android:icon="@drawable/ic_baseline_home_24"
+            android:icon="@drawable/icon"
             android:title="@string/menu_my_trips" />
         <item
             android:id="@+id/nav_favorites"

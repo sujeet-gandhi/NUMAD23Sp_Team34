@@ -67,11 +67,15 @@ public class HomeFragment extends Fragment {
         popularTripsRecyclerView.setAdapter(popularTripsAdapter);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        System.out.println("Current user: " + currentUser);
         if (currentUser != null) {
+            System.out.println("Current user id: " + currentUser.getUid());
             String userId = currentUser.getUid();
             FirebaseRecyclerOptions<Trip> recentTripsOptions = new FirebaseRecyclerOptions.Builder<Trip>()
-                    .setQuery(databaseReference.orderByChild("userId").equalTo(userId).limitToLast(10), Trip.class)
+                    .setQuery(databaseReference.orderByChild("timestamp").limitToLast(10), Trip.class)
                     .build();
+
+            System.out.println("Recent trips options: " + recentTripsOptions.getSnapshots());
 
             recentTripsAdapter = createTripAdapter(recentTripsOptions);
             recentTripsRecyclerView.setAdapter(recentTripsAdapter);
