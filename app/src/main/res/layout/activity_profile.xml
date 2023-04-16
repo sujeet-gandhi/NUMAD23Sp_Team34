@@ -28,9 +28,8 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-
     <ImageView
-        android:id="@+id/profile_picture"
+        android:id="@+id/user_profile_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -40,62 +39,95 @@
         tools:srcCompat="@tools:sample/avatars"
         android:contentDescription="@string/profile_picture_string" />
 
+    <ImageButton
+        android:id="@+id/uploadProfilePictureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_baseline_add_a_photo_24"
+        app:layout_constraintBottom_toBottomOf="@+id/user_profile_picture"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_picture" />
+
     <TextView
-        android:id="@+id/firstName"
+        android:id="@+id/fullName"
         android:layout_width="105dp"
         android:layout_height="36dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="60dp"
-        android:text="@string/first_name_string"
-        android:textStyle="bold"
+        android:text="@string/name_string"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_picture"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/lastName"
-        android:layout_width="105dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="17dp"
-        android:textStyle="bold"
-        android:text="@string/last_name_string"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture"
-        app:layout_constraintTop_toBottomOf="@+id/firstName" />
+        android:id="@+id/userEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/email_string"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_picture"
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/places_visited_card1"
         android:layout_width="145dp"
         android:layout_height="150dp"
         android:layout_marginBottom="96dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
-        app:layout_constraintVertical_bias="0.834" />
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_picture"
+        app:layout_constraintVertical_bias="0.834" >
+
+        <TextView
+        android:id="@+id/placesVisitedTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:text="@string/places_visited_string1"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/trip_stories_card1"
         android:layout_width="145dp"
         android:layout_height="150dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="96dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
-        app:layout_constraintVertical_bias="0.834" />
+        app:layout_constraintStart_toEndOf="@+id/places_visited_card1"
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_picture"
+        app:layout_constraintVertical_bias="0.834" >
+
+        <TextView
+        android:id="@+id/tripStoriesTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        android:text="@string/trip_stories_string1" />
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/purple_200"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

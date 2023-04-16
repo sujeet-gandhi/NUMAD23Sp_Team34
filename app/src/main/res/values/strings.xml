@@ -20,8 +20,14 @@
     <string name="from_username_string">From: username</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="first_name_string">First Name</string>
-    <string name="last_name_string">Last Name</string>
+    <string name="name_string">Name</string>
     <string name="profile_pic_icon_string">Profile pic icon</string>
     <string name="profile_picture_string">Profile Picture</string>
+    <string name="user_picture">User Picture</string>
+    <string name="places_visited_string">Places Visited</string>
+    <string name="trip_stories_string">Trip Stories</string>
+    <string name="places_visited_string1">Places Visited</string>
+    <string name="trip_stories_string1">Trip Stories</string>
+    <string name="email_string">Email: </string>
+    <string name="full_name_string">Name</string>
 </resources>
