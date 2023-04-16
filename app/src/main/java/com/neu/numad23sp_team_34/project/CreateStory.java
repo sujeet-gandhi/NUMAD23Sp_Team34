@@ -231,11 +231,23 @@ public class CreateStory extends AppCompatActivity {
             editTextStoryTitle.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add an event or an activity that can highlight the trip",Toast.LENGTH_SHORT);
         }else if(review.length()<5000){
-            editTextStoryTitle.setError("Only 5000 caharacters");
+            editTextStoryTitle.setError("Only 5000 characters");
             editTextStoryTitle.requestFocus();
             Toast.makeText(getApplicationContext(),"review cannot be more than 5000 characters",Toast.LENGTH_SHORT);
-        } else {
+        } else if(imageAdapter.getItemCount()==0){
+            Toast.makeText(CreateStory.this,"Please add an image... " +
+                    "",Toast.LENGTH_SHORT).show();
 
+        } else if(itineraryAdapter.getItemCount()==0){
+            Toast.makeText(CreateStory.this,"Please add location..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else if(itineraryAdapter.getItemCount()==1){
+            Toast.makeText(CreateStory.this,"Trip needs two locations..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else if (ratingBar.getRating()==0.0){
+            Toast.makeText(CreateStory.this,"Rating can not be empty..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else {
 
             // Create a unique ID for the story
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
