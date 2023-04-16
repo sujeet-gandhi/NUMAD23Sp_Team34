@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".wanderlust.login.NewAccountActivity">
+    android:background="@drawable/peralbeach"
+    tools:context=".WanderLust.NewAccountActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="false"
-        android:background="#122f3e"
-        tools:context=".wanderlust.login.LoginActivity">
+        tools:context=".WanderLust.LoginActivity">
 
 
         <ScrollView
@@ -33,9 +33,10 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
-                    android:backgroundTint="#c0dfee"
+                    android:backgroundTint="#7EC8E3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:cardCornerRadius="40dp"
                     tools:layout_editor_absoluteX="1dp">
 
                     <LinearLayout
@@ -43,14 +44,15 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
+
                         <EditText
                             android:id="@+id/Username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:ems="10"
-                            android:hint="Username"
-                             />
+                            android:hint="Enter new Username"
+                            />
 
                         <EditText
                             android:id="@+id/editTextTextEmailAddress"
@@ -58,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:ems="10"
-                            android:hint="email"
+                            android:hint="Enter new Email"
                             android:inputType="textEmailAddress" />
 
                         <EditText
@@ -67,7 +69,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:ems="10"
-                            android:hint="Password"
+                            android:hint="Enter new Password"
                             android:inputType="textPassword" />
                         <EditText
                             android:id="@+id/confirmPassword"
@@ -75,7 +77,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
                             android:ems="10"
-                            android:hint="Confirm Password"
+                            android:hint="Please confirm Password"
                             android:inputType="textPassword" />
 
                         <Button
@@ -89,6 +91,7 @@
                             android:bottomLeftRadius="30dp"
                             android:topLeftRadius="30dp"
                             android:topRightRadius="30dp"
+                            android:backgroundTint="#055C9D"
                             android:text="Signup" />
 
 
