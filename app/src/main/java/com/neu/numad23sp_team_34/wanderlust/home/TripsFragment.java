@@ -66,26 +66,58 @@ public class TripsFragment extends Fragment {
 
         stories = new ArrayList<>();
 
-        adapter = new StoryAdapter(getContext(), stories);
+        adapter = new StoryAdapter(getContext(), stories, false);
 
         storyRecyclerView.setAdapter(adapter);
 
-        FirebaseDatabase.getInstance().getReference().child("messages").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("stories")
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Story story = snapshot.getValue(Story.class);
                 stories.add(story);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(stories.size() - 1);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Story changedStory = snapshot.getValue(Story.class);
+                if (changedStory != null) {
+                    for (int i = 0; i < stories.size(); i++) {
+                        if (changedStory.getId().equals(stories.get(i).getId())) {
+                            stories.get(i).setDescription(changedStory.getDescription());
+                            stories.get(i).setImageUrl(changedStory.getImageUrl());
+                            stories.get(i).setTitle(changedStory.getTitle());
+                            stories.get(i).setKeywords(changedStory.getKeywords());
+                            stories.get(i).setItinerary(changedStory.getItinerary());
+                            stories.get(i).setReview(changedStory.getReview());
+                            stories.get(i).setRating(changedStory.getRating());
 
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Story story = snapshot.getValue(Story.class);
+                int positionToBeRemoved = -1;
+                if (story != null) {
+                    for (int i = 0; i < stories.size(); i++) {
+                        if (story.getId().equals(stories.get(i).getId())) {
+                            positionToBeRemoved = i;
+                        }
+                    }
+                }
 
+                if (positionToBeRemoved == -1) {
+                    stories.remove(story);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    stories.remove(positionToBeRemoved);
+                    adapter.notifyItemRemoved(positionToBeRemoved);
+                }
             }
 
             @Override
