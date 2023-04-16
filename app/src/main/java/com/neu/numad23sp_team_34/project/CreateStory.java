@@ -135,8 +135,6 @@ public class CreateStory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Do Validation for all the fields here
-
-
                 submitStory();
             }
         });
@@ -219,28 +217,30 @@ public class CreateStory extends AppCompatActivity {
             editTextStoryTitle.requestFocus();
             Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters",Toast.LENGTH_SHORT);
         }else if(storyDescription.isEmpty()){
-            editTextStoryTitle.setError("Description cannot be empty");
-            editTextStoryTitle.requestFocus();
+            editTextStoryDescription.setError("Description cannot be empty");
+            editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
         }if(storyDescription.length()<1000){
-            editTextStoryTitle.setError("Only 1000 caharacters");
-            editTextStoryTitle.requestFocus();
+            editTextStoryDescription.setError("Only 1000 characters");
+            editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
         }else if(keywords.size()<1){
-            editTextStoryTitle.setError("Please add any highlights of the trip");
-            editTextStoryTitle.requestFocus();
+            editKeywords.setError("Please add any highlights of the trip");
+            editKeywords.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add an event or an activity that can highlight the trip",Toast.LENGTH_SHORT);
         }else if(review.length()<5000){
-            editTextStoryTitle.setError("Only 5000 characters");
-            editTextStoryTitle.requestFocus();
+            editTextReview.setError("Only 5000 characters");
+            editTextReview.requestFocus();
             Toast.makeText(getApplicationContext(),"review cannot be more than 5000 characters",Toast.LENGTH_SHORT);
         } else if(imageAdapter.getItemCount()==0){
             Toast.makeText(CreateStory.this,"Please add an image... " +
                     "",Toast.LENGTH_SHORT).show();
         } else if(itineraryAdapter.getItemCount()==0){
+            editTextItinerary.setError("Location cannot be empty");
             Toast.makeText(CreateStory.this,"Please add location..." +
                     "",Toast.LENGTH_SHORT).show();
         } else if(itineraryAdapter.getItemCount()==1){
+            editTextItinerary.setError("Destination required");
             Toast.makeText(CreateStory.this,"Trip needs two locations..." +
                     "",Toast.LENGTH_SHORT).show();
         } else if (rating==0.0){
