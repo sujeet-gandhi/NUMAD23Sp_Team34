@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         transaction.add(binding.bookmarkContainer.getId(), favoriteFragment);
         transaction.commit();
 
-        ProfileFragment profileFragment = ProfileFragment.newInstance("", "");
+        ProfileFragment profileFragment = ProfileFragment.newInstance();
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(binding.profileContainer.getId(), profileFragment);
         transaction.commit();
