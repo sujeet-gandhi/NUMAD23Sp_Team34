@@ -170,21 +170,21 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if( firebaseAuth.getCurrentUser()!= null){
-            Toast.makeText(LoginActivity.this,"Already logged in!",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-
-
-        } else {
-            Toast.makeText(LoginActivity.this,"Please login!",Toast.LENGTH_SHORT).show();
-
-        }
-
-       }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if( firebaseAuth.getCurrentUser()!= null){
+//            Toast.makeText(LoginActivity.this,"Already logged in!",Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+//
+//
+//        } else {
+//            Toast.makeText(LoginActivity.this,"Please login!",Toast.LENGTH_SHORT).show();
+//
+//        }
+//
+//       }
 
 }

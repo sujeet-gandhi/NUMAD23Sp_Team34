@@ -136,11 +136,10 @@ public class CreateStory extends AppCompatActivity {
             public void onClick(View v) {
                 // Do Validation for all the fields here
 
+
                 submitStory();
             }
         });
-
-
     }
 
     private void launchPlacesAutocomplete() {
@@ -211,15 +210,44 @@ public class CreateStory extends AppCompatActivity {
         List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
         float rating = ratingBar.getRating();
 
-        // Create a unique ID for the story
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
-        String storyId = databaseReference.push().getKey();
+        if(storyTitle.isEmpty()){
+            editTextStoryTitle.setError("Title cannot be empty");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a title",Toast.LENGTH_SHORT);
+        }else if(storyTitle.length()>50){
+            editTextStoryTitle.setError("Only 50 characters");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters",Toast.LENGTH_SHORT);
+        }else if(storyDescription.isEmpty()){
+            editTextStoryTitle.setError("Description cannot be empty");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
+        }if(storyDescription.length()<1000){
+            editTextStoryTitle.setError("Only 1000 caharacters");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
+        }else if(keywords.size()<1){
+            editTextStoryTitle.setError("Please add any highlights of the trip");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add an event or an activity that can highlight the trip",Toast.LENGTH_SHORT);
+        }else if(review.length()<5000){
+            editTextStoryTitle.setError("Only 5000 caharacters");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"review cannot be more than 5000 characters",Toast.LENGTH_SHORT);
+        } else {
 
-        // Upload images to Firebase Storage
-        uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
 
-        Toast.makeText(this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
-        finish();
+            // Create a unique ID for the story
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
+            String storyId = databaseReference.push().getKey();
+
+            // Upload images to Firebase Storage
+            uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
+
+            Toast.makeText(this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
     }
 
     private void uploadImagesAndCreateStory(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> keywords) {
@@ -262,7 +290,7 @@ public class CreateStory extends AppCompatActivity {
 
 
 
-                    private void chooseImage() {
+    private void chooseImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose an option")
                 .setItems(new CharSequence[]{"Take a photo", "Choose from gallery"},
