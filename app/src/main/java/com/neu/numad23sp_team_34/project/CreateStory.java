@@ -220,7 +220,7 @@ public class CreateStory extends AppCompatActivity {
             editTextStoryDescription.setError("Description cannot be empty");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
-        }if(storyDescription.length()<1000){
+        }if(storyDescription.length()>1000){
             editTextStoryDescription.setError("Only 1000 characters");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
