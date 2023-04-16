@@ -1,10 +1,14 @@
 package com.neu.numad23sp_team_34.wanderlust.login;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +18,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.wanderlust.User;
+import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 public class NewAccountActivity extends AppCompatActivity {
 
@@ -37,6 +46,7 @@ public class NewAccountActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     User user;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,31 +125,64 @@ public class NewAccountActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth = FirebaseAuth.getInstance();
+                if (!(username.isEmpty() && email.isEmpty()
+                        && password.isEmpty()
+                        && confirmPassword.isEmpty())) {
+                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(username).build();
+                            if (user != null) {
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
+                                                    FirebaseUser firebaseUser = auth.getCurrentUser();
+                                                    //email verification.
+                                                    firebaseUser.sendEmailVerification();
 
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(username).build();
-                        if (user != null) {
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getApplicationContext(), "Registration Successfully completed", Toast.LENGTH_SHORT).show();
+                                                    //Opening an activity after registration.
+                                                    Intent intent = new Intent(NewAccountActivity.this, HomeActivity.class);
+//
+                                                    //Once finish registering, clear out the activities behind.
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                                    startActivity(intent);
+                                                    finish();
+                                                    //close register activity.
+                                                }
                                             }
-                                        }
-                                    });
-                        }
-                    } else {
-                        if (task.getException() != null) {
-                            Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                                        });
+                            }
+                        } else {
+//                            if (task.getException() != null) {
+//                                Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+                            try{
+                                throw task.getException();
+                            }catch(FirebaseAuthWeakPasswordException e){
+                                edtPassword.setError("Your password is too weak.");
+                                edtPassword.requestFocus();
+                            }catch (FirebaseAuthInvalidCredentialsException e){
+                                edtPassword.setError("Your email is invalid or already used. Kindly re-enter.");
+                                edtPassword.requestFocus();
+                            }catch (FirebaseAuthUserCollisionException e){
+                                edtPassword.setError("User is already registered with this email. Please use another email.");
+                                edtPassword.requestFocus();
+                            }catch (Exception e){
+                                Log.d(TAG,e.getMessage());
+                                Toast.makeText(NewAccountActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
 
-                });
+                        }
+
+                    });
+                }
             }
 
         });

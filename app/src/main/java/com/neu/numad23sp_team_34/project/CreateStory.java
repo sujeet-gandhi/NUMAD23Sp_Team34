@@ -135,12 +135,9 @@ public class CreateStory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Do Validation for all the fields here
-
                 submitStory();
             }
         });
-
-
     }
 
     private void launchPlacesAutocomplete() {
@@ -211,15 +208,47 @@ public class CreateStory extends AppCompatActivity {
         List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
         float rating = ratingBar.getRating();
 
-        // Create a unique ID for the story
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
-        String storyId = databaseReference.push().getKey();
+        if(storyTitle.isEmpty()){
+            editTextStoryTitle.setError("Title cannot be empty");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a title",Toast.LENGTH_SHORT);
+        }else if(storyTitle.length()>50){
+            editTextStoryTitle.setError("Only 50 characters");
+            editTextStoryTitle.requestFocus();
+            Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters",Toast.LENGTH_SHORT);
+        }else if(storyDescription.isEmpty()){
+            editTextStoryDescription.setError("Description cannot be empty");
+            editTextStoryDescription.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
+        }if(storyDescription.length()<1000){
+            editTextStoryDescription.setError("Only 1000 characters");
+            editTextStoryDescription.requestFocus();
+            Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
+        } else if(imageAdapter.getItemCount()==0){
+            Toast.makeText(CreateStory.this,"Please add an image... " +
+                    "",Toast.LENGTH_SHORT).show();
+        } else if(itineraryAdapter.getItemCount()==0){
+            Toast.makeText(CreateStory.this,"Please add location..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else if(itineraryAdapter.getItemCount()==1){
+            Toast.makeText(CreateStory.this,"Trip needs two locations..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else if (rating==0.0){
+            Toast.makeText(CreateStory.this,"Rating can not be empty..." +
+                    "",Toast.LENGTH_SHORT).show();
+        } else {
 
-        // Upload images to Firebase Storage
-        uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
+            // Create a unique ID for the story
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
+            String storyId = databaseReference.push().getKey();
 
-        Toast.makeText(this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
-        finish();
+            // Upload images to Firebase Storage
+            uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
+
+            Toast.makeText(this, "Story submitted successfully!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
     }
 
     private void uploadImagesAndCreateStory(String storyId, String storyTitle, String storyDescription, String review, float rating, List<String> keywords) {
@@ -262,7 +291,7 @@ public class CreateStory extends AppCompatActivity {
 
 
 
-                    private void chooseImage() {
+    private void chooseImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose an option")
                 .setItems(new CharSequence[]{"Take a photo", "Choose from gallery"},
