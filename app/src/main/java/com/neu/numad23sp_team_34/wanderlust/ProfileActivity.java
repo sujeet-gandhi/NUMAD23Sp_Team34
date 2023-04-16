@@ -36,7 +36,8 @@ import com.neu.numad23sp_team_34.R;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
-    private ImageView profilePicture;
+    private ImageView profilePictureIcon;
+    private ImageView profilePic;
     private BottomNavigationView bottomNavigation;
     private TextView name;
     private TextView userEmail;
@@ -56,8 +57,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        profilePicture = findViewById(R.id.profile_picture_icon);
-        profilePicture.setOnClickListener(this);
+        profilePictureIcon = findViewById(R.id.profile_picture_icon);
+        profilePictureIcon.setOnClickListener(this);
+        profilePic = findViewById(R.id.user_profile_picture);
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
 
@@ -92,7 +94,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             String profilePictureURL = document.getString("profilePictureURL");
                             name.setText(username);
                             userEmail.setText(email);
-                            Glide.with(ProfileActivity.this).load(profilePictureURL).placeholder(R.drawable.default_profile_picture).into(profilePicture);
+                            Glide.with(ProfileActivity.this).load(profilePictureURL).placeholder(R.drawable.default_profile_picture).into(profilePictureIcon);
+                            Glide.with(ProfileActivity.this).load(profilePictureURL).placeholder(R.drawable.default_profile_picture).into(profilePic);
                         }
                     }
                 }
@@ -175,7 +178,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Glide.with(ProfileActivity.this).load(profilePictureURL).into(profilePicture);
+                            Glide.with(ProfileActivity.this).load(profilePictureURL).into(profilePictureIcon);
+                            Glide.with(ProfileActivity.this).load(profilePictureURL).into(profilePic);
                             Toast.makeText(ProfileActivity.this, "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -187,7 +191,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     });
         }
     }
-
-
 
 }
