@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,13 +29,9 @@ import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button login;
+    private EditText email;
 
-    private Button newAccount;
-
-    EditText email;
-
-    EditText password;
+    private EditText password;
 
     private static final String TAG = "LoginActivity";
 
@@ -49,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login = (Button) findViewById(R.id.login);
-        newAccount = (Button) findViewById(R.id.createAccount);
+        Button login = (Button) findViewById(R.id.login);
+        Button newAccount = (Button) findViewById(R.id.createAccount);
         email = (EditText) findViewById(R.id.editTextTextEmailAddress);
         password = (EditText) findViewById(R.id.editTextTextPassword);
 
@@ -81,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             login.setOnClickListener(view -> {
                 String email_id = email.getText().toString();
                 String pwd = password.getText().toString();
-                if(TextUtils.isEmpty(email_id)){
+                if(TextUtils.isEmpty(email_id)) {
                     Toast.makeText(LoginActivity.this,"Please enter email-id!",Toast.LENGTH_SHORT).show();
                     email.setError("This field cannot be empty");
                     email.requestFocus();
@@ -112,9 +107,9 @@ public class LoginActivity extends AppCompatActivity {
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         startActivity(intent);
                                     } else {
-                                        firebaseUser.sendEmailVerification();
+
+                                        showEmailVerificationDialog(firebaseUser);
                                         firebaseAuth.signOut();
-                                        AlertDialogLogin();
                                     }
 
 //                                    Intent intent = new Intent(LoginActivity.this, StickItToEm.class);
@@ -150,24 +145,18 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-    private void AlertDialogLogin() {
-
+    private void showEmailVerificationDialog(FirebaseUser firebaseUser) {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle("Login Verification");
         builder.setMessage("Kindly verify your email before logging in");
 
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
+        builder.setPositiveButton("OK", (dialogInterface, i) -> {});
+        builder.setNegativeButton("Re-send Verification Email", (dialogInterface, i) -> {
+            firebaseUser.sendEmailVerification();
         });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
-
     }
 
 //    @Override
