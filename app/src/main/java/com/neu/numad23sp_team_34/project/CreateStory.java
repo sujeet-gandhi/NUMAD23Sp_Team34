@@ -237,14 +237,13 @@ public class CreateStory extends AppCompatActivity {
         } else if(imageAdapter.getItemCount()==0){
             Toast.makeText(CreateStory.this,"Please add an image... " +
                     "",Toast.LENGTH_SHORT).show();
-
         } else if(itineraryAdapter.getItemCount()==0){
             Toast.makeText(CreateStory.this,"Please add location..." +
                     "",Toast.LENGTH_SHORT).show();
         } else if(itineraryAdapter.getItemCount()==1){
             Toast.makeText(CreateStory.this,"Trip needs two locations..." +
                     "",Toast.LENGTH_SHORT).show();
-        } else if (ratingBar.getRating()==0.0){
+        } else if (rating==0.0){
             Toast.makeText(CreateStory.this,"Rating can not be empty..." +
                     "",Toast.LENGTH_SHORT).show();
         } else {
