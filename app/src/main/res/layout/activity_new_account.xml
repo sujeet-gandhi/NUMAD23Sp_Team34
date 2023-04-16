@@ -110,15 +110,17 @@
                             android:id="@+id/Signup"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
                             android:layout_gravity="right"
                             android:layout_marginRight="30sp"
-                            android:bottomRightRadius="30dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/btn_bg"
+                            android:backgroundTintMode="add"
                             android:bottomLeftRadius="30dp"
+                            android:bottomRightRadius="30dp"
+                            android:text="Signup"
                             android:topLeftRadius="30dp"
                             android:topRightRadius="30dp"
-                            android:backgroundTint="#055C9D"
-                            android:text="Signup" />
+                            app:iconTint="#86BFEC" />
 
 
                     </LinearLayout>
