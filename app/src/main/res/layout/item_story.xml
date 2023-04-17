@@ -15,13 +15,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/storyImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
                 android:scaleType="centerCrop"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"/>
@@ -31,20 +30,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/storyImage"
+                android:textStyle="bold"
                 android:textSize="32sp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 tools:text="Yosemite Park"/>
 
             <TextView
                 android:id="@+id/username"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/userLogo"
-                android:layout_toEndOf="@id/storyImage"
+                android:layout_below="@id/storyTitle"
                 android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 tools:text="Super User"/>
 
@@ -53,22 +51,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_below="@id/storyTitle"
+                android:layout_below="@id/username"
+                android:progressTint="@color/purple_200"
+                android:clickable="false"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:numStars="5"
-                android:stepSize="1"
-                android:layout_marginTop="16dp"/>
-
+                android:stepSize="1"/>
 
 
             <ImageView
-                android:id="@+id/userLogo"
+                android:id="@+id/favButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_toEndOf="@id/storyImage"
-                android:layout_marginStart="32dp"
-                android:src="@drawable/baseline_account_circle_24"
                 android:layout_alignParentTop="true"
-                app:tint="@color/black"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/baseline_favorite_border_24"/>
 
         </RelativeLayout>
 
