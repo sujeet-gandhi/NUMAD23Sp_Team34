@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         transaction.add(binding.tripsContainer.getId(), tripsFragment);
         transaction.commit();
 
-        FavoriteFragment favoriteFragment = FavoriteFragment.newInstance("", "");
+        FavoriteFragment favoriteFragment = FavoriteFragment.newInstance();
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(binding.bookmarkContainer.getId(), favoriteFragment);
         transaction.commit();

@@ -50,16 +50,21 @@ public class ProfileFragment extends Fragment {
 
         myStories = new ArrayList<>();
 
-        adapter = new StoryAdapter(getContext(), myStories, true);
-
-        binding.myTripsList.setAdapter(adapter);
-
 
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             binding.email.setText(firebaseAuth.getCurrentUser().getEmail());
             binding.username.setText(firebaseAuth.getCurrentUser().getDisplayName());
+
+            adapter = new StoryAdapter(getContext(), myStories, true, new RecyclerViewCallbackListener() {
+                @Override
+                public void onFavoriteToggleClicked(Story story) {
+
+                }
+            }, firebaseAuth.getCurrentUser().getDisplayName());
+
+            binding.myTripsList.setAdapter(adapter);
 
             FirebaseDatabase.getInstance().getReference().child("stories")
                     .addChildEventListener(new ChildEventListener() {

@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".wanderlust.home.FavoriteFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoritesList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="30sp"
-        android:text="Favorite Fragment"
-        android:layout_gravity="center"/>
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

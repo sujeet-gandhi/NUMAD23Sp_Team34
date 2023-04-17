@@ -4,32 +4,35 @@ import java.util.List;
 import java.util.Objects;
 
 public class Story {
+
     private String id;
     private String title;
     private String description;
     private String review;
     private float rating;
-    private List<String> imageUrl;
     private String userName;
     private List<String> keywords;
-
+    private List<String> imageUrl;
     private List<String> itinerary;
+    private List<String> favoriteUserIds;
 
     public Story() {
 
     }
 
     public Story(String id, String title, String description, String review, float rating,
-                 List<String> itinerary, List<String> imageUrl, String userName, List<String> keywords) {
+                 List<String> itinerary, List<String> imageUrl, String userName, List<String> keywords,
+                 List<String> favoriteUserIds) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.review = review;
         this.rating = rating;
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.keywords = keywords;
         this.itinerary = itinerary;
+        this.description = description;
+        this.favoriteUserIds = favoriteUserIds;
     }
 
     public String getId() {
@@ -102,6 +105,14 @@ public class Story {
 
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
+    }
+
+    public List<String> getFavoriteUserIds() {
+        return favoriteUserIds;
+    }
+
+    public void setFavoriteUserIds(List<String> favoriteUserIds) {
+        this.favoriteUserIds = favoriteUserIds;
     }
 
     @Override

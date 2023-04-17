@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.wanderlust.home.RecyclerViewCallbackListener;
+import com.neu.numad23sp_team_34.wanderlust.home.TripsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,10 +27,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
     private final boolean isMyStoriesAdapter;
 
-    public StoryAdapter(Context context, List<Story> stories, boolean isMyStoriesAdapter) {
+    private final RecyclerViewCallbackListener listener;
+
+    private final String currentUserName;
+
+    public StoryAdapter(Context context, List<Story> stories, boolean isMyStoriesAdapter,
+                        RecyclerViewCallbackListener listener, String currentUserName) {
         this.context = context;
         this.stories = stories;
         this.isMyStoriesAdapter = isMyStoriesAdapter;
+        this.listener = listener;
+        this.currentUserName = currentUserName;
     }
 
     @NonNull
@@ -42,19 +51,29 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         holder.storyTitle.setText(stories.get(position).getTitle());
         if (isMyStoriesAdapter) {
             holder.userName.setVisibility(View.GONE);
-            holder.userLogo.setVisibility(View.GONE);
         } else {
             holder.userName.setVisibility(View.VISIBLE);
-            holder.userLogo.setVisibility(View.VISIBLE);
             holder.userName.setText(stories.get(position).getUserName());
         }
 
         holder.ratingBar.setRating(stories.get(position).getRating());
         holder.ratingBar.isIndicator();
 
+        if (stories.get(position).getFavoriteUserIds() != null) {
+            if (stories.get(position).getFavoriteUserIds().contains(currentUserName)) {
+                // Is Favorite
+                holder.favButton.setImageResource(R.drawable.baseline_favorite_24);
+            } else {
+                // Not yet favorite
+                holder.favButton.setImageResource(R.drawable.baseline_favorite_border_24);
+            }
+        }
+
         Picasso.get()
                 .load(stories.get(position).getImageUrl().get(0))
                 .into(holder.storyImage);
+
+        holder.favButton.setOnClickListener(view -> listener.onFavoriteToggleClicked(stories.get(position)));
     }
 
     @Override
@@ -66,7 +85,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         public ImageView storyImage;
 
-        public ImageView userLogo;
+        public ImageView favButton;
 
         public TextView storyTitle;
 
@@ -79,8 +98,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
             storyTitle = itemView.findViewById(R.id.storyTitle);
             userName = itemView.findViewById(R.id.username);
+            favButton = itemView.findViewById(R.id.favButton);
             storyImage = itemView.findViewById(R.id.storyImage);
-            userLogo = itemView.findViewById(R.id.userLogo);
             ratingBar = itemView.findViewById(R.id.ratingBar);
         }
 

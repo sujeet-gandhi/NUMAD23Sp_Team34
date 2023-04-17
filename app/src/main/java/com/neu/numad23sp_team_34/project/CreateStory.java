@@ -276,7 +276,7 @@ public class CreateStory extends AppCompatActivity {
                                 imageUrls.add(uri.toString());
                                 if (images.size() == imageUrls.size()) {
                                     // Create a Story object with the input data
-                                    Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems, imageUrls, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),  keywords);
+                                    Story story = new Story(storyId, storyTitle, storyDescription, review, rating, itineraryItems, imageUrls, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),  keywords, new ArrayList<>());
 
                                     // Save the story object to the Realtime Database
                                     FirebaseDatabase.getInstance().getReference("stories").child(storyId).setValue(story);

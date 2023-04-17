@@ -2,65 +2,130 @@ package com.neu.numad23sp_team_34.wanderlust.home;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.databinding.FragmentFavoriteBinding;
+import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoriteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class FavoriteFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FragmentFavoriteBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private StoryAdapter adapter;
+
+    private List<Story> stories;
 
     public FavoriteFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteFragment newInstance(String param1, String param2) {
-        FavoriteFragment fragment = new FavoriteFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static FavoriteFragment newInstance() {
+        return new FavoriteFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        binding = FragmentFavoriteBinding.inflate(inflater);
+
+        binding.favoritesList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        stories = new ArrayList<>();
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        adapter = new StoryAdapter(getContext(), stories, false, new RecyclerViewCallbackListener() {
+            @Override
+            public void onFavoriteToggleClicked(Story story) {
+
+            }
+        }, firebaseAuth.getCurrentUser().getDisplayName());
+
+        binding.favoritesList.setAdapter(adapter);
+
+        FirebaseDatabase.getInstance().getReference().child("stories")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Story story = snapshot.getValue(Story.class);
+                        if (story != null && story.getFavoriteUserIds() != null && story.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())) {
+                            stories.add(story);
+                            adapter.notifyItemInserted(stories.size() - 1);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Story changedStory = snapshot.getValue(Story.class);
+                        if (changedStory != null && changedStory.getFavoriteUserIds() != null && changedStory.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())) {
+                            for (int i = 0; i < stories.size(); i++) {
+                                if (changedStory.getId().equals(stories.get(i).getId())) {
+                                    stories.get(i).setDescription(changedStory.getDescription());
+                                    stories.get(i).setImageUrl(changedStory.getImageUrl());
+                                    stories.get(i).setTitle(changedStory.getTitle());
+                                    stories.get(i).setKeywords(changedStory.getKeywords());
+                                    stories.get(i).setItinerary(changedStory.getItinerary());
+                                    stories.get(i).setReview(changedStory.getReview());
+                                    stories.get(i).setRating(changedStory.getRating());
+
+                                    adapter.notifyItemChanged(i);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                        Story story = snapshot.getValue(Story.class);
+                        int positionToBeRemoved = -1;
+                        if (story != null && story.getFavoriteUserIds() != null && story.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())) {
+                            for (int i = 0; i < stories.size(); i++) {
+                                if (story.getId().equals(stories.get(i).getId())) {
+                                    positionToBeRemoved = i;
+                                }
+                            }
+
+                            if (positionToBeRemoved == -1) {
+                                stories.remove(story);
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                stories.remove(positionToBeRemoved);
+                                adapter.notifyItemRemoved(positionToBeRemoved);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+        return binding.getRoot();
     }
 }
