@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +38,8 @@ public class TripsFragment extends Fragment {
 
     private RecyclerView storyRecyclerView;
 
+    private String currentUserId;
+
     public TripsFragment() {
         // Required empty public constructor
     }
@@ -51,6 +55,10 @@ public class TripsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trips, container, false);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
+            this.currentUserId = firebaseAuth.getCurrentUser().getDisplayName();
+        }
 
         CardView createStory = view.findViewById(R.id.createStory);
 
@@ -66,7 +74,31 @@ public class TripsFragment extends Fragment {
 
         stories = new ArrayList<>();
 
-        adapter = new StoryAdapter(getContext(), stories, false);
+        adapter = new StoryAdapter(getContext(), stories, false, new RecyclerViewCallbackListener() {
+            @Override
+            public void onFavoriteToggleClicked(Story story) {
+                int positionToRemove = -1;
+                if (story.getFavoriteUserIds() == null) {
+                    story.setFavoriteUserIds(new ArrayList<>());
+                }
+                for (int i = 0; i < story.getFavoriteUserIds().size(); i++) {
+                    if (story.getFavoriteUserIds().get(i).equals(currentUserId)) {
+                        positionToRemove = i;
+                        break;
+                    }
+                }
+
+                if (positionToRemove == -1) {
+                    story.getFavoriteUserIds().add(currentUserId);
+                    Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                } else {
+                    story.getFavoriteUserIds().remove(positionToRemove);
+                    Toast.makeText(getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                }
+
+                writeNewStoryObject(story);
+            }
+        }, firebaseAuth.getCurrentUser().getDisplayName());
 
         storyRecyclerView.setAdapter(adapter);
 
@@ -92,6 +124,7 @@ public class TripsFragment extends Fragment {
                             stories.get(i).setItinerary(changedStory.getItinerary());
                             stories.get(i).setReview(changedStory.getReview());
                             stories.get(i).setRating(changedStory.getRating());
+                            stories.get(i).setFavoriteUserIds(changedStory.getFavoriteUserIds());
 
                             adapter.notifyItemChanged(i);
                         }
@@ -132,6 +165,14 @@ public class TripsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void writeNewStoryObject(Story story) {
+        FirebaseDatabase
+                .getInstance()
+                .getReference("stories")
+                .child(story.getId())
+                .setValue(story);
     }
 
 
