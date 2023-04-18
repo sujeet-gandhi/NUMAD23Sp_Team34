@@ -5,75 +5,88 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/storyCard"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="12dp">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/storyImage"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:scaleType="centerCrop"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
-
-            <TextView
-                android:id="@+id/storyTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/storyImage"
-                android:textStyle="bold"
-                android:textSize="32sp"
-                android:layout_marginStart="16dp"
-                android:textColor="@color/black"
-                tools:text="Yosemite Park"/>
-
-            <TextView
-                android:id="@+id/username"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/storyCard"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/storyTitle"
-                android:textSize="18sp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:textColor="@color/black"
-                tools:text="Super User"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardUseCompatPadding="true">
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_below="@id/username"
-                android:progressTint="@color/purple_200"
-                android:clickable="false"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:numStars="5"
-                android:stepSize="1"/>
+                <RelativeLayout
+                    android:layout_width="350dp"
+                    android:layout_height="480dp">
+
+                    <ImageView
+                        android:id="@+id/storyImage"
+                        android:layout_width="500dp"
+                        android:layout_height="350dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/storyTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/storyImage"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        tools:text="Yosemite Park" />
+
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/storyTitle"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="Super User" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/username"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:clickable="false"
+                        android:numStars="5"
+                        android:progressTint="@color/purple_200"
+                        android:stepSize="1" />
 
 
-            <ImageView
-                android:id="@+id/favButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/baseline_favorite_border_24"/>
+                    <ImageView
+                        android:id="@+id/favButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingTop="10dp"
+                        android:paddingStart="10dp"
+                        android:src="@drawable/baseline_favorite_border_24" />
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

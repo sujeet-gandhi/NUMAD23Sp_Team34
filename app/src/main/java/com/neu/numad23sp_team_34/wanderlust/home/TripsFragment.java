@@ -1,6 +1,7 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,7 @@ public class TripsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trips, container, false);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -173,6 +175,12 @@ public class TripsFragment extends Fragment {
                 .getReference("stories")
                 .child(story.getId())
                 .setValue(story);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
     }
 
 
