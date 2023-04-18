@@ -2,6 +2,7 @@ package com.neu.numad23sp_team_34.wanderlust.home;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,19 +19,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.FragmentProfileBinding;
 import com.neu.numad23sp_team_34.project.Story;
@@ -38,6 +46,7 @@ import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +59,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private ImageView profilePic;
 
+    private Uri imageUri;
+
+    private FirebaseStorage storage;
+
+    private StorageReference storageReference;
+
     private static final int PICK_IMAGE_REQUEST = 1;
 
     FirebaseAuth firebaseAuth;
+
+    private static final String TAG = "ProfileFragment";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -68,6 +85,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         FragmentProfileBinding binding = FragmentProfileBinding.inflate(inflater);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         profilePic = binding.profilePic;
         profilePic.setOnClickListener(this);
 
@@ -75,8 +95,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 LinearLayoutManager.HORIZONTAL, false));
 
         myStories = new ArrayList<>();
-
-
 
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
@@ -156,29 +174,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
                     });
 
-            FirebaseDatabase.getInstance().getReference()
-                    .child("users")
-                    .child(firebaseAuth.getCurrentUser().getUid())
-                    .child("profileImageUrl")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                String imageUrl = dataSnapshot.getValue(String.class);
-                                if (imageUrl != null) {
-                                    Glide.with(getContext())
-                                            .load(imageUrl)
-                                            .into(profilePic);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle errors here
-                        }
-                    });
-
+            // Load user's profile picture
+            StorageReference profilePicRef = storageReference.child("profiles/" + firebaseAuth.getCurrentUser().getUid() + ".jpg");
+            profilePicRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Log.d(TAG,"ProfileFragment" );
+//                    Picasso.get().load(uri).fit().centerCrop().into(profilePic);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    profilePic.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Handle error
+                    Log.d(TAG,"Error " );
+                }
+            });
         }
 
         binding.logout.setOnClickListener(view -> {
@@ -195,43 +207,59 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.profilePic) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            openFileChooser();
         }
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
+            imageUri = data.getData();
 
-            // Upload image to Firebase Storage
-            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-            StorageReference imageRef = storageRef.child("images/" + firebaseAuth.getCurrentUser().getUid() + "/profile.jpg");
-            imageRef.putFile(uri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Image uploaded successfully
-                        // Get the download URL of the image and save it to Firebase Realtime Database
-                        imageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child("users")
-                                    .child(firebaseAuth.getCurrentUser().getUid())
-                                    .child("profileImageUrl")
-                                    .setValue(uri1.toString());
-                            // Set the image as the profile picture
-                            Glide.with(getContext())
-                                    .load(uri1)
-                                    .into(profilePic);
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error uploading image
-                        Toast.makeText(getContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
-                    });
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                compressAndUploadImage(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    private void compressAndUploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference fileReference = storageReference.child("profiles/" + System.currentTimeMillis() + ".jpg");
+
+        fileReference.putBytes(data)
+                .addOnSuccessListener(taskSnapshot -> {
+                    fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Picasso.get().load(uri).into(profilePic);
+
+                        // Save the download URL to the user's profile in the database
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseDatabase.getInstance().getReference("users/" + userId + "/profileImageUrl")
+                                .setValue(uri.toString());
+                    });
+                })
+                .addOnFailureListener(e -> Toast.makeText(getActivity(), "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
 
 }
