@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.databinding.FragmentProfileBinding;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.project.ViewStoryActivity;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
 
@@ -65,6 +66,17 @@ public class ProfileFragment extends Fragment {
 
                 @Override
                 public void onStoryClicked(Story story) {
+
+                    Intent intent = new Intent(getContext(), ViewStoryActivity.class);
+                    intent.putExtra("id", story.getId());
+                    intent.putExtra("title", story.getTitle());
+                    intent.putExtra("rating", story.getRating());
+                    intent.putExtra("description", story.getDescription());
+                    intent.putExtra("review", story.getReview());
+                    intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                    intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                    intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                    startActivity(intent);
 
                 }
             }, firebaseAuth.getCurrentUser().getDisplayName());

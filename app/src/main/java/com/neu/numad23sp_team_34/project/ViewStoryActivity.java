@@ -92,8 +92,9 @@ public class ViewStoryActivity extends AppCompatActivity {
 //        imageAdapter = new DisplayImageAdapter(this, images);
         imageRecyclerView.setAdapter(imageAdapter);
 //
-//        itineraryAdapter = new ItineraryAdapter( itineraryList);
-//        itineraryRecyclerView.setAdapter(itineraryAdapter);
+        ItineraryViewOnlyAdapter itineraryAdapter = new ItineraryViewOnlyAdapter(itineraryList);
+        itineraryRecyclerView.setAdapter(itineraryAdapter);
+
 
 
 
