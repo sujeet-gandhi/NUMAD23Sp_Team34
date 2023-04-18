@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/baseline_account_circle_24"
             android:layout_margin="16dp"
-            app:tint="@color/black"/>
+            />
 
         <TextView
             android:id="@+id/username"
