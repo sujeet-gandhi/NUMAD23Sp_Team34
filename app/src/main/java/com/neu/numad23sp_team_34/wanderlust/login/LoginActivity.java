@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,7 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.neu.numad23sp_team_34.MainActivity;
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
 import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -159,21 +162,11 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        if( firebaseAuth.getCurrentUser()!= null){
-//            Toast.makeText(LoginActivity.this,"Already logged in!",Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//
-//
-//        } else {
-//            Toast.makeText(LoginActivity.this,"Please login!",Toast.LENGTH_SHORT).show();
-//
-//        }
-//
-//       }
+    @Override
+    public void onBackPressed() {
 
+        Intent intent = new Intent(LoginActivity.this, WanderLust_MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 }

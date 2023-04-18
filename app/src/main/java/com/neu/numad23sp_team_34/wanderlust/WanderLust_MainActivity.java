@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.neu.numad23sp_team_34.MainActivity;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
@@ -46,9 +47,11 @@ public class WanderLust_MainActivity extends AppCompatActivity {
             });
         }
 
-
-
-
-
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(WanderLust_MainActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

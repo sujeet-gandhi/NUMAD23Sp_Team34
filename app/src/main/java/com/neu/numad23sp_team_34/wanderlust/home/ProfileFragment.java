@@ -2,7 +2,9 @@ package com.neu.numad23sp_team_34.wanderlust.home;
 
 import static android.app.Activity.RESULT_OK;
 
+
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -54,6 +55,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     FirebaseAuth firebaseAuth;
 
+    FirebaseUser firebaseUser;
+
+    StorageReference storageReference;
+
+    Uri uriImage;
+
+    private  static final String TAG = "ProfileFragment";
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -66,9 +75,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
         FragmentProfileBinding binding = FragmentProfileBinding.inflate(inflater);
 
         profilePic = binding.profilePic;
+  //      profilePic = findViewById(R.id.profPic);
+//        View Iview = inflater.inflate(R.layout.fragment_profile, container, false);
+//        profilePic = Iview.findViewById(R.id.profilePic);
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        Uri uri = firebaseUser.getPhotoUrl();
+
+        Picasso.get().load(uri).into(profilePic);
         profilePic.setOnClickListener(this);
 
         binding.myTripsList.setLayoutManager(new LinearLayoutManager(getContext(),
@@ -156,35 +179,38 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
                     });
 
-            FirebaseDatabase.getInstance().getReference()
-                    .child("users")
-                    .child(firebaseAuth.getCurrentUser().getUid())
-                    .child("profileImageUrl")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                String imageUrl = dataSnapshot.getValue(String.class);
-                                if (imageUrl != null) {
-                                    Glide.with(getContext())
-                                            .load(imageUrl)
-                                            .into(profilePic);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle errors here
-                        }
-                    });
+//            FirebaseDatabase.getInstance().getReference()
+//                    .child("users")
+//                    .child(firebaseAuth.getCurrentUser().getUid())
+//                    .child("profileImageUrl")
+//                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            if (dataSnapshot.exists()) {
+//                                String imageUrl = dataSnapshot.getValue(String.class);
+//                                if (imageUrl != null) {
+//                                    Glide.with(getContext())
+//                                            .load(imageUrl)
+//                                            .into(profilePic);
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//                            // Handle errors here
+//                        }
+//                    });
 
         }
 
         binding.logout.setOnClickListener(view -> {
             firebaseAuth.signOut();
             Intent intent = new Intent(getContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getContext().startActivity(intent);
+
+
         });
 
         return binding.getRoot();
@@ -195,8 +221,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.profilePic) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setType("image/*");
+//            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            Intent intent = new Intent();
+
             intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         }
     }
@@ -205,33 +236,54 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            Uri uri = data.getData();
+//
+//            // Upload image to Firebase Storage
+//            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//            StorageReference imageRef = storageRef.child("images/" + firebaseAuth.getCurrentUser().getUid() + "/profile.jpg");
+//            imageRef.putFile(uri)
+//                    .addOnSuccessListener(taskSnapshot -> {
+//                        // Image uploaded successfully
+//                        // Get the download URL of the image and save it to Firebase Realtime Database
+//                        imageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
+//                            FirebaseDatabase.getInstance().getReference()
+//                                    .child("users")
+//                                    .child(firebaseAuth.getCurrentUser().getUid())
+//                                    .child("profileImageUrl")
+//                                    .setValue(uri1.toString());
+//                            // Set the image as the profile picture
+//                            Glide.with(getContext())
+//                                    .load(uri1)
+//                                    .into(profilePic);
+//                        });
+//                    })
+//                    .addOnFailureListener(e -> {
+//                        // Error uploading image
+//                        Toast.makeText(getContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
+//                    });
+        // }
+//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data!=null && data.getData()!=null) {
+//            uriImage = data.getData();
+//            profilePic.setImageURI(uriImage);
+//        }
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
 
-            // Upload image to Firebase Storage
-            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-            StorageReference imageRef = storageRef.child("images/" + firebaseAuth.getCurrentUser().getUid() + "/profile.jpg");
-            imageRef.putFile(uri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Image uploaded successfully
-                        // Get the download URL of the image and save it to Firebase Realtime Database
-                        imageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child("users")
-                                    .child(firebaseAuth.getCurrentUser().getUid())
-                                    .child("profileImageUrl")
-                                    .setValue(uri1.toString());
-                            // Set the image as the profile picture
-                            Glide.with(getContext())
-                                    .load(uri1)
-                                    .into(profilePic);
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error uploading image
-                        Toast.makeText(getContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
-                    });
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                profilePic.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
     }
 
 }
