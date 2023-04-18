@@ -100,11 +100,7 @@ public class CreateStory extends AppCompatActivity {
         Button buttonAddLocation = findViewById(R.id.buttonAddLocation);
 
         itineraryRecyclerView = findViewById(R.id.itineraryRecyclerView);
-        itineraryAdapter = new ItineraryAdapter( itineraryItems, () -> {
-            buttonAddLocation.setVisibility(View.INVISIBLE);
-            buttonAddLocation.callOnClick();
-            itineraryAdapter.notifyDataSetChanged();
-        });
+        itineraryAdapter = new ItineraryAdapter( itineraryItems);
         LinearLayoutManager layoutManagerItinerary = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);

@@ -1,6 +1,5 @@
 package com.neu.numad23sp_team_34.project;
 
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     private List<String> locations;
     private OnAddLocationClickListener onAddLocationClickListener;
 
-    public ItineraryAdapter(List<String> locations, OnAddLocationClickListener onAddLocationClickListener) {
+    public ItineraryAdapter(List<String> locations) {
         this.locations = locations;
         this.onAddLocationClickListener = onAddLocationClickListener;
     }

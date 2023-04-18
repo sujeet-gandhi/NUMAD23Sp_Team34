@@ -48,6 +48,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
+        Story story = stories.get(position);
         holder.storyTitle.setText(stories.get(position).getTitle());
         if (isMyStoriesAdapter) {
             holder.userName.setVisibility(View.GONE);
@@ -74,6 +75,12 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
                 .into(holder.storyImage);
 
         holder.favButton.setOnClickListener(view -> listener.onFavoriteToggleClicked(stories.get(position)));
+
+        holder.itemView.setOnClickListener(view -> listener.onStoryClicked(story));
+
+
+
+
     }
 
     @Override

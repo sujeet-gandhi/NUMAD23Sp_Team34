@@ -62,6 +62,11 @@ public class ProfileFragment extends Fragment {
                 public void onFavoriteToggleClicked(Story story) {
 
                 }
+
+                @Override
+                public void onStoryClicked(Story story) {
+
+                }
             }, firebaseAuth.getCurrentUser().getDisplayName());
 
             binding.myTripsList.setAdapter(adapter);

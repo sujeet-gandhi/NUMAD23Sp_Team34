@@ -6,4 +6,6 @@ public interface RecyclerViewCallbackListener {
 
     void onFavoriteToggleClicked(Story story);
 
+    void onStoryClicked(Story story);
+
 }
