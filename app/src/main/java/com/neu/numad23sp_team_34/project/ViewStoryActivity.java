@@ -1,8 +1,11 @@
 package com.neu.numad23sp_team_34.project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +25,7 @@ import com.neu.numad23sp_team_34.R;
 
 import java.util.List;
 
-public class ViewStoryActivity extends AppCompatActivity {
+public class ViewStoryActivity extends AppCompatActivity implements ItineraryViewOnlyAdapter.OnLocationClickListener {
 
     private TextView textViewStoryTitle, textViewStoryDescription, textViewKeywords, textViewItinerary, textViewReview;
     private EditText editTextStoryTitle, editTextStoryDescription, editTextKeywords, editTextItinerary, editTextReview;
@@ -92,7 +95,7 @@ public class ViewStoryActivity extends AppCompatActivity {
 //        imageAdapter = new DisplayImageAdapter(this, images);
         imageRecyclerView.setAdapter(imageAdapter);
 //
-        ItineraryViewOnlyAdapter itineraryAdapter = new ItineraryViewOnlyAdapter(itineraryList);
+        ItineraryViewOnlyAdapter itineraryAdapter = new ItineraryViewOnlyAdapter(itineraryList, this);
         itineraryRecyclerView.setAdapter(itineraryAdapter);
 
 
@@ -146,4 +149,20 @@ public class ViewStoryActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onLocationClick(String location) {
+
+        Log.d("ViewStoryActivity", "Opening location on Google Maps: " + location);
+
+
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(location));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        } else {
+            Log.e("ViewStoryActivity", "Failed to open any map application");
+        }
+
+    }
 }

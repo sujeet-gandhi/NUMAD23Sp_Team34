@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateStory extends AppCompatActivity {
+public class CreateStory extends AppCompatActivity implements ItineraryAdapter.OnRemoveLocationListener  {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -100,7 +100,7 @@ public class CreateStory extends AppCompatActivity {
         Button buttonAddLocation = findViewById(R.id.buttonAddLocation);
 
         itineraryRecyclerView = findViewById(R.id.itineraryRecyclerView);
-        itineraryAdapter = new ItineraryAdapter( itineraryItems);
+        itineraryAdapter = new ItineraryAdapter( itineraryItems, this);
         LinearLayoutManager layoutManagerItinerary = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);
@@ -369,7 +369,12 @@ public class CreateStory extends AppCompatActivity {
         itineraryAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onRemoveLocation(int position) {
+itineraryItems.remove(position);
+        itineraryAdapter.notifyDataSetChanged();
 
+    }
 
 
     // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
