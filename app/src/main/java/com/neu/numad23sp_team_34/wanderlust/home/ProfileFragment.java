@@ -1,7 +1,7 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
-import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 
 import android.content.Intent;
@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,8 +36,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,23 +51,17 @@ import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment {
 
     private List<Story> myStories;
 
     private StoryAdapter adapter;
-
-    private ImageView profilePic;
-
-    private Uri imageUri;
-
-    private FirebaseStorage storage;
-
-    private StorageReference storageReference;
+    private FragmentProfileBinding binding;
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -82,13 +79,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentProfileBinding binding = FragmentProfileBinding.inflate(inflater);
+        binding = FragmentProfileBinding.inflate(inflater);
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
-        profilePic = binding.profilePic;
-        profilePic.setOnClickListener(this);
+        //profilePic = binding.profilePic;
+        //profilePic.setOnClickListener(this);
 
         binding.myTripsList.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
@@ -123,7 +118,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                             Story changedStory = snapshot.getValue(Story.class);
-                            if (changedStory != null&& changedStory.getUserName() != null && changedStory.getUserName().equals(firebaseAuth.getCurrentUser().getDisplayName())) {
+                            if (changedStory != null && changedStory.getUserName() != null && changedStory.getUserName().equals(firebaseAuth.getCurrentUser().getDisplayName())) {
                                 for (int i = 0; i < myStories.size(); i++) {
                                     if (changedStory.getId().equals(myStories.get(i).getId())) {
                                         myStories.get(i).setDescription(changedStory.getDescription());
@@ -172,21 +167,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                         }
                     });
-
-            // Load user's profile picture
-            StorageReference profilePicRef = storageReference.child("profiles/" + firebaseAuth.getCurrentUser().getUid() + ".jpg");
-            profilePicRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).fit().centerCrop().into(profilePic);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Handle error
-                }
-            });
         }
+
+        loadUserProfilePicture(binding.profilePic, firebaseAuth.getCurrentUser().getUid());
+        binding.profilePic.setOnClickListener(view -> {
+            openImagePicker();
+        });
+
 
         binding.logout.setOnClickListener(view -> {
             firebaseAuth.signOut();
@@ -195,65 +182,81 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         return binding.getRoot();
-
     }
 
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.profilePic) {
-            openFileChooser();
-        }
-    }
-
-    private void openFileChooser() {
+    private void openImagePicker() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-                compressAndUploadImage(bitmap);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                Log.d("ProfileFragment", "Bitmap created: " + bitmap); // Add this log statement
+                uploadImageToFirebase(bitmap, binding.profilePic);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
-    private void compressAndUploadImage(Bitmap bitmap) {
+    private void uploadImageToFirebase(Bitmap bitmap, ImageView imageView) {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("profiles/" + userId + ".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        byte[] imageData = baos.toByteArray();
 
-        StorageReference fileReference = storageReference.child("profiles/" + System.currentTimeMillis() + ".jpg");
-
-        fileReference.putBytes(data)
-                .addOnSuccessListener(taskSnapshot -> {
-                    fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                        Picasso.get().load(uri).into(profilePic);
-
-                        // Save the download URL to the user's profile in the database
-                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        FirebaseDatabase.getInstance().getReference("users/" + userId + "/profileImageUrl")
+        UploadTask uploadTask = storageReference.putBytes(imageData);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("profileImage")
                                 .setValue(uri.toString());
-                    });
-                })
-                .addOnFailureListener(e -> Toast.makeText(getActivity(), "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+
+                        GlideApp.with(getContext()).load(uri).into(imageView);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadUserProfilePicture(ImageView imageView, String userId) {
+        DatabaseReference profileImageRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("profileImage");
+        profileImageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String imageUrl = dataSnapshot.getValue(String.class);
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Log.d("ProfileFragment", "Image URL: " + imageUrl);
+                        GlideApp.with(getContext()).load(imageUrl).into(imageView);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Error loading profile image", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
