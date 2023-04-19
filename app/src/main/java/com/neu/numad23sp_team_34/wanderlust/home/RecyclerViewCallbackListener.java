@@ -6,4 +6,12 @@ public interface RecyclerViewCallbackListener {
 
     void onFavoriteToggleClicked(Story story);
 
+    void onStoryClicked(Story story);
+
+    void onDeleteStoryClicked(Story story);
+
+    void onEditButtonClicked(Story story);
+
+
+
 }

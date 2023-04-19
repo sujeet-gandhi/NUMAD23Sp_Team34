@@ -1,6 +1,5 @@
 package com.neu.numad23sp_team_34.project;
 
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,13 @@ import java.util.List;
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> {
 
     private List<String> locations;
-    private OnAddLocationClickListener onAddLocationClickListener;
 
-    public ItineraryAdapter(List<String> locations, OnAddLocationClickListener onAddLocationClickListener) {
+    private final OnRemoveLocationListener removeLocationListener;
+
+
+    public ItineraryAdapter(List<String> locations, OnRemoveLocationListener removeLocationListener) {
         this.locations = locations;
-        this.onAddLocationClickListener = onAddLocationClickListener;
+        this.removeLocationListener = removeLocationListener;
     }
 
     @Override
@@ -32,8 +33,22 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textViewLocation.setText(locations.get(position));
-        holder.buttonAddLocation.setOnClickListener(view -> onAddLocationClickListener.onAddLocationClick());
-    }
+        String location = locations.get(position);
+
+        if (position == locations.size() - 1) {
+            holder.buttonRemoveLocation.setVisibility(View.VISIBLE);
+            holder.buttonRemoveLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    if (removeLocationListener != null && position != RecyclerView.NO_POSITION) {
+                        removeLocationListener.onRemoveLocation(position);
+                    }
+                }
+            });
+        } else {
+            holder.buttonRemoveLocation.setVisibility(View.GONE);
+        }    }
 
     @Override
     public int getItemCount() {
@@ -41,17 +56,19 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View buttonRemoveLocation;
         TextView textViewLocation;
         ImageButton buttonAddLocation;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewLocation = itemView.findViewById(R.id.textViewLocation);
-            buttonAddLocation = itemView.findViewById(R.id.buttonAddLocation);
+            buttonRemoveLocation = itemView.findViewById(R.id.buttonRemoveLocation);
         }
     }
 
-    public interface OnAddLocationClickListener {
-        void onAddLocationClick();
+    public interface OnRemoveLocationListener {
+        void onRemoveLocation(int position);
     }
 }
+
