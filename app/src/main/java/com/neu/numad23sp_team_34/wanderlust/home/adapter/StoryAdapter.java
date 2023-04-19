@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.wanderlust.Utility;
 import com.neu.numad23sp_team_34.wanderlust.home.RecyclerViewCallbackListener;
 import com.neu.numad23sp_team_34.wanderlust.home.TripsFragment;
 import com.squareup.picasso.Picasso;
@@ -26,8 +27,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     private final Context context;
 
     private final List<Story> stories;
-
-
 
     private final boolean isMyStoriesAdapter;
 
@@ -56,18 +55,19 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         holder.storyTitle.setText(stories.get(position).getTitle());
         if (isMyStoriesAdapter) {
             holder.userName.setVisibility(View.GONE);
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams layoutParams = holder.storyImage.getLayoutParams();
+            layoutParams.height = ((int) Utility.dpToPx(200, context));
+            holder.storyImage.setLayoutParams(layoutParams);
         } else {
             holder.userName.setVisibility(View.VISIBLE);
             holder.userName.setText(stories.get(position).getUserName());
-        }
-
-
-        if (isMyStoriesAdapter) {
-            holder.editButton.setVisibility(View.VISIBLE);
-            holder.deleteButton.setVisibility(View.VISIBLE);
-        } else {
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
+            ViewGroup.LayoutParams layoutParams = holder.storyImage.getLayoutParams();
+            layoutParams.height = ((int) Utility.dpToPx(400, context));
+            holder.storyImage.setLayoutParams(layoutParams);
         }
 
         holder.ratingBar.setRating(stories.get(position).getRating());
@@ -109,8 +109,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         });
 
 
-
-
     }
 
     @Override
@@ -130,8 +128,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         public RatingBar ratingBar;
 
-        public Button editButton;
-        public Button deleteButton;
+        public ImageView editButton;
+
+        public ImageView deleteButton;
 
 
         public StoryViewHolder(@NonNull View itemView) {

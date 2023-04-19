@@ -1,10 +1,12 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -77,7 +79,7 @@ public class TripsFragment extends Fragment {
 
         stories = new ArrayList<>();
 
-        adapter = new StoryAdapter(getContext(), stories, true, new RecyclerViewCallbackListener() {
+        adapter = new StoryAdapter(getContext(), stories, false, new RecyclerViewCallbackListener() {
             @Override
             public void onFavoriteToggleClicked(Story story) {
                 int positionToRemove = -1;
@@ -120,17 +122,6 @@ public class TripsFragment extends Fragment {
             public void onDeleteStoryClicked(Story story) {
                 Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId()); // Add this log statement
 
-                FirebaseDatabase
-                        .getInstance()
-                        .getReference("stories")
-                        .child(story.getId())
-                        .removeValue()
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
-                        });
             }
 
             @Override
