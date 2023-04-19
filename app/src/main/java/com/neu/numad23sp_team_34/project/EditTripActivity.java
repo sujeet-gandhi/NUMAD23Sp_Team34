@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -70,13 +71,23 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     private ItineraryAdapter itineraryAdapter;
     private List<String> itineraryItems = new ArrayList<>();
 
+    private String storyId;
+    private String storyTitle;
+    private String storyDescription;
+    private String review;
+    private float rating;
+
+
+    private List<String> images2;
+    private List<String> keywords;
+
+    private List<String> itineraryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
 
-        Places.initialize(getApplicationContext(), "AIzaSyC0YKtZG9Gq0bA8slXRbBbvRlaw3IxsI8c");
 
 
         editTextStoryTitle = findViewById(R.id.updateeditTextStoryTitle);
@@ -89,6 +100,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         ratingBar = findViewById(R.id.editratingBar);
         editKeywords = findViewById(R.id.updatekeywords);
 
+//        storyImageView = findViewById(R.id.updatestoryImageView);
 
         imageRecyclerView = findViewById(R.id.editimageRecyclerView);
         imageAdapter = new ImageAdapter(this, images);
@@ -104,6 +116,35 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);
         itineraryRecyclerView.addItemDecoration(new ConnectingLineItemDecoration(Color.GRAY, 5));
+
+        storyId = getIntent().getStringExtra("id");
+        storyTitle = getIntent().getStringExtra("title");
+        storyDescription = getIntent().getStringExtra("description");
+        keywords = getIntent().getStringArrayListExtra("keywords");
+        review = getIntent().getStringExtra("review");
+        rating = getIntent().getFloatExtra("rating", 0);
+        images2 = getIntent().getStringArrayListExtra("imageUrl");
+        itineraryList = getIntent().getStringArrayListExtra("itinerary");
+
+        editTextStoryTitle.setText(storyTitle);
+        editTextStoryDescription.setText(storyDescription);
+        editTextReview.setText(review);
+        ratingBar.setRating(Float.parseFloat(String.valueOf(rating)));
+
+
+        for (String keyword : keywords) {
+            editKeywords.append(keyword + ",");
+        }
+
+//        for (String imageUrl : images2) {
+//            Glide.with(this).load(imageUrl).into(storyImageView);
+//        }
+
+        for (String itinerary : itineraryList) {
+            itineraryItems.add(itinerary);
+        }
+
+
 
         buttonAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +276,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
 
             // Create a unique ID for the story
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
-            String storyId = databaseReference.push().getKey();
 
             // Upload images to Firebase Storage
             uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
