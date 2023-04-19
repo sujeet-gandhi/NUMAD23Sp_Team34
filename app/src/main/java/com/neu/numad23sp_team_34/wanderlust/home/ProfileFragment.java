@@ -1,10 +1,12 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -55,7 +57,6 @@ public class ProfileFragment extends Fragment {
         myStories = new ArrayList<>();
 
 
-
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             binding.email.setText(firebaseAuth.getCurrentUser().getEmail());
@@ -87,17 +88,29 @@ public class ProfileFragment extends Fragment {
                 public void onDeleteStoryClicked(Story story) {
 
                     Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId());
-                    FirebaseDatabase
-                            .getInstance()
-                            .getReference("stories")
-                            .child(story.getId())
-                            .removeValue()
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
+
+
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Delete Confirmation")
+                            .setMessage("Are you sure you want to delete this story?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked OK, perform action
+                                    FirebaseDatabase
+                                            .getInstance()
+                                            .getReference("stories")
+                                            .child(story.getId())
+                                            .removeValue()
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
+                                            });
+                                }
                             })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
-                            });
+                            .setNegativeButton("No", null)
+                            .show();
                 }
 
                 @Override
@@ -133,7 +146,7 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                             Story changedStory = snapshot.getValue(Story.class);
-                            if (changedStory != null&& changedStory.getUserName() != null && changedStory.getUserName().equals(firebaseAuth.getCurrentUser().getDisplayName())) {
+                            if (changedStory != null && changedStory.getUserName() != null && changedStory.getUserName().equals(firebaseAuth.getCurrentUser().getDisplayName())) {
                                 for (int i = 0; i < myStories.size(); i++) {
                                     if (changedStory.getId().equals(myStories.get(i).getId())) {
                                         myStories.get(i).setDescription(changedStory.getDescription());
