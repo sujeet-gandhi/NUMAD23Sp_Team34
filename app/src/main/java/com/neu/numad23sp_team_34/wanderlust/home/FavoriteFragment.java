@@ -98,20 +98,11 @@ public class FavoriteFragment extends Fragment {
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         Story changedStory = snapshot.getValue(Story.class);
                         if (changedStory != null && changedStory.getFavoriteUserIds() != null && changedStory.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())) {
-                            for (int i = 0; i < stories.size(); i++) {
-                                if (changedStory.getId().equals(stories.get(i).getId())) {
-                                    stories.get(i).setDescription(changedStory.getDescription());
-                                    stories.get(i).setImageUrl(changedStory.getImageUrl());
-                                    stories.get(i).setTitle(changedStory.getTitle());
-                                    stories.get(i).setKeywords(changedStory.getKeywords());
-                                    stories.get(i).setItinerary(changedStory.getItinerary());
-                                    stories.get(i).setReview(changedStory.getReview());
-                                    stories.get(i).setRating(changedStory.getRating());
-
-                                    adapter.notifyItemChanged(i);
-                                }
-                            }
+                            stories.add(changedStory);
+                        } else if (changedStory != null && (changedStory.getFavoriteUserIds() == null || (changedStory.getFavoriteUserIds() != null && !changedStory.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())))) {
+                            stories.remove(changedStory);
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
