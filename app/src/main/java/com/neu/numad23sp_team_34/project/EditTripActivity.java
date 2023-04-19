@@ -55,6 +55,10 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 2;
+
+
+
     private RecyclerView imageRecyclerView;
     private ImageAdapter imageAdapter;
     private List<Bitmap> images = new ArrayList<>();
@@ -88,6 +92,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
 
+        Places.initialize(getApplicationContext(), "AIzaSyC0YKtZG9Gq0bA8slXRbBbvRlaw3IxsI8c");
 
 
         editTextStoryTitle = findViewById(R.id.updateeditTextStoryTitle);
