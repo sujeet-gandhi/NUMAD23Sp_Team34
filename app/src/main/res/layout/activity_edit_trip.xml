@@ -174,11 +174,11 @@
 
 
             <Button
-                android:id="@+id/buttonSubmit"
+                android:id="@+id/buttonStoryUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Submit Story"
+                android:text="Update Story"
                 android:textColor="@android:color/black"
                 android:backgroundTint="@android:color/white"
                 android:layout_marginTop="16dp" />

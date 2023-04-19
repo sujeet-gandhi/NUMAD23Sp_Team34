@@ -100,6 +100,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         });
 
 
+        holder.editButton.setOnClickListener(view -> {
+            Log.d("StoryAdapter", "Edit button clicked for story: " + story.getId()); // Add this log statement
+
+            if (listener != null) {
+                listener.onEditButtonClicked(story);
+            }
+        });
+
+
+
+
     }
 
     @Override

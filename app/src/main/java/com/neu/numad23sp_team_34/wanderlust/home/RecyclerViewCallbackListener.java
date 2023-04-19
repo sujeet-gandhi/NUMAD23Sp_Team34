@@ -10,5 +10,8 @@ public interface RecyclerViewCallbackListener {
 
     void onDeleteStoryClicked(Story story);
 
+    void onEditButtonClicked(Story story);
+
+
 
 }

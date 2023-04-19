@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="33">
+
+        <activity
+            android:name=".project.EditTripActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".wanderlust.home.HomeActivity"
             android:exported="false">

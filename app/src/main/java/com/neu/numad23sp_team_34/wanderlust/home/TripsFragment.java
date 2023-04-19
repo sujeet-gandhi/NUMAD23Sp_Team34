@@ -132,6 +132,12 @@ public class TripsFragment extends Fragment {
                             Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
                         });
             }
+
+            @Override
+            public void onEditButtonClicked(Story story) {
+
+
+            }
         }, firebaseAuth.getCurrentUser().getDisplayName());
 
         storyRecyclerView.setAdapter(adapter);
