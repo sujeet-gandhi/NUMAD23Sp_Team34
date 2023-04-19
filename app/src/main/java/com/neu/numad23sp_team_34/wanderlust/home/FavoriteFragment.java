@@ -64,7 +64,16 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onStoryClicked(Story story) {
 
-
+                Intent intent = new Intent(getContext(), ViewStoryActivity.class);
+                intent.putExtra("id", story.getId());
+                intent.putExtra("title", story.getTitle());
+                intent.putExtra("rating", story.getRating());
+                intent.putExtra("description", story.getDescription());
+                intent.putExtra("review", story.getReview());
+                intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                startActivity(intent);
 
 
 
