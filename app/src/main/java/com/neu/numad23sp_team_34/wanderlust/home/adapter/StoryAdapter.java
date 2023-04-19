@@ -1,9 +1,11 @@
 package com.neu.numad23sp_team_34.wanderlust.home.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -25,13 +27,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
     private final List<Story> stories;
 
+
+
     private final boolean isMyStoriesAdapter;
 
     private final RecyclerViewCallbackListener listener;
 
     private final String currentUserName;
 
-    public StoryAdapter(Context context, List<Story> stories, boolean isMyStoriesAdapter,
+    public StoryAdapter(Context context, List<Story> stories,  boolean isMyStoriesAdapter,
                         RecyclerViewCallbackListener listener, String currentUserName) {
         this.context = context;
         this.stories = stories;
@@ -57,6 +61,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             holder.userName.setText(stories.get(position).getUserName());
         }
 
+
+        if (isMyStoriesAdapter) {
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+        }
+
         holder.ratingBar.setRating(stories.get(position).getRating());
         holder.ratingBar.isIndicator();
 
@@ -78,7 +91,13 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         holder.itemView.setOnClickListener(view -> listener.onStoryClicked(story));
 
+        holder.deleteButton.setOnClickListener(view -> {
+            Log.d("StoryAdapter", "Delete button clicked for story: " + story.getId()); // Add this log statement
 
+            if (listener != null) {
+                listener.onDeleteStoryClicked(story);
+            }
+        });
 
 
     }
@@ -100,8 +119,16 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         public RatingBar ratingBar;
 
+        public Button editButton;
+        public Button deleteButton;
+
+
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
+
+
+            editButton = itemView.findViewById(R.id.editButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
 
             storyTitle = itemView.findViewById(R.id.storyTitle);
             userName = itemView.findViewById(R.id.username);

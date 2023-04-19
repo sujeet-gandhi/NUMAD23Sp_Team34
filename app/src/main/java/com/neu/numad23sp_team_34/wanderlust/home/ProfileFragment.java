@@ -8,9 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -78,6 +80,23 @@ public class ProfileFragment extends Fragment {
                     intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
                     startActivity(intent);
 
+                }
+
+                @Override
+                public void onDeleteStoryClicked(Story story) {
+
+                    Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId());
+                    FirebaseDatabase
+                            .getInstance()
+                            .getReference("stories")
+                            .child(story.getId())
+                            .removeValue()
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
+                            });
                 }
             }, firebaseAuth.getCurrentUser().getDisplayName());
 

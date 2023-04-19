@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,7 @@ public class TripsFragment extends Fragment {
 
         stories = new ArrayList<>();
 
-        adapter = new StoryAdapter(getContext(), stories, false, new RecyclerViewCallbackListener() {
+        adapter = new StoryAdapter(getContext(), stories, true, new RecyclerViewCallbackListener() {
             @Override
             public void onFavoriteToggleClicked(Story story) {
                 int positionToRemove = -1;
@@ -113,6 +114,23 @@ public class TripsFragment extends Fragment {
                 intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
                 intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
                 startActivity(intent);
+            }
+
+            @Override
+            public void onDeleteStoryClicked(Story story) {
+                Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId()); // Add this log statement
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference("stories")
+                        .child(story.getId())
+                        .removeValue()
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
+                        });
             }
         }, firebaseAuth.getCurrentUser().getDisplayName());
 

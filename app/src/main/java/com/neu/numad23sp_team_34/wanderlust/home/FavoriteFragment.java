@@ -76,6 +76,11 @@ public class FavoriteFragment extends Fragment {
                 startActivity(intent);
 
             }
+
+            @Override
+            public void onDeleteStoryClicked(Story story) {
+
+            }
         }, firebaseAuth.getCurrentUser().getDisplayName());
 
         binding.favoritesList.setAdapter(adapter);

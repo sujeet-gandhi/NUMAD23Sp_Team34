@@ -8,4 +8,7 @@ public interface RecyclerViewCallbackListener {
 
     void onStoryClicked(Story story);
 
+    void onDeleteStoryClicked(Story story);
+
+
 }

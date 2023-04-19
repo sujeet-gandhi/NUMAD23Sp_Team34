@@ -72,6 +72,29 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/baseline_favorite_border_24"/>
 
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:layout_below="@id/ratingBar"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_below="@id/ratingBar"
+                android:layout_toEndOf="@+id/editButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
