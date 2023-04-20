@@ -36,19 +36,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.FragmentProfileBinding;
 import com.neu.numad23sp_team_34.project.Story;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -195,7 +191,7 @@ public class ProfileFragment extends Fragment {
             Uri filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                Log.d("ProfileFragment", "Bitmap created: " + bitmap); // Add this log statement
+                //Log.d("ProfileFragment", "Bitmap created: " + bitmap);
                 uploadImageToFirebase(bitmap, binding.profilePic);
             } catch (IOException e) {
                 e.printStackTrace();
