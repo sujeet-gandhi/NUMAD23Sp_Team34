@@ -207,7 +207,8 @@ public class ProfileFragment extends Fragment {
     private void uploadImageToFirebase(Bitmap bitmap, ImageView imageView) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getCurrentUser().getUid();
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("profiles/" + userId + ".jpg");
+        String userName = firebaseAuth.getCurrentUser().getDisplayName();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("profiles/" + userName + ".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageData = baos.toByteArray();
@@ -219,8 +220,11 @@ public class ProfileFragment extends Fragment {
                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("profileImage")
-                                .setValue(uri.toString());
+                        //FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("profileImage")
+                        //        .setValue(uri.toString());
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+                        userRef.child("profileImage").setValue(uri.toString());
+                        userRef.child("username").setValue(userName);
 
                         GlideApp.with(getContext()).load(uri).into(imageView);
                     }
