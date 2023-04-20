@@ -44,6 +44,8 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
+import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -370,9 +372,26 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
     }
 
     @Override
+
+    public void onBackPressed() {
+        new android.app.AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit? The story will be lost...")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(CreateStory.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
     public void onRemoveLocation(int position) {
 itineraryItems.remove(position);
         itineraryAdapter.notifyDataSetChanged();
+
 
     }
 

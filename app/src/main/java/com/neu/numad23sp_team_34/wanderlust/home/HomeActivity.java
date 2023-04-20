@@ -3,14 +3,19 @@ package com.neu.numad23sp_team_34.wanderlust.home;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationBarView;
+import com.neu.numad23sp_team_34.MainActivity;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.ActivityHomeBinding;
+import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -77,4 +82,19 @@ public class HomeActivity extends AppCompatActivity {
         binding.profileContainer.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 }

@@ -1,6 +1,10 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
+
+import android.content.pm.ActivityInfo;
+
 import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -48,6 +52,8 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentFavoriteBinding.inflate(inflater);
+
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         binding.favoritesList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -148,5 +154,11 @@ public class FavoriteFragment extends Fragment {
                 });
 
         return binding.getRoot();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
     }
 }

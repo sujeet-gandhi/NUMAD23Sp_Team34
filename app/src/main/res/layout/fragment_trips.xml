@@ -9,12 +9,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:orientation="vertical">
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/createStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_margin="32dp"
             app:cardCornerRadius="128dp"
             app:cardElevation="32dp"
@@ -37,7 +40,10 @@
                 app:drawableEndCompat="@android:drawable/ic_input_add" />
 
 
+
         </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/topLocationsLabel"
@@ -59,6 +65,7 @@
             app:layout_constraintTop_toBottomOf="@id/topLocationsLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
