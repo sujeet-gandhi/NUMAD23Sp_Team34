@@ -13,9 +13,10 @@
         android:text="Location" />
 
     <ImageButton
-        android:id="@+id/buttonAddLocation"
+        android:id="@+id/buttonRemoveLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_add_circle_outline_black_24dp" />
+        android:src="@drawable/ic_baseline_delete_forever_24" />
 </LinearLayout>

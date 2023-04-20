@@ -1,9 +1,11 @@
 package com.neu.numad23sp_team_34.wanderlust.home.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.wanderlust.Utility;
 import com.neu.numad23sp_team_34.wanderlust.home.RecyclerViewCallbackListener;
 import com.neu.numad23sp_team_34.wanderlust.home.TripsFragment;
 import com.squareup.picasso.Picasso;
@@ -31,7 +34,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
     private final String currentUserName;
 
-    public StoryAdapter(Context context, List<Story> stories, boolean isMyStoriesAdapter,
+    public StoryAdapter(Context context, List<Story> stories,  boolean isMyStoriesAdapter,
                         RecyclerViewCallbackListener listener, String currentUserName) {
         this.context = context;
         this.stories = stories;
@@ -48,12 +51,23 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
+        Story story = stories.get(position);
         holder.storyTitle.setText(stories.get(position).getTitle());
         if (isMyStoriesAdapter) {
             holder.userName.setVisibility(View.GONE);
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams layoutParams = holder.storyImage.getLayoutParams();
+            layoutParams.height = ((int) Utility.dpToPx(200, context));
+            holder.storyImage.setLayoutParams(layoutParams);
         } else {
             holder.userName.setVisibility(View.VISIBLE);
             holder.userName.setText(stories.get(position).getUserName());
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+            ViewGroup.LayoutParams layoutParams = holder.storyImage.getLayoutParams();
+            layoutParams.height = ((int) Utility.dpToPx(400, context));
+            holder.storyImage.setLayoutParams(layoutParams);
         }
 
         holder.ratingBar.setRating(stories.get(position).getRating());
@@ -74,6 +88,27 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
                 .into(holder.storyImage);
 
         holder.favButton.setOnClickListener(view -> listener.onFavoriteToggleClicked(stories.get(position)));
+
+        holder.itemView.setOnClickListener(view -> listener.onStoryClicked(story));
+
+        holder.deleteButton.setOnClickListener(view -> {
+            Log.d("StoryAdapter", "Delete button clicked for story: " + story.getId()); // Add this log statement
+
+            if (listener != null) {
+                listener.onDeleteStoryClicked(story);
+            }
+        });
+
+
+        holder.editButton.setOnClickListener(view -> {
+            Log.d("StoryAdapter", "Edit button clicked for story: " + story.getId()); // Add this log statement
+
+            if (listener != null) {
+                listener.onEditButtonClicked(story);
+            }
+        });
+
+
     }
 
     @Override
@@ -93,8 +128,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         public RatingBar ratingBar;
 
+        public ImageView editButton;
+
+        public ImageView deleteButton;
+
+
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
+
+
+            editButton = itemView.findViewById(R.id.editButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
 
             storyTitle = itemView.findViewById(R.id.storyTitle);
             userName = itemView.findViewById(R.id.username);

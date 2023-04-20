@@ -1,16 +1,19 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +24,12 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.neu.numad23sp_team_34.DetailViewActivity;
 import com.neu.numad23sp_team_34.MainActivity;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.project.CreateStory;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.project.ViewStoryActivity;
 import com.neu.numad23sp_team_34.sticktoem.models.Message;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 
@@ -99,6 +104,32 @@ public class TripsFragment extends Fragment {
                 }
 
                 writeNewStoryObject(story);
+            }
+
+            @Override
+            public void onStoryClicked(Story story) {
+                Intent intent = new Intent(getContext(), ViewStoryActivity.class);
+                intent.putExtra("id", story.getId());
+                intent.putExtra("title", story.getTitle());
+                intent.putExtra("rating", story.getRating());
+                intent.putExtra("description", story.getDescription());
+                intent.putExtra("review", story.getReview());
+                intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onDeleteStoryClicked(Story story) {
+                Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId()); // Add this log statement
+
+            }
+
+            @Override
+            public void onEditButtonClicked(Story story) {
+
+
             }
         }, firebaseAuth.getCurrentUser().getDisplayName());
 

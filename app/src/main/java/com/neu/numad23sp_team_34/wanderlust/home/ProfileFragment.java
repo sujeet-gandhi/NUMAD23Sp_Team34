@@ -1,8 +1,10 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
 
+
 import android.app.Activity;
 import android.content.ContentResolver;
+
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,17 +20,23 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
+
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -50,7 +58,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.neu.numad23sp_team_34.databinding.FragmentProfileBinding;
+import com.neu.numad23sp_team_34.project.EditTripActivity;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.project.ViewStoryActivity;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
 
@@ -93,7 +103,9 @@ public class ProfileFragment extends Fragment {
 
         myStories = new ArrayList<>();
 
-        firebaseAuth = FirebaseAuth.getInstance();
+
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             binding.email.setText(firebaseAuth.getCurrentUser().getEmail());
             binding.username.setText(firebaseAuth.getCurrentUser().getDisplayName());
@@ -102,6 +114,67 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onFavoriteToggleClicked(Story story) {
 
+                }
+
+                @Override
+                public void onStoryClicked(Story story) {
+
+                    Intent intent = new Intent(getContext(), ViewStoryActivity.class);
+                    intent.putExtra("id", story.getId());
+                    intent.putExtra("title", story.getTitle());
+                    intent.putExtra("rating", story.getRating());
+                    intent.putExtra("description", story.getDescription());
+                    intent.putExtra("review", story.getReview());
+                    intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                    intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                    intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onDeleteStoryClicked(Story story) {
+
+                    Log.d("TripsFragment", "onDeleteStoryClicked called for story: " + story.getId());
+
+
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Delete Confirmation")
+                            .setMessage("Are you sure you want to delete this story?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked OK, perform action
+                                    FirebaseDatabase
+                                            .getInstance()
+                                            .getReference("stories")
+                                            .child(story.getId())
+                                            .removeValue()
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(getContext(), "Story deleted", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getContext(), "Failed to delete story", Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+
+                @Override
+                public void onEditButtonClicked(Story story) {
+
+                    Log.d("TripsFragment", "onEditButtonClicked called for story: " + story.getId()); // Add this log statement
+                    Intent intent = new Intent(getContext(), EditTripActivity.class);
+                    intent.putExtra("id", story.getId());
+                    intent.putExtra("title", story.getTitle());
+                    intent.putExtra("rating", story.getRating());
+                    intent.putExtra("description", story.getDescription());
+                    intent.putExtra("review", story.getReview());
+                    intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                    intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                    intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                    startActivity(intent);
                 }
             }, firebaseAuth.getCurrentUser().getDisplayName());
 

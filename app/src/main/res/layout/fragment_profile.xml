@@ -55,6 +55,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -99,24 +101,20 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/passwordCard"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            android:backgroundTint="@color/purple_200"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
 
                 <Button
                     android:id="@+id/changePassword"
                     android:layout_gravity="center"
                     android:text="Change Password"
-                    android:backgroundTint="@color/purple_200"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/purple_200"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-        </androidx.cardview.widget.CardView>
+
+
 
 
         <androidx.cardview.widget.CardView

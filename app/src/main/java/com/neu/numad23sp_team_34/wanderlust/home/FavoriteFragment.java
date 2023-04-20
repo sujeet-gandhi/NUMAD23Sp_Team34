@@ -1,6 +1,10 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
+
 import android.content.pm.ActivityInfo;
+
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.FragmentFavoriteBinding;
 import com.neu.numad23sp_team_34.project.Story;
+import com.neu.numad23sp_team_34.project.ViewStoryActivity;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 
 import java.util.ArrayList;
@@ -61,6 +66,34 @@ public class FavoriteFragment extends Fragment {
             public void onFavoriteToggleClicked(Story story) {
 
             }
+
+            @Override
+            public void onStoryClicked(Story story) {
+
+                Intent intent = new Intent(getContext(), ViewStoryActivity.class);
+                intent.putExtra("id", story.getId());
+                intent.putExtra("title", story.getTitle());
+                intent.putExtra("rating", story.getRating());
+                intent.putExtra("description", story.getDescription());
+                intent.putExtra("review", story.getReview());
+                intent.putStringArrayListExtra("imageUrl", new ArrayList<>(story.getImageUrl()));
+                intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
+                intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
+                startActivity(intent);
+
+
+
+            }
+
+            @Override
+            public void onDeleteStoryClicked(Story story) {
+
+            }
+
+            @Override
+            public void onEditButtonClicked(Story story) {
+
+            }
         }, firebaseAuth.getCurrentUser().getDisplayName());
 
         binding.favoritesList.setAdapter(adapter);
@@ -80,20 +113,11 @@ public class FavoriteFragment extends Fragment {
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         Story changedStory = snapshot.getValue(Story.class);
                         if (changedStory != null && changedStory.getFavoriteUserIds() != null && changedStory.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())) {
-                            for (int i = 0; i < stories.size(); i++) {
-                                if (changedStory.getId().equals(stories.get(i).getId())) {
-                                    stories.get(i).setDescription(changedStory.getDescription());
-                                    stories.get(i).setImageUrl(changedStory.getImageUrl());
-                                    stories.get(i).setTitle(changedStory.getTitle());
-                                    stories.get(i).setKeywords(changedStory.getKeywords());
-                                    stories.get(i).setItinerary(changedStory.getItinerary());
-                                    stories.get(i).setReview(changedStory.getReview());
-                                    stories.get(i).setRating(changedStory.getRating());
-
-                                    adapter.notifyItemChanged(i);
-                                }
-                            }
+                            stories.add(changedStory);
+                        } else if (changedStory != null && (changedStory.getFavoriteUserIds() == null || (changedStory.getFavoriteUserIds() != null && !changedStory.getFavoriteUserIds().contains(firebaseAuth.getCurrentUser().getDisplayName())))) {
+                            stories.remove(changedStory);
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

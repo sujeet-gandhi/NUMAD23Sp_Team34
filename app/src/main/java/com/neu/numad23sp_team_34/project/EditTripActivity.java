@@ -1,6 +1,9 @@
 package com.neu.numad23sp_team_34.project;
 
+
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,41 +14,36 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
-
-import com.google.android.gms.common.api.Status;
-import com.google.android.libraries.places.api.Places;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.neu.numad23sp_team_34.R;
-import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
-import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateStory extends AppCompatActivity implements ItineraryAdapter.OnRemoveLocationListener  {
+public class EditTripActivity extends AppCompatActivity implements ItineraryAdapter.OnRemoveLocationListener {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -73,27 +71,38 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
     private ItineraryAdapter itineraryAdapter;
     private List<String> itineraryItems = new ArrayList<>();
 
+    private String storyId;
+    private String storyTitle;
+    private String storyDescription;
+    private String review;
+    private float rating;
+
+
+    private List<String> images2;
+    private List<String> keywords;
+
+    private List<String> itineraryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.createstory);
-
-        Places.initialize(getApplicationContext(), "AIzaSyC0YKtZG9Gq0bA8slXRbBbvRlaw3IxsI8c");
+        setContentView(R.layout.activity_edit_trip);
 
 
-        editTextStoryTitle = findViewById(R.id.editTextStoryTitle);
-        editTextStoryDescription = findViewById(R.id.editTextStoryDescription);
+
+        editTextStoryTitle = findViewById(R.id.updateeditTextStoryTitle);
+        editTextStoryDescription = findViewById(R.id.updateeditTextStoryDescription);
 
         editTextReview = findViewById(R.id.editTextReview);
         buttonAddImage = findViewById(R.id.buttonAddImage);
-        buttonSubmit = findViewById(R.id.buttonSubmit);
+        buttonSubmit = findViewById(R.id.buttonStoryUpdate);
         buttonPreview = findViewById(R.id.buttonPreview);
-        ratingBar = findViewById(R.id.ratingBar);
-        editKeywords = findViewById(R.id.keywords);
+        ratingBar = findViewById(R.id.editratingBar);
+        editKeywords = findViewById(R.id.updatekeywords);
 
+//        storyImageView = findViewById(R.id.updatestoryImageView);
 
-        imageRecyclerView = findViewById(R.id.imageRecyclerView);
+        imageRecyclerView = findViewById(R.id.editimageRecyclerView);
         imageAdapter = new ImageAdapter(this, images);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageRecyclerView.setLayoutManager(layoutManager);
@@ -101,12 +110,41 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
 
         Button buttonAddLocation = findViewById(R.id.buttonAddLocation);
 
-        itineraryRecyclerView = findViewById(R.id.itineraryRecyclerView);
-        itineraryAdapter = new ItineraryAdapter( itineraryItems, this);
+        itineraryRecyclerView = findViewById(R.id.edititineraryRecyclerView);
+        itineraryAdapter = new ItineraryAdapter( itineraryItems, (ItineraryAdapter.OnRemoveLocationListener) this);
         LinearLayoutManager layoutManagerItinerary = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);
         itineraryRecyclerView.addItemDecoration(new ConnectingLineItemDecoration(Color.GRAY, 5));
+
+        storyId = getIntent().getStringExtra("id");
+        storyTitle = getIntent().getStringExtra("title");
+        storyDescription = getIntent().getStringExtra("description");
+        keywords = getIntent().getStringArrayListExtra("keywords");
+        review = getIntent().getStringExtra("review");
+        rating = getIntent().getFloatExtra("rating", 0);
+        images2 = getIntent().getStringArrayListExtra("imageUrl");
+        itineraryList = getIntent().getStringArrayListExtra("itinerary");
+
+        editTextStoryTitle.setText(storyTitle);
+        editTextStoryDescription.setText(storyDescription);
+        editTextReview.setText(review);
+        ratingBar.setRating(Float.parseFloat(String.valueOf(rating)));
+
+
+        for (String keyword : keywords) {
+            editKeywords.append(keyword + ",");
+        }
+
+//        for (String imageUrl : images2) {
+//            Glide.with(this).load(imageUrl).into(storyImageView);
+//        }
+
+        for (String itinerary : itineraryList) {
+            itineraryItems.add(itinerary);
+        }
+
+
 
         buttonAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,22 +261,21 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
         } else if(imageAdapter.getItemCount()==0){
-            Toast.makeText(CreateStory.this,"Please add an image... " +
+            Toast.makeText(this,"Please add an image... " +
                     "",Toast.LENGTH_SHORT).show();
         } else if(itineraryAdapter.getItemCount()==0){
-            Toast.makeText(CreateStory.this,"Please add location..." +
+            Toast.makeText(this,"Please add location..." +
                     "",Toast.LENGTH_SHORT).show();
         } else if(itineraryAdapter.getItemCount()==1){
-            Toast.makeText(CreateStory.this,"Trip needs two locations..." +
+            Toast.makeText(this,"Trip needs two locations..." +
                     "",Toast.LENGTH_SHORT).show();
         } else if (rating==0.0){
-            Toast.makeText(CreateStory.this,"Rating can not be empty..." +
+            Toast.makeText(this,"Rating can not be empty..." +
                     "",Toast.LENGTH_SHORT).show();
         } else {
 
             // Create a unique ID for the story
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
-            String storyId = databaseReference.push().getKey();
 
             // Upload images to Firebase Storage
             uploadImagesAndCreateStory(storyId, storyTitle, storyDescription, review, rating, keywords);
@@ -265,7 +302,7 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
 
             uploadTask
                     .addOnFailureListener(e ->
-                            Toast.makeText(CreateStory.this, "Failed to upload image: " + e.getMessage() + "\n Try again", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(EditTripActivity.this, "Failed to upload image: " + e.getMessage() + "\n Try again", Toast.LENGTH_SHORT).show()
                     )
                     .addOnSuccessListener(taskSnapshot -> {
                         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -281,7 +318,7 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
                                 }
                             }
                         });
-                        Toast.makeText(CreateStory.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditTripActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                     });
         }
     }
@@ -372,32 +409,20 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
     }
 
     @Override
-
-    public void onBackPressed() {
-        new android.app.AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit? The story will be lost...")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(CreateStory.this, HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-    }
-
     public void onRemoveLocation(int position) {
-itineraryItems.remove(position);
+        itineraryItems.remove(position);
         itineraryAdapter.notifyDataSetChanged();
-
 
     }
 
 
     // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
-        // ...
+    // ...
+
 
 
 }
+
+
+
+
