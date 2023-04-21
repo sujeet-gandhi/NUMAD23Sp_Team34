@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -77,6 +82,9 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     private String review;
     private float rating;
 
+    private RequestManager glideRequestManager;
+
+
 
     private List<String> images2;
     private List<String> keywords;
@@ -100,7 +108,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         ratingBar = findViewById(R.id.editratingBar);
         editKeywords = findViewById(R.id.updatekeywords);
 
-//        storyImageView = findViewById(R.id.updatestoryImageView);
 
         imageRecyclerView = findViewById(R.id.editimageRecyclerView);
         imageAdapter = new ImageAdapter(this, images);
@@ -131,14 +138,32 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         editTextReview.setText(review);
         ratingBar.setRating(Float.parseFloat(String.valueOf(rating)));
 
+        glideRequestManager = Glide.with(this);
 
         for (String keyword : keywords) {
             editKeywords.append(keyword + ",");
         }
 
-//        for (String imageUrl : images2) {
-//            Glide.with(this).load(imageUrl).into(storyImageView);
-//        }
+
+        /** The images already uploaded by the user are displayed in the recycler view. Also display it when the user opens up the edit activity */
+
+        for (String image : images2) {
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(image));
+                images.add(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        imageAdapter.notifyDataSetChanged();
+
+
+
+
+
+
+
 
         for (String itinerary : itineraryList) {
             itineraryItems.add(itinerary);
@@ -174,6 +199,30 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
                 submitStory();
             }
         });
+
+        loadStoryImages();
+
+    }
+
+
+    private void loadStoryImages() {
+        for (String imageUrl : images2) {
+            glideRequestManager
+                    .asBitmap()
+                    .load(imageUrl)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            images.add(resource);
+                            imageAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                            // No need to handle this
+                        }
+                    });
+        }
     }
 
     private void launchPlacesAutocomplete() {
