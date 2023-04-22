@@ -21,7 +21,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.FragmentFavoriteBinding;
 import com.neu.numad23sp_team_34.project.Story;
 import com.neu.numad23sp_team_34.project.ViewStoryActivity;
@@ -29,7 +28,6 @@ import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FavoriteFragment extends Fragment {
 
@@ -52,8 +50,6 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentFavoriteBinding.inflate(inflater);
-
-        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         binding.favoritesList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -80,8 +76,6 @@ public class FavoriteFragment extends Fragment {
                 intent.putStringArrayListExtra("keywords", new ArrayList<>(story.getKeywords()));
                 intent.putStringArrayListExtra("itinerary", new ArrayList<>(story.getItinerary()));
                 startActivity(intent);
-
-
 
             }
 

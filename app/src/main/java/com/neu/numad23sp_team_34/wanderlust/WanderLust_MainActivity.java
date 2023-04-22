@@ -1,14 +1,11 @@
 package com.neu.numad23sp_team_34.wanderlust;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.neu.numad23sp_team_34.MainActivity;
 import com.neu.numad23sp_team_34.R;
@@ -26,15 +23,17 @@ public class WanderLust_MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wander_lust_main);
 
-        login =(Button) findViewById(R.id.UserLogin);
-        createAccount = (Button) findViewById(R.id.createAccount);
+        login = findViewById(R.id.UserLogin);
+        createAccount = findViewById(R.id.createAccount);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
         if (firebaseAuth.getCurrentUser() != null) {
             Toast.makeText(this, "Already Logged in as " + firebaseAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(WanderLust_MainActivity.this, HomeActivity.class);
             startActivity(intent);
-        } else {
+        }
+        else {
             login.setVisibility(View.VISIBLE);
             createAccount.setVisibility(View.VISIBLE);
             login.setOnClickListener(view -> {
@@ -48,6 +47,7 @@ public class WanderLust_MainActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(WanderLust_MainActivity.this, MainActivity.class);

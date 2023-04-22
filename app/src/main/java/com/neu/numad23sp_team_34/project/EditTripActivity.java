@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,19 +28,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -49,7 +45,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.neu.numad23sp_team_34.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +57,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
 
     private RecyclerView imageRecyclerView;
     private ImageAdapter imageAdapter;
-    private List<Bitmap> images = new ArrayList<>();
+    private final List<Bitmap> images = new ArrayList<>();
 
     private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview, editKeywords;
     private ImageView storyImageView;
@@ -74,7 +69,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
 
     private RecyclerView itineraryRecyclerView;
     private ItineraryAdapter itineraryAdapter;
-    private List<String> itineraryItems = new ArrayList<>();
+    private final List<String> itineraryItems = new ArrayList<>();
 
     private String storyId;
     private String storyTitle;
@@ -83,8 +78,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     private float rating;
 
     private RequestManager glideRequestManager;
-
-
 
     private List<String> images2;
     private List<String> keywords;
@@ -96,8 +89,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
 
-
-
         editTextStoryTitle = findViewById(R.id.updateeditTextStoryTitle);
         editTextStoryDescription = findViewById(R.id.updateeditTextStoryDescription);
 
@@ -108,7 +99,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         ratingBar = findViewById(R.id.editratingBar);
         editKeywords = findViewById(R.id.updatekeywords);
 
-
         imageRecyclerView = findViewById(R.id.editimageRecyclerView);
         imageAdapter = new ImageAdapter(this, images);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -118,7 +108,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         Button buttonAddLocation = findViewById(R.id.buttonAddLocation);
 
         itineraryRecyclerView = findViewById(R.id.edititineraryRecyclerView);
-        itineraryAdapter = new ItineraryAdapter( itineraryItems, (ItineraryAdapter.OnRemoveLocationListener) this);
+        itineraryAdapter = new ItineraryAdapter( itineraryItems, this);
         LinearLayoutManager layoutManagerItinerary = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itineraryRecyclerView.setAdapter(itineraryAdapter);
@@ -158,18 +148,9 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
 
         imageAdapter.notifyDataSetChanged();
 
-
-
-
-
-
-
-
         for (String itinerary : itineraryList) {
             itineraryItems.add(itinerary);
         }
-
-
 
         buttonAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +214,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -253,8 +233,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         String description = editTextStoryDescription.getText().toString();
         String review = editTextReview.getText().toString();
         float rating = ratingBar.getRating();
-
-
 
         // Create a custom dialog
         Dialog previewDialog = new Dialog(this);
@@ -276,11 +254,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         dialogImageRecyclerView.setLayoutManager(layoutManager);
         dialogImageRecyclerView.setAdapter(dialogImageAdapter);
 
-        // Set the image for the ImageView in the dialog
-        // Replace the line below with the actual image data
-
-
-
         // Show the dialog
         previewDialog.show();
     }
@@ -293,35 +266,43 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
         float rating = ratingBar.getRating();
 
-        if(storyTitle.isEmpty()){
+        if(storyTitle.isEmpty()) {
             editTextStoryTitle.setError("Title cannot be empty");
             editTextStoryTitle.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add a title",Toast.LENGTH_SHORT);
-        }else if(storyTitle.length()>50){
+        }
+        else if(storyTitle.length()>50) {
             editTextStoryTitle.setError("Only 50 characters");
             editTextStoryTitle.requestFocus();
             Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters",Toast.LENGTH_SHORT);
-        }else if(storyDescription.isEmpty()){
+        }
+        else if(storyDescription.isEmpty()) {
             editTextStoryDescription.setError("Description cannot be empty");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
-        }if(storyDescription.length()>1000){
+        }
+        if(storyDescription.length()>1000) {
             editTextStoryDescription.setError("Only 1000 characters");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
-        } else if(imageAdapter.getItemCount()==0){
+        }
+        else if(imageAdapter.getItemCount()==0) {
             Toast.makeText(this,"Please add an image... " +
                     "",Toast.LENGTH_SHORT).show();
-        } else if(itineraryAdapter.getItemCount()==0){
+        }
+        else if(itineraryAdapter.getItemCount()==0) {
             Toast.makeText(this,"Please add location..." +
                     "",Toast.LENGTH_SHORT).show();
-        } else if(itineraryAdapter.getItemCount()==1){
+        }
+        else if(itineraryAdapter.getItemCount()==1) {
             Toast.makeText(this,"Trip needs two locations..." +
                     "",Toast.LENGTH_SHORT).show();
-        } else if (rating==0.0){
+        }
+        else if (rating==0.0) {
             Toast.makeText(this,"Rating can not be empty..." +
                     "",Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else {
 
             // Create a unique ID for the story
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
@@ -373,8 +354,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     }
 
 
-
-
     private void chooseImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose an option")
@@ -415,6 +394,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         }
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -451,11 +431,13 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         }
     }
 
+
     private void addLocationToItinerary(String placeName, String placeAddress) {
         String locationEntry = "📍 " + placeName + " (" + placeAddress + ")";
         itineraryItems.add(locationEntry);
         itineraryAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onRemoveLocation(int position) {
@@ -463,12 +445,6 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         itineraryAdapter.notifyDataSetChanged();
 
     }
-
-
-    // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
-    // ...
-
-
 
 }
 

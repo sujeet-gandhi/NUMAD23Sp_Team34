@@ -8,15 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.neu.numad23sp_team_34.R;
-
 import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
-    private List<Bitmap> images;
-    private Context context;
+    private final List<Bitmap> images;
+    private final Context context;
 
     public ImageAdapter(Context context, List<Bitmap> images) {
         this.context = context;

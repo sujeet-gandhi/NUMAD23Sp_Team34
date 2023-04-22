@@ -1,9 +1,7 @@
 package com.neu.numad23sp_team_34.wanderlust.login;
 
 import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,23 +10,16 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
-
-
 import com.neu.numad23sp_team_34.R;
-import com.neu.numad23sp_team_34.wanderlust.User;
 import com.neu.numad23sp_team_34.wanderlust.home.HomeActivity;
 
 public class NewAccountActivity extends AppCompatActivity {
@@ -43,9 +34,6 @@ public class NewAccountActivity extends AppCompatActivity {
 
     Button signup;
 
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-
-    User user;
     FirebaseAuth auth;
 
     @Override
@@ -53,16 +41,11 @@ public class NewAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_account);
 
-
-        edtUsername = (EditText) findViewById(R.id.Username);
-        edtEmail = (EditText) findViewById(R.id.editTextTextEmailAddress);
-        edtPassword = (EditText) findViewById(R.id.editTextTextPassword);
-        edtConfirmPassword = (EditText) findViewById(R.id.confirmPassword);
-        signup = (Button) findViewById(R.id.Signup);
-
-
-
-
+        edtUsername = findViewById(R.id.Username);
+        edtEmail = findViewById(R.id.editTextTextEmailAddress);
+        edtPassword = findViewById(R.id.editTextTextPassword);
+        edtConfirmPassword = findViewById(R.id.confirmPassword);
+        signup = findViewById(R.id.Signup);
 
         signup.setOnClickListener(view -> {
 
@@ -70,61 +53,53 @@ public class NewAccountActivity extends AppCompatActivity {
             String email = edtEmail.getText().toString();
             String password = edtPassword.getText().toString();
             String confirmPassword = edtConfirmPassword.getText().toString();
-            if(username.isEmpty()){
+
+            if(username.isEmpty()) {
                 edtUsername.setError("This field cannot be empty");
                 edtUsername.requestFocus();
                 Toast.makeText(NewAccountActivity.this,"Please enter a user " +
-                        "name",Toast.LENGTH_SHORT).show();
-            }else if(TextUtils.isEmpty(email)){
+                        "name", Toast.LENGTH_SHORT).show();
+            }
+
+            else if(TextUtils.isEmpty(email)) {
                 Toast.makeText(NewAccountActivity.this,"Please enter email-id" +
-                        "!",Toast.LENGTH_SHORT).show();
+                        "!", Toast.LENGTH_SHORT).show();
                 edtEmail.setError("This field cannot be empty");
                 edtEmail.requestFocus();
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches()){
+            }
+
+            else if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches()) {
                 Toast.makeText(NewAccountActivity.this,"Please " +
-                        "enter email-id in correct format!",Toast.LENGTH_SHORT).show();
+                        "enter email-id in correct format!", Toast.LENGTH_SHORT).show();
                 edtEmail.setError("Not correct format");
                 edtEmail.requestFocus();
-            }else if(password.isEmpty()) {
+            }
+
+            else if(password.isEmpty()) {
                 Toast.makeText(NewAccountActivity.this, "Please " +
                         "enter the password!", Toast.LENGTH_SHORT).show();
                 edtPassword.setError("This field cannot be empty");
                 edtPassword.requestFocus();
-            }else if(password.length()<6){
+            }
+
+            else if(password.length() < 6) {
                 Toast.makeText(NewAccountActivity.this,"Password must " +
-                        "have at least 6 characters",Toast.LENGTH_SHORT).show();
+                        "have at least 6 characters", Toast.LENGTH_SHORT).show();
                 edtPassword.setError("More than 6 characters");
                 edtPassword.requestFocus();
-            } else if(confirmPassword.isEmpty()){
+            }
+
+            else if(confirmPassword.isEmpty()) {
                 edtConfirmPassword.setError("Please confirm the password");
                 edtConfirmPassword.requestFocus();
-            }else if(!password.equals(confirmPassword)){
+            }
+
+            else if(!password.equals(confirmPassword)) {
                 edtConfirmPassword.setError("Passwords don't match");
                 edtConfirmPassword.requestFocus();
-            } else {
+            }
 
-//                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()){
-//                            // Sign in is successful
-//                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                                    .setDisplayName(mName).build();
-//
-//                            user.updateProfile(profileUpdates)
-//                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            if (task.isSuccessful()) {
-//                                                Log.d(TAG, "User profile updated.");
-//                                            }
-//                                        }
-//                                    });
-//                        }
-//                    });
-
+            else {
                 auth = FirebaseAuth.getInstance();
                 if (!(username.isEmpty() && email.isEmpty()
                         && password.isEmpty()
@@ -147,7 +122,7 @@ public class NewAccountActivity extends AppCompatActivity {
 
                                                     //Opening an activity after registration.
                                                     Intent intent = new Intent(NewAccountActivity.this, HomeActivity.class);
-//
+
                                                     //Once finish registering, clear out the activities behind.
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                             | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -159,22 +134,24 @@ public class NewAccountActivity extends AppCompatActivity {
                                             }
                                         });
                             }
-                        } else {
-//                            if (task.getException() != null) {
-//                                Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                            }
+                        }
+                        else {
                             try{
                                 throw task.getException();
-                            }catch(FirebaseAuthWeakPasswordException e){
+                            }
+                            catch(FirebaseAuthWeakPasswordException e) {
                                 edtPassword.setError("Your password is too weak.");
                                 edtPassword.requestFocus();
-                            }catch (FirebaseAuthInvalidCredentialsException e){
+                            }
+                            catch (FirebaseAuthInvalidCredentialsException e) {
                                 edtPassword.setError("Your email is invalid or already used. Kindly re-enter.");
                                 edtPassword.requestFocus();
-                            }catch (FirebaseAuthUserCollisionException e){
+                            }
+                            catch (FirebaseAuthUserCollisionException e) {
                                 edtPassword.setError("User is already registered with this email. Please use another email.");
                                 edtPassword.requestFocus();
-                            }catch (Exception e){
+                            }
+                            catch (Exception e) {
                                 Log.d(TAG,e.getMessage());
                                 Toast.makeText(NewAccountActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }

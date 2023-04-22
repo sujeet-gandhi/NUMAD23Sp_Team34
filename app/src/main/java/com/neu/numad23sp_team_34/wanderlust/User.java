@@ -6,15 +6,11 @@ public class User {
     private String wanderLust_email;
     private String wanderLust_password;
 
-
-//    public Users(){
-//    }
     public User(String WanderLust_username, String WanderLust_email, String WanderLust_password ){
         this.wanderLust_username = WanderLust_username;
         this.wanderLust_email =WanderLust_email;
         this.wanderLust_password =WanderLust_password;
     }
-
 
     public String getWanderLust_username() {
         return wanderLust_username;

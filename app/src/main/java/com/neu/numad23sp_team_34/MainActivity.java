@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        atYourServiceBtn = (Button) findViewById(R.id.atYourService);
-        stickItToEm = (Button) findViewById(R.id.stickItToEm);
-        wanderLust = (Button) findViewById(R.id.project);
+        atYourServiceBtn = findViewById(R.id.atYourService);
+        stickItToEm = findViewById(R.id.stickItToEm);
+        wanderLust = findViewById(R.id.project);
 
         atYourServiceBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AtYourService.class);

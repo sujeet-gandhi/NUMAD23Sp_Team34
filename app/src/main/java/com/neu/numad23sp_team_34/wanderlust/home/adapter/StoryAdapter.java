@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.project.Story;
 import com.neu.numad23sp_team_34.wanderlust.Utility;
 import com.neu.numad23sp_team_34.wanderlust.home.RecyclerViewCallbackListener;
-import com.neu.numad23sp_team_34.wanderlust.home.TripsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -135,7 +133,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
-
 
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
