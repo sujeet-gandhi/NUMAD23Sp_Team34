@@ -38,14 +38,14 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private String currentUserId;
-    private String storyId;
+    private String storyAuthorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_chat);
 
-        storyId = getIntent().getStringExtra("chatId");
+        storyAuthorId = getIntent().getStringExtra("storyAuthorId");
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -79,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
             ChatMessage chatMessage = new ChatMessage(senderId, senderName, messageText);
 
-            databaseReference.child("stories").child(storyId).child("messages").push().setValue(chatMessage, new DatabaseReference.CompletionListener() {
+            databaseReference.child("chats").child(storyAuthorId).child("messages").push().setValue(chatMessage, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError error, DatabaseReference ref) {
                     if (error != null) {
@@ -93,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        databaseReference.child("chats").child(storyId).child("messages").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("chats").child(storyAuthorId).child("messages").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
