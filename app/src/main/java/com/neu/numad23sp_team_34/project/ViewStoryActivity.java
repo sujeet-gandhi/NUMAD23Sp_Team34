@@ -1,5 +1,6 @@
 package com.neu.numad23sp_team_34.project;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,19 +10,35 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.neu.numad23sp_team_34.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -43,13 +60,20 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
 
     private List<String> itineraryList;
 
+    private TextView locationTemperature;
+    private TextView weatherDescription;
+    private ImageView descriptionImageView;
+
     private Button buttonBack;
     private RecyclerView imageRecyclerView, itineraryRecyclerView;
+
+    private static final String API_KEY = "e89024468ba6624bb1ca47053e1aa3e2";
 
     private DisplayImageAdapter imageAdapter;
     private ItineraryAdapter itineraryAdapter;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +96,9 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
         imageRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         itineraryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        locationTemperature = findViewById(R.id.locationTemperature);
+        weatherDescription = findViewById(R.id.weatherDescription);
+        descriptionImageView = findViewById(R.id.descriptionImageView);
 
 
         storyId = getIntent().getStringExtra("id");
@@ -100,6 +127,12 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
 
 
 
+        System.out.println("location: " + extractCityName(itineraryList.get(0)));
+
+        showTemperature();
+
+
+
 
         // Fetch and display the story data
 
@@ -114,6 +147,89 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
                 finish(); // Close the activity and return to the previous one
             }
         });
+    }
+
+
+    public String extractCityName(String locationString) {
+        Pattern pattern = Pattern.compile("(?<=, )[^,]+(?=,)");
+        Matcher matcher = pattern.matcher(locationString);
+
+        if (matcher.find()) {
+            return matcher.group(0).trim();
+        }
+
+        return "";
+    }
+
+    public void showTemperature() {
+        String destinationNameString = extractCityName(itineraryList.get(0));
+        System.out.println("destinationNameString: " + destinationNameString);
+
+        // Split the destination name string into words
+        String[] words = destinationNameString.split(" ");
+
+        // Create a queue to manage the requests
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        // Function to make requests for each word
+        makeWeatherRequest(words, 0, requestQueue);
+    }
+
+    private void makeWeatherRequest(String[] words, int index, RequestQueue requestQueue) {
+        if (index >= words.length) {
+            // No valid weather output found
+            return;
+        }
+
+        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + words[index] + "&appid=" + API_KEY + "&units=Metric";
+        System.out.println("url: " + url);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    System.out.println("response: " + response);
+                    JSONObject jsonObject = response.getJSONObject("main");
+                    JSONArray jsonArray = response.getJSONArray("weather");
+                    JSONObject object = jsonArray.getJSONObject(0);
+                    double temperatureDouble = jsonObject.getDouble("temp");
+                    String description = object.getString("main");
+
+                    // Temperature processing
+                    double temperatureRounded = (int) Math.round(temperatureDouble);
+                    int temperatureInt = (int) temperatureRounded;
+                    String temp = String.valueOf(temperatureInt + "°C");
+                    locationTemperature.setText(temp);
+
+                    // Weather description processing
+                    if (description.contains("Cloud")) {
+                        descriptionImageView.setImageResource(R.drawable.ic_cloud);
+                        weatherDescription.setText(description);
+                    } else if (description.contains("Clear")) {
+                        descriptionImageView.setImageResource(R.drawable.ic_sun);
+                        weatherDescription.setText(description);
+                    } else if (description.contains("Rain")) {
+                        descriptionImageView.setImageResource(R.drawable.ic_rain);
+                        weatherDescription.setText(description);
+                    } else if (description.contains("Snow")) {
+                        descriptionImageView.setImageResource(R.drawable.ic_snow);
+                        weatherDescription.setText(description);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                // If the request fails, try the next word in the destination name string
+                makeWeatherRequest(words, index + 1, requestQueue);
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
     private void fetchStoryData() {
