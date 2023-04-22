@@ -34,6 +34,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -88,6 +89,7 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
+        Places.initialize(getApplicationContext(), "AIzaSyC0YKtZG9Gq0bA8slXRbBbvRlaw3IxsI8c");
 
         editTextStoryTitle = findViewById(R.id.updateeditTextStoryTitle);
         editTextStoryDescription = findViewById(R.id.updateeditTextStoryDescription);
@@ -263,7 +265,8 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
         String storyTitle = editTextStoryTitle.getText().toString();
         String storyDescription = editTextStoryDescription.getText().toString();
         String review = editTextReview.getText().toString();
-        List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
+        String[] keywordArray = editKeywords.getText().toString().trim().isEmpty() ? new String[0] : editKeywords.getText().toString().trim().split("\\s*,\\s*");
+        List<String> keywords = Arrays.asList(keywordArray);
         float rating = ratingBar.getRating();
 
         if(storyTitle.isEmpty()) {
@@ -285,8 +288,20 @@ public class EditTripActivity extends AppCompatActivity implements ItineraryAdap
             editTextStoryDescription.setError("Only 1000 characters");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
+        } else if(review.isEmpty()) {
+            editTextReview.setError("Review cannot be empty");
+            editTextReview.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a review",Toast.LENGTH_SHORT);
         }
-        else if(imageAdapter.getItemCount()==0) {
+        else if(review.length()>1000) {
+            editTextReview.setError("Only 1000 characters");
+            editTextReview.requestFocus();
+            Toast.makeText(getApplicationContext(),"Review cannot be more than 1000 characters",Toast.LENGTH_SHORT);
+        } else if(keywords.isEmpty()) {
+            editKeywords.setError("Keywords cannot be empty");
+            editKeywords.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add keywords",Toast.LENGTH_SHORT);
+        } else if(imageAdapter.getItemCount()==0) {
             Toast.makeText(this,"Please add an image... " +
                     "",Toast.LENGTH_SHORT).show();
         }
