@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.neu.numad23sp_team_34.R;
+import com.neu.numad23sp_team_34.project.chat.ChatActivity;
 
 import java.util.List;
 
@@ -35,13 +36,24 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
     private RatingBar ratingBar;
     private String storyId;
 
+    private String storyAuthorId;
+
+
+    private String chatId;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_trip);
 
+
+        storyAuthorId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        Button buttonOpenChat = findViewById(R.id.buttonOpenChat);
+
 
         textViewStoryTitle = findViewById(R.id.storyTitle);
         textViewStoryDescription = findViewById(R.id.storyDescription);
@@ -89,6 +101,15 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
         buttonBack.setOnClickListener(v -> {
             finish();
         });
+
+
+        buttonOpenChat.setOnClickListener(v -> {
+            Intent chatIntent = new Intent(ViewStoryActivity.this, ChatActivity.class);
+            chatIntent.putExtra("chatId", storyId);
+            chatIntent.putExtra("storyAuthorId", storyAuthorId);
+
+            startActivity(chatIntent);
+        });
     }
 
     @Override
@@ -100,6 +121,15 @@ public class ViewStoryActivity extends AppCompatActivity implements ItineraryVie
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private String generateChatId(String currentUserId, String storyAuthorId) {
+        if (currentUserId.compareTo(storyAuthorId) > 0) {
+            return currentUserId + "-" + storyAuthorId;
+        } else {
+            return storyAuthorId + "-" + currentUserId;
+        }
     }
 
 
