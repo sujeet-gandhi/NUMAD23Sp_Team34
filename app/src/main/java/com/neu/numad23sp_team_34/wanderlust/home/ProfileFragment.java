@@ -1,45 +1,27 @@
 package com.neu.numad23sp_team_34.wanderlust.home;
 
-
-
 import android.app.Activity;
-import android.content.ContentResolver;
-
-
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
-
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,7 +45,6 @@ import com.neu.numad23sp_team_34.project.Story;
 import com.neu.numad23sp_team_34.project.ViewStoryActivity;
 import com.neu.numad23sp_team_34.wanderlust.home.adapter.StoryAdapter;
 import com.neu.numad23sp_team_34.wanderlust.login.LoginActivity;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,11 +55,11 @@ public class ProfileFragment extends Fragment {
     private List<Story> myStories;
 
     private StoryAdapter adapter;
+
     private FragmentProfileBinding binding;
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    FirebaseAuth firebaseAuth;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -88,22 +69,15 @@ public class ProfileFragment extends Fragment {
         return new ProfileFragment();
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentProfileBinding.inflate(inflater);
 
-
-        //profilePic = binding.profilePic;
-        //profilePic.setOnClickListener(this);
-
         binding.myTripsList.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
 
         myStories = new ArrayList<>();
-
-
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
@@ -164,7 +138,6 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onEditButtonClicked(Story story) {
 
-                    Log.d("TripsFragment", "onEditButtonClicked called for story: " + story.getId()); // Add this log statement
                     Intent intent = new Intent(getContext(), EditTripActivity.class);
                     intent.putExtra("id", story.getId());
                     intent.putExtra("title", story.getTitle());
@@ -250,7 +223,6 @@ public class ProfileFragment extends Fragment {
             openImagePicker();
         });
 
-
         binding.logout.setOnClickListener(view -> {
             firebaseAuth.signOut();
             Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -260,7 +232,6 @@ public class ProfileFragment extends Fragment {
         binding.changePassword.setOnClickListener(view -> {
             changePassword();
         });
-
 
         return binding.getRoot();
     }
@@ -279,7 +250,6 @@ public class ProfileFragment extends Fragment {
             Uri filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                //Log.d("ProfileFragment", "Bitmap created: " + bitmap);
                 uploadImageToFirebase(bitmap, binding.profilePic);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -304,8 +274,6 @@ public class ProfileFragment extends Fragment {
                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        //FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("profileImage")
-                        //        .setValue(uri.toString());
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
                         userRef.child("profileImage").setValue(uri.toString());
                         userRef.child("username").setValue(userName);
@@ -409,8 +377,5 @@ public class ProfileFragment extends Fragment {
 
         builder.show();
     }
-
-
-
 
 }

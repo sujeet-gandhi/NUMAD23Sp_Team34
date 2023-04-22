@@ -59,7 +59,7 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
 
     private RecyclerView imageRecyclerView;
     private ImageAdapter imageAdapter;
-    private List<Bitmap> images = new ArrayList<>();
+    private final List<Bitmap> images = new ArrayList<>();
 
     private EditText editTextStoryTitle, editTextStoryDescription, editTextItinerary, editTextReview, editKeywords;
     private ImageView storyImageView;
@@ -71,7 +71,7 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
 
     private RecyclerView itineraryRecyclerView;
     private ItineraryAdapter itineraryAdapter;
-    private List<String> itineraryItems = new ArrayList<>();
+    private final List<String> itineraryItems = new ArrayList<>();
 
 
     @Override
@@ -206,36 +206,43 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
         List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
         float rating = ratingBar.getRating();
 
-        if(storyTitle.isEmpty()){
+        if(storyTitle.isEmpty()) {
             editTextStoryTitle.setError("Title cannot be empty");
             editTextStoryTitle.requestFocus();
-            Toast.makeText(getApplicationContext(),"Please add a title",Toast.LENGTH_SHORT);
-        }else if(storyTitle.length()>50){
+            Toast.makeText(getApplicationContext(),"Please add a title", Toast.LENGTH_SHORT);
+        }
+        else if(storyTitle.length()>50) {
             editTextStoryTitle.setError("Only 50 characters");
             editTextStoryTitle.requestFocus();
-            Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters",Toast.LENGTH_SHORT);
-        }else if(storyDescription.isEmpty()){
+            Toast.makeText(getApplicationContext(),"Title cannot be more than 50 characters", Toast.LENGTH_SHORT);
+        }
+        else if(storyDescription.isEmpty()) {
             editTextStoryDescription.setError("Description cannot be empty");
             editTextStoryDescription.requestFocus();
-            Toast.makeText(getApplicationContext(),"Please add a description",Toast.LENGTH_SHORT);
-        }if(storyDescription.length()>1000){
+            Toast.makeText(getApplicationContext(),"Please add a description", Toast.LENGTH_SHORT);
+        }
+        if(storyDescription.length()>1000) {
             editTextStoryDescription.setError("Only 1000 characters");
             editTextStoryDescription.requestFocus();
-            Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters",Toast.LENGTH_SHORT);
-        } else if(imageAdapter.getItemCount()==0){
+            Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters", Toast.LENGTH_SHORT);
+        }
+        else if(imageAdapter.getItemCount()==0) {
             Toast.makeText(CreateStory.this,"Please add an image... " +
-                    "",Toast.LENGTH_SHORT).show();
-        } else if(itineraryAdapter.getItemCount()==0){
+                    "", Toast.LENGTH_SHORT).show();
+        }
+        else if(itineraryAdapter.getItemCount()==0) {
             Toast.makeText(CreateStory.this,"Please add location..." +
-                    "",Toast.LENGTH_SHORT).show();
-        } else if(itineraryAdapter.getItemCount()==1){
+                    "", Toast.LENGTH_SHORT).show();
+        }
+        else if(itineraryAdapter.getItemCount()==1) {
             Toast.makeText(CreateStory.this,"Trip needs two locations..." +
-                    "",Toast.LENGTH_SHORT).show();
-        } else if (rating==0.0){
+                    "", Toast.LENGTH_SHORT).show();
+        }
+        else if (rating==0.0) {
             Toast.makeText(CreateStory.this,"Rating can not be empty..." +
-                    "",Toast.LENGTH_SHORT).show();
-        } else {
-
+                    "", Toast.LENGTH_SHORT).show();
+        }
+        else {
             // Create a unique ID for the story
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("stories");
             String storyId = databaseReference.push().getKey();
@@ -285,9 +292,6 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
                     });
         }
     }
-
-
-
 
     private void chooseImage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -340,10 +344,12 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 images.add(bitmap);
                 imageAdapter.notifyDataSetChanged();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == CAPTURE_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+        }
+        else if (requestCode == CAPTURE_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             images.add(imageBitmap);
@@ -356,10 +362,12 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
                 String placeName = place.getName();
                 String placeAddress = place.getAddress();
                 addLocationToItinerary(placeName, placeAddress);
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            }
+            else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i("MainActivity", status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
+            }
+            else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
         }
@@ -372,7 +380,6 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
     }
 
     @Override
-
     public void onBackPressed() {
         new android.app.AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to exit? The story will be lost...")
@@ -389,15 +396,10 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
     }
 
     public void onRemoveLocation(int position) {
-itineraryItems.remove(position);
+        itineraryItems.remove(position);
         itineraryAdapter.notifyDataSetChanged();
 
-
     }
-
-
-    // Perform validation checks and store the data in your preferred way (e.g., local database, remote server, etc.)
-        // ...
 
 
 }

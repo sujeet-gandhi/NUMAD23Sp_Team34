@@ -2,20 +2,13 @@ package com.neu.numad23sp_team_34.wanderlust.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
 import android.view.View;
-
-import com.google.android.material.navigation.NavigationBarView;
 import com.neu.numad23sp_team_34.MainActivity;
-import com.neu.numad23sp_team_34.R;
 import com.neu.numad23sp_team_34.databinding.ActivityHomeBinding;
-import com.neu.numad23sp_team_34.wanderlust.WanderLust_MainActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -72,8 +65,6 @@ public class HomeActivity extends AppCompatActivity {
         binding.tripsContainer.setVisibility(View.GONE);
         binding.bookmarkContainer.setVisibility(View.VISIBLE);
         binding.profileContainer.setVisibility(View.GONE);
-
-
     }
 
     private void openProfile() {

@@ -6,17 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.neu.numad23sp_team_34.R;
-
 import java.util.List;
 
 public class ItineraryViewOnlyAdapter extends RecyclerView.Adapter<ItineraryViewOnlyAdapter.ViewHolder> {
 
-
-    private List<String> locations;
+    private final List<String> locations;
     private final OnLocationClickListener locationClickListener;
 
 
@@ -57,8 +53,6 @@ public class ItineraryViewOnlyAdapter extends RecyclerView.Adapter<ItineraryView
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewLocation;
-        ImageView imageViewLocationSymbol;
-        ImageView imageViewArrow;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -128,5 +128,4 @@ public class Story {
         return Objects.hash(id);
     }
 
-    // Add getters and setters for each field
 }

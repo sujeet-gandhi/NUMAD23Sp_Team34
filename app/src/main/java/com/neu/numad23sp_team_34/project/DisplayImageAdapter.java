@@ -5,19 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.neu.numad23sp_team_34.R;
-
 import java.util.List;
 
 public class DisplayImageAdapter extends RecyclerView.Adapter<DisplayImageAdapter.ImageViewHolder> {
 
-    private List<String> imageUrls;
-    private Context context;
+    private final List<String> imageUrls;
+    private final Context context;
 
     public DisplayImageAdapter(Context context, List<String> imageUrls) {
         this.context = context;

@@ -3,21 +3,16 @@ package com.neu.numad23sp_team_34.project;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.neu.numad23sp_team_34.R;
-
 import java.util.List;
 
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> {
 
-    private List<String> locations;
+    private final List<String> locations;
 
     private final OnRemoveLocationListener removeLocationListener;
-
 
     public ItineraryAdapter(List<String> locations, OnRemoveLocationListener removeLocationListener) {
         this.locations = locations;
@@ -46,7 +41,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
                     }
                 }
             });
-        } else {
+        }
+        else {
             holder.buttonRemoveLocation.setVisibility(View.GONE);
         }    }
 
@@ -58,7 +54,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View buttonRemoveLocation;
         TextView textViewLocation;
-        ImageButton buttonAddLocation;
 
         public ViewHolder(View itemView) {
             super(itemView);
