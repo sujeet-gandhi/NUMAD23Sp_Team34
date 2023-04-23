@@ -203,7 +203,8 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
         String storyTitle = editTextStoryTitle.getText().toString();
         String storyDescription = editTextStoryDescription.getText().toString();
         String review = editTextReview.getText().toString();
-        List<String> keywords = Arrays.asList(editKeywords.getText().toString().split(","));
+        String[] keywordArray = editKeywords.getText().toString().trim().isEmpty() ? new String[0] : editKeywords.getText().toString().trim().split("\\s*,\\s*");
+        List<String> keywords = Arrays.asList(keywordArray);
         float rating = ratingBar.getRating();
 
         if(storyTitle.isEmpty()) {
@@ -225,8 +226,25 @@ public class CreateStory extends AppCompatActivity implements ItineraryAdapter.O
             editTextStoryDescription.setError("Only 1000 characters");
             editTextStoryDescription.requestFocus();
             Toast.makeText(getApplicationContext(),"Description cannot be more than 1000 characters", Toast.LENGTH_SHORT);
+        } else if(review.isEmpty()) {
+            editTextReview.setError("Review cannot be empty");
+            editTextReview.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add a review", Toast.LENGTH_SHORT);
         }
-        else if(imageAdapter.getItemCount()==0) {
+        else if(review.length()>1000) {
+            editTextReview.setError("Only 1000 characters");
+            editTextReview.requestFocus();
+            Toast.makeText(getApplicationContext(),"Review cannot be more than 1000 characters", Toast.LENGTH_SHORT);
+        } else if(keywords.isEmpty()) {
+            editKeywords.setError("Keywords cannot be empty");
+            editKeywords.requestFocus();
+            Toast.makeText(getApplicationContext(),"Please add keywords", Toast.LENGTH_SHORT);
+        }
+        else if(keywords.size()>5) {
+            editKeywords.setError("Only 5 keywords");
+            editKeywords.requestFocus();
+            Toast.makeText(getApplicationContext(),"Keywords cannot be more than 5", Toast.LENGTH_SHORT);
+        } else if(imageAdapter.getItemCount()==0) {
             Toast.makeText(CreateStory.this,"Please add an image... " +
                     "", Toast.LENGTH_SHORT).show();
         }
